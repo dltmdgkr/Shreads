@@ -1,19 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+type Props = {
+  handlePrevImage: () => void;
+};
 
-export default function BackButton() {
-  const router = useRouter();
-  const onClick = () => {
-    router.back();
-  };
+export default function PhotoModalPrevButton({ handlePrevImage }: Props) {
   return (
     <button
-      className="w-34 h-34 bg-white border-none rounded-full flex items-center justify-center cursor-pointer :hover:bg-opacity-10:hover:bg-black"
-      onClick={onClick}
+      className="w-34 h-34 bg-white border-none rounded-full absolute left-20 flex items-center justify-center cursor-pointer :hover:bg-opacity-10:hover:bg-black"
+      onClick={handlePrevImage}
     >
       <svg
-        width={24}
+        width={36}
         viewBox="0 0 24 24"
         aria-hidden="true"
         className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03"

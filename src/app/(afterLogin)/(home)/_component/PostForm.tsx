@@ -26,7 +26,7 @@ export default function PostForm() {
         <div className="flex-grow">
           <textarea
             className="w-full h-full border-0 focus:outline-none"
-            placeholder="슈레드를 시작하세요..."
+            placeholder="슈레드를 시작하세요!"
           />
         </div>
       </div>

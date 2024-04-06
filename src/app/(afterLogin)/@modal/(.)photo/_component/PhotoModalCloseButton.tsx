@@ -1,15 +1,16 @@
 "use client";
 
+import React from "react";
 import { useRouter } from "next/navigation";
 
-export default function BackButton() {
+export default function PhotoModalCloseButton() {
   const router = useRouter();
   const onClick = () => {
     router.back();
   };
   return (
     <button
-      className="w-34 h-34 bg-white border-none rounded-full flex items-center justify-center cursor-pointer :hover:bg-opacity-10:hover:bg-black"
+      className="w-8 h-8 rounded-full border-none cursor-pointer bg-gray-600 bg-opacity-75 absolute left-4 top-4 flex items-center justify-center"
       onClick={onClick}
     >
       <svg
@@ -19,7 +20,7 @@ export default function BackButton() {
         className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03"
       >
         <g>
-          <path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path>
+          <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path>
         </g>
       </svg>
     </button>

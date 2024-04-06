@@ -17,8 +17,10 @@ import Link from "next/link";
 
 export default function AfterLoginLayout({
   children,
+  modal,
 }: {
   children: ReactNode;
+  modal: ReactNode;
 }) {
   return (
     <Container fixed>
@@ -56,7 +58,7 @@ export default function AfterLoginLayout({
                   <ListItemText>쪽지</ListItemText>
                 </MenuItem>
               </Link>
-              <Link href={"/profile"}>
+              <Link href={"/dltmdgkr"}>
                 <MenuItem>
                   <ListItemIcon>
                     <PermIdentityIcon fontSize="small" />
@@ -65,12 +67,14 @@ export default function AfterLoginLayout({
                 </MenuItem>
               </Link>
               <Divider />
-              <MenuItem>
-                <ListItemIcon>
-                  <PostAddIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>게시하기</ListItemText>
-              </MenuItem>
+              <Link href={"/create-post"}>
+                <MenuItem>
+                  <ListItemIcon>
+                    <PostAddIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>게시하기</ListItemText>
+                </MenuItem>
+              </Link>
             </MenuList>
             <MenuItem>
               <LogoutButton />
@@ -81,6 +85,7 @@ export default function AfterLoginLayout({
           {children}
         </Grid>
       </Grid>
+      {modal}
     </Container>
   );
 }
