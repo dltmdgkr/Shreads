@@ -1,3 +1,9 @@
+import SearchForm from "./_component/SearchForm";
+
 export default function Page() {
-  return "explore page";
+  return (
+    <div>
+      <SearchForm />
+    </div>
+  );
 }

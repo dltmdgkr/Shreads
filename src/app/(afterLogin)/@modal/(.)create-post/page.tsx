@@ -5,27 +5,32 @@ import { ChangeEvent, useRef, useState } from "react";
 
 export default function CreatePostModal() {
   const [content, setContent] = useState("");
-  const imageRef = useRef(null);
+  const imageRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
-  const onSubmit = () => {};
-  const onClickClose = () => {
-    router.back();
-  };
-  const onClickButton = () => {};
-  const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) =>
-    setContent(e.target.value);
 
   const me = {
     id: "lee",
     image: "/noneProfile.jpg",
   };
 
+  const onSubmit = () => {};
+
+  const onClickClose = () => {
+    router.back();
+  };
+
+  const onClickButton = () => {
+    imageRef.current?.click();
+  };
+
+  const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) =>
+    setContent(e.target.value);
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
       <div className="relative max-w-[80vw] min-w-[600px] bg-white rounded-lg flex flex-col">
         <button
-          className="absolute top-0 left-3 w-9 h-9 rounded-full border-0 bg-white flex items-center justify-center"
+          className="absolute top-3 left-3 w-9 h-9 rounded-full border-0 bg-white flex items-center justify-center"
           onClick={onClickClose}
         >
           <svg
@@ -73,21 +78,16 @@ export default function CreatePostModal() {
                   ref={imageRef}
                 />
                 <button
-                  className="w-9 h-9 rounded-full border-0 cursor-pointer bg-blue-200 hover:bg-blue-300 flex items-center justify-center"
+                  className="w-9 h-9 rounded-full border-0 cursor-pointer bg-gray-300 hover:bg-gray-400 flex items-center justify-center"
                   type="button"
                   onClick={onClickButton}
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    className="w-6 h-6 text-gray-700"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 5.5A2.5 2.5 0 015.5 3h9A2.5 2.5 0 0117 5.5v9a2.5 2.5 0 01-2.5 2.5h-9A2.5 2.5 0 013 14.5v-9zm2-1.5A1.5 1.5 0 015.5 3h9a1.5 1.5 0 011.5 1.5v9a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 015 14.5v-9zM9 10a1 1 0 00-1 1v2a1 1 0 102 0v-2a1 1 0 00-1-1zm-1-7a1 1 0 100 2h5a1 1 0 100-2h-5z"
-                      clipRule="evenodd"
-                    />
+                    <path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"></path>
                   </svg>
                 </button>
               </div>
