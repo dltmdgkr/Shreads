@@ -35,7 +35,7 @@ export default function AfterLoginLayout({
           >
             <MenuList>
               <Link href={"/"}>
-                <MenuItem>
+                <MenuItem className="pb-2">
                   <ListItemIcon>
                     <HomeIcon fontSize="small" />
                   </ListItemIcon>
@@ -43,7 +43,7 @@ export default function AfterLoginLayout({
                 </MenuItem>
               </Link>
               <Link href={"/explore"}>
-                <MenuItem>
+                <MenuItem className="py-2">
                   <ListItemIcon>
                     <SearchIcon fontSize="small" />
                   </ListItemIcon>
@@ -51,7 +51,7 @@ export default function AfterLoginLayout({
                 </MenuItem>
               </Link>
               <Link href={"/messages"}>
-                <MenuItem>
+                <MenuItem className="py-2">
                   <ListItemIcon>
                     <MailOutlineIcon fontSize="small" />
                   </ListItemIcon>
@@ -59,7 +59,7 @@ export default function AfterLoginLayout({
                 </MenuItem>
               </Link>
               <Link href={"/dltmdgkr"}>
-                <MenuItem>
+                <MenuItem className="pt-2 pb-3">
                   <ListItemIcon>
                     <PermIdentityIcon fontSize="small" />
                   </ListItemIcon>
@@ -68,7 +68,7 @@ export default function AfterLoginLayout({
               </Link>
               <Divider />
               <Link href={"/create-post"}>
-                <MenuItem>
+                <MenuItem className="pt-4 pb-3">
                   <ListItemIcon>
                     <PostAddIcon fontSize="small" />
                   </ListItemIcon>
@@ -76,7 +76,7 @@ export default function AfterLoginLayout({
                 </MenuItem>
               </Link>
             </MenuList>
-            <MenuItem>
+            <MenuItem className="py-2">
               <LogoutButton />
             </MenuItem>
           </Paper>

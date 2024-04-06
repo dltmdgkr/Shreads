@@ -1,13 +1,18 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function LogoutButton() {
+  const router = useRouter();
   const me = {
     id: "lee",
     name: "dltmdgkr",
     image: "/noneProfile.jpg",
   };
 
-  const onLogout = () => {};
+  const onLogout = () => {
+    router.replace("/login");
+  };
 
   return (
     <button className="flex" onClick={onLogout}>
