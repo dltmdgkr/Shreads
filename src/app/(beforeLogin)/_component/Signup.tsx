@@ -1,73 +1,73 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import onSubmit from "../_lib/signup";
+import { useFormState, useFormStatus } from "react-dom";
 
-export default function Login() {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const router = useRouter();
+function showMessage(message: any) {
+  if (message === "no_id") {
+    return "아이디를 입력해주세요";
+  }
+  if (message === "no_name") {
+    return "닉네임을 입력해주세요";
+  }
+  if (message === "no_password") {
+    return "비밀번호를 입력해주세요";
+  }
+  if (message === "no_image") {
+    return "이미지를 업로드 해주세요";
+  }
+  if (message === "no_exists") {
+    return "이미 사용중인 아이디입니다";
+  }
+  return "";
+}
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setMessage("");
-    try {
-      await signIn("credentials", {
-        username: id,
-        password,
-        redirect: false,
-      });
-      router.replace("/");
-    } catch (err) {
-      console.error(err);
-      setMessage("아이디와 비밀번호가 일치하지 않습니다.");
-    }
-  };
-
-  const onChangeId = (e: ChangeEvent<HTMLInputElement>) => {
-    setId(e.target.value);
-  };
-
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
+export default function Signup() {
+  const [state, formAction] = useFormState(onSubmit, { message: null });
+  const { pending } = useFormStatus();
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          로그인 해주세요
+          회원가입 해주세요
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          className="space-y-6"
-          action="#"
-          method="POST"
-          onSubmit={onSubmit}
-        >
+        <form className="space-y-6" action={formAction}>
           <div>
             <label
-              htmlFor="text"
+              htmlFor="id"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               아이디
             </label>
             <div className="mt-2">
               <input
-                id="text"
-                name="text"
+                id="id"
+                name="id"
                 type="text"
                 autoComplete="text"
-                value={id}
-                onChange={onChangeId}
                 required
                 className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
               />
             </div>
+          </div>
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              닉네임
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder=""
+              required
+              className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            />
           </div>
           <div>
             <div className="flex items-center justify-between">
@@ -77,14 +77,6 @@ export default function Login() {
               >
                 비밀번호
               </label>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-gray-500 hover:text-gray-600"
-                >
-                  비밀번호를 잊어버렸나요?
-                </a>
-              </div>
             </div>
             <div className="mt-2">
               <input
@@ -92,34 +84,40 @@ export default function Login() {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                value={password}
-                onChange={onChangePassword}
                 required
                 className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
           <div>
+            <label
+              className="block text-sm font-medium leading-6 text-gray-900"
+              htmlFor="image"
+            >
+              프로필
+            </label>
+            <input
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
+              required
+              className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            />
+          </div>
+          <div>
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+              disabled={pending}
             >
-              로그인 하기
+              회원가입 하기
             </button>
             <div className="font-bold text-rose-500 text-center mt-2">
-              {message}
+              {showMessage(state?.message)}
             </div>
           </div>
         </form>
-        <p className="mt-10 text-center text-sm text-gray-500">
-          계정이 없으신가요?{" "}
-          <Link
-            href="/signup"
-            className="font-semibold leading-6 text-gray-500 hover:text-gray-600"
-          >
-            회원가입 하기
-          </Link>
-        </p>
       </div>
     </div>
   );
