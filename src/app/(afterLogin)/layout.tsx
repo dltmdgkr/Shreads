@@ -25,7 +25,7 @@ export default function AfterLoginLayout({
 }) {
   return (
     <RQProvider>
-      <Container fixed>
+      <Container className="relative" fixed>
         <Grid container>
           <Grid item xs={3}>
             <Paper
@@ -61,22 +61,22 @@ export default function AfterLoginLayout({
                   </MenuItem>
                 </Link>
                 <Link href={"/dltmdgkr"}>
-                  <MenuItem className="pt-2 pb-3">
+                  <MenuItem className="py-2 pb-3">
                     <ListItemIcon>
                       <PermIdentityIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>프로필</ListItemText>
                   </MenuItem>
                 </Link>
-                <Divider />
                 <Link href={"/create-post"}>
-                  <MenuItem className="pt-4 pb-3">
+                  <MenuItem className="pb-3">
                     <ListItemIcon>
                       <PostAddIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>게시하기</ListItemText>
                   </MenuItem>
                 </Link>
+                <Divider />
               </MenuList>
               <MenuItem className="py-2">
                 <LogoutButton />

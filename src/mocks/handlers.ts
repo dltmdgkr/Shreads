@@ -48,14 +48,14 @@ export const handlers = [
       {
         postId: 1,
         User: User[0],
-        content: `${1} Z.com is so marvelous. I'm gonna buy that.`,
+        content: `${1} shreads is so marvelous. I'm gonna buy that.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: new Date(),
       },
       {
         postId: 2,
         User: User[1],
-        content: `${2} Z.com is so marvelous. I'm gonna buy that.`,
+        content: `${2} shreads is so marvelous. I'm gonna buy that.`,
         Images: [
           { imageId: 1, link: faker.image.urlLoremFlickr() },
           { imageId: 2, link: faker.image.urlLoremFlickr() },
@@ -65,14 +65,49 @@ export const handlers = [
       {
         postId: 3,
         User: User[2],
-        content: `${3} Z.com is so marvelous. I'm gonna buy that.`,
+        content: `${3} shreads is so marvelous. I'm gonna buy that.`,
         Images: [],
         createdAt: new Date(),
       },
       {
         postId: 4,
         User: User[2],
-        content: `${3} Z.com is so marvelous. I'm gonna buy that.`,
+        content: `${4} shreads is so marvelous. I'm gonna buy that.`,
+        Images: [],
+        createdAt: new Date(),
+      },
+    ]);
+  }),
+  http.get("/api/followingPosts", async ({ request }) => {
+    return HttpResponse.json([
+      {
+        postId: 1,
+        User: User[0],
+        content: `${1} This is following posts`,
+        Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
+        createdAt: new Date(),
+      },
+      {
+        postId: 2,
+        User: User[1],
+        content: `${2} This is following posts`,
+        Images: [
+          { imageId: 1, link: faker.image.urlLoremFlickr() },
+          { imageId: 2, link: faker.image.urlLoremFlickr() },
+        ],
+        createdAt: new Date(),
+      },
+      {
+        postId: 3,
+        User: User[2],
+        content: `${3} This is following posts`,
+        Images: [],
+        createdAt: new Date(),
+      },
+      {
+        postId: 4,
+        User: User[2],
+        content: `${4} This is following posts`,
         Images: [],
         createdAt: new Date(),
       },
