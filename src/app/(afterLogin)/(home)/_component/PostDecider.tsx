@@ -7,7 +7,6 @@ import { PostsToggleContext } from "./PostsToggleProvider";
 
 export default function PostDecider() {
   const { recommendPosts } = useContext(PostsToggleContext);
-  console.log(recommendPosts);
 
   return recommendPosts ? <PostRecommends /> : <FollowingPosts />;
 }

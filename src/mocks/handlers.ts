@@ -113,4 +113,40 @@ export const handlers = [
       },
     ]);
   }),
+  http.get("/api/search/:tag", async ({ request, params }) => {
+    const { tag } = params;
+    return HttpResponse.json([
+      {
+        postId: 1,
+        User: User[0],
+        content: `${1} Search result is ${tag}`,
+        Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
+        createdAt: new Date(),
+      },
+      {
+        postId: 2,
+        User: User[1],
+        content: `${2} Search result is ${tag}`,
+        Images: [
+          { imageId: 1, link: faker.image.urlLoremFlickr() },
+          { imageId: 2, link: faker.image.urlLoremFlickr() },
+        ],
+        createdAt: new Date(),
+      },
+      {
+        postId: 3,
+        User: User[2],
+        content: `${3} Search result is ${tag}`,
+        Images: [],
+        createdAt: new Date(),
+      },
+      {
+        postId: 4,
+        User: User[2],
+        content: `${4} Search result is ${tag}`,
+        Images: [],
+        createdAt: new Date(),
+      },
+    ]);
+  }),
 ];

@@ -12,13 +12,7 @@ import { Post } from "@/model/Post";
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Post({
-  noImage,
-  post,
-}: {
-  noImage?: boolean;
-  post: Post;
-}) {
+export default function Post({ post }: { post: Post }) {
   // const target = {
   //   postId: 1,
   //   User: {
@@ -33,7 +27,7 @@ export default function Post({
 
   const target = post;
 
-  if (Math.random() > 0.5 && !noImage) {
+  if (Math.random() > 0.5) {
     target.Images.push({ imageId: 1, link: faker.image.urlLoremFlickr() });
   }
 

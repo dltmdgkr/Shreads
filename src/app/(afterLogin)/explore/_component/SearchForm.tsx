@@ -1,6 +1,18 @@
-export default function SearchForm() {
+"use client";
+
+import { useRouter } from "next/navigation";
+import { FormEvent } from "react";
+
+export default function SearchForm({ q }: { q: string }) {
+  const router = useRouter();
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    router.push(`/search?q=${event.currentTarget.search.value}`);
+  };
+
   return (
-    <form className="fixed top-0 w-full">
+    <form className="fixed top-0 w-full" onSubmit={onSubmit}>
       <div className="flex items-center w-full max-w-xl bg-gray-200 rounded-full mt-6 mb-12">
         <svg
           className="w-6 h-6 ml-4 text-gray-600"
@@ -16,6 +28,7 @@ export default function SearchForm() {
           />
         </svg>
         <input
+          name="search"
           type="search"
           className="w-full py-2 px-4 text-gray-700 rounded-full bg-transparent focus:outline-none"
           placeholder="검색"
