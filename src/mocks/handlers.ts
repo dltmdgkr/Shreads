@@ -3,18 +3,26 @@ import { HttpResponse, http } from "msw";
 
 const User = [
   {
+    userId: 1,
     id: "elonmusk",
     name: "Elon Musk",
     image: "/noneProfile.jpg",
-    follower: 101,
+    followers: 101,
   },
   {
+    userId: 2,
     id: "elonmusk",
     name: "Elon Musk",
     image: "/noneProfile.jpg",
-    follower: 521,
+    followers: 521,
   },
-  { id: "hihi", name: "leehai", image: faker.image.avatar(), follower: 1234 },
+  {
+    userId: 3,
+    id: "hihi",
+    name: "leehai",
+    image: faker.image.avatar(),
+    followers: 1234,
+  },
 ];
 
 export const handlers = [
@@ -26,6 +34,7 @@ export const handlers = [
         name: "dltmdgkr",
         id: "lee",
         image: "/noneProfile.jpg",
+        followers: 123,
       },
       {
         headers: {

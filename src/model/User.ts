@@ -1,6 +1,7 @@
 export interface User {
+  userId: number;
   id: string;
   name: string;
   image: string;
-  follower: number;
+  followers: number;
 }
