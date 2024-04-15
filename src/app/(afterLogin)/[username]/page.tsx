@@ -13,8 +13,6 @@ export default async function UserPage({
   params: { username: string };
 }) {
   const { username } = params;
-  console.log("params", params);
-  console.log("username", username);
   const queryClient = new QueryClient();
   const dehydratedState = dehydrate(queryClient);
 
@@ -22,11 +20,7 @@ export default async function UserPage({
     queryKey: ["users", username],
     queryFn: getUserInfo,
   });
-  // const user = {
-  //   id: "lee",
-  //   name: "dltmdgkr",
-  //   followers: 100,
-  // };
+
   return (
     <HydrationBoundary state={dehydratedState}>
       <div className="max-w-xl mx-auto p-6">
