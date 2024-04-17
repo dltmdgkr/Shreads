@@ -11,6 +11,7 @@ export default function FollowingPosts() {
     queryFn: getFollowingPosts,
     staleTime: 60 * 1000,
   });
+  if (!data) return;
 
   return data?.map((post: IPost) => <Post key={post.postId} post={post} />);
 }

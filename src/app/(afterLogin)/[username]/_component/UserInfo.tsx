@@ -15,11 +15,11 @@ export default function UserInfo({ username }: { username: string }) {
       gcTime: 300 * 1000,
     }
   );
+
   if (!user) {
     return null;
   }
 
-  console.log("user", user);
   return (
     <>
       <div className="flex mb-4">

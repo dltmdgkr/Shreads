@@ -10,14 +10,11 @@ import PostImages from "./PostImages";
 import { Post } from "@/model/Post";
 
 dayjs.locale("ko");
+
 dayjs.extend(relativeTime);
 
 export default function Post({ post }: { post: Post }) {
-  if (!post.User) {
-    console.log(post.User);
-    return <div>Loading...</div>;
-  }
-
+  if (!post || !post.User) return;
   return (
     <PostArticle post={post}>
       <div className={style.postWrapper}>

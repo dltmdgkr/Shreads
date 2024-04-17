@@ -210,15 +210,13 @@ export const handlers = [
   }),
   http.get("/api/posts/:postId", ({ request, params }) => {
     const { postId } = params;
-    return HttpResponse.json([
-      {
-        postId,
-        User: User[0],
-        content: `${1} 게시글 ${postId}의 내용`,
-        Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
-        createdAt: new Date(),
-      },
-    ]);
+    return HttpResponse.json({
+      postId,
+      User: User[0],
+      content: `${1} 게시글 ${postId}의 내용`,
+      Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
+      createdAt: new Date(),
+    });
   }),
   http.get("/api/posts/:postId/comments", async ({ request, params }) => {
     const { postId } = params;

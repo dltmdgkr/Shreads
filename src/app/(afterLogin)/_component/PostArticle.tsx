@@ -5,21 +5,6 @@ import style from "./post.module.css";
 import { useRouter } from "next/navigation";
 import { Post } from "@/model/Post";
 
-// interface Props {
-//   children: ReactNode;
-//   post: {
-//     postId: number;
-//     User: {
-//       id: string;
-//       name: string;
-//       image: string;
-//     };
-//     content: string;
-//     createdAt: Date;
-//     Images: any[];
-//   };
-// }
-
 export default function PostArticle({
   children,
   post,
@@ -31,6 +16,7 @@ export default function PostArticle({
   const onClick = () => {
     router.replace(`/${post.User.id}/posts/${post.postId}`);
   };
+
   return (
     <article onClickCapture={onClick} className={style.post}>
       {children}

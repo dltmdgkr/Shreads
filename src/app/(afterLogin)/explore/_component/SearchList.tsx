@@ -20,7 +20,7 @@ export default function SearchList({ user }: { user: User }) {
         </button>
       </div>
       <div className="ml-[70px] pb-3 border-b border-gray-200">
-        <p>팔로워 {user.follower}명</p>
+        <p>팔로워 {user.followers}명</p>
       </div>
     </div>
   );
