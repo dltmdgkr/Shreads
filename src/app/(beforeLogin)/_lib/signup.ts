@@ -1,51 +1,39 @@
 "use server";
 
 import { signIn } from "@/auth";
+import { supabase } from "@/lib/supabase";
 import { redirect } from "next/navigation";
 
-export default async (prevState: any, formData: FormData) => {
-  if (!formData?.get("id") || !(formData.get("id") as string)?.trim()) {
-    return { message: "no_id" };
+const signUpHandler = async (prevState: any, formData: FormData) => {
+  if (!formData?.get("email") || !(formData.get("email") as string)?.trim()) {
+    return { message: "no_email" };
   }
-  if (!formData.get("name") || !(formData.get("name") as string)?.trim()) {
-    return { message: "no_name" };
-  }
+
   if (
     !formData.get("password") ||
     !(formData.get("password") as string)?.trim()
   ) {
     return { message: "no_password" };
   }
-  if (!formData.get("image")) {
-    return { message: "no_image" };
-  }
-  let shouldRedirect = false;
+
+  // let shouldRedirect = false;
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/signup`,
-      {
-        method: "post",
-        body: formData,
-        credentials: "include",
-      }
-    );
-    console.log(response.status);
-    if (response.status === 403) {
-      return { message: "user_exists" };
-    }
-    console.log(await response.json());
-    shouldRedirect = true;
-    // await signIn("credentials", {
-    //   username: formData.get("id"),
-    //   password: formData.get("password"),
-    //   redirect: false,
-    // });
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    // shouldRedirect = true;
+    // redirect("/login");
   } catch (err) {
     console.error(err);
     return;
   }
-  if (shouldRedirect) {
-    redirect("/login");
-  }
+  // if (shouldRedirect) {
+  // }
   return { message: null };
 };
+
+export default signUpHandler;

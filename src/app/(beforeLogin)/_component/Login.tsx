@@ -1,13 +1,20 @@
 "use client";
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+// import { supabase } from "@/lib/supabase";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function Login() {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  const supabase = createClientComponentClient();
+  const [data, setData] = useState<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
+  // const [id, setId] = useState("");
+  // const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const router = useRouter();
 
@@ -15,11 +22,13 @@ export default function Login() {
     e.preventDefault();
     setMessage("");
     try {
-      await signIn("credentials", {
-        username: id,
-        password,
-        redirect: false,
+      const { data: dataUser, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       });
+      if (dataUser) {
+        console.log(dataUser);
+      }
       router.replace("/");
     } catch (err) {
       console.error(err);
@@ -27,12 +36,22 @@ export default function Login() {
     }
   };
 
-  const onChangeId = (e: ChangeEvent<HTMLInputElement>) => {
-    setId(e.target.value);
+  const signInWithGithub = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+    router.refresh();
   };
 
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -59,11 +78,11 @@ export default function Login() {
             <div className="mt-2">
               <input
                 id="text"
-                name="text"
+                name="email"
                 type="text"
                 autoComplete="text"
-                value={id}
-                onChange={onChangeId}
+                value={data?.email}
+                onChange={onChange}
                 required
                 className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
               />
@@ -92,8 +111,8 @@ export default function Login() {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                value={password}
-                onChange={onChangePassword}
+                value={data?.password}
+                onChange={onChange}
                 required
                 className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
               />
@@ -111,6 +130,13 @@ export default function Login() {
             </div>
           </div>
         </form>
+        <button
+          type="button"
+          onClick={signInWithGithub}
+          className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+        >
+          깃헙 로그인 하기
+        </button>
         <p className="mt-10 text-center text-sm text-gray-500">
           계정이 없으신가요?{" "}
           <Link
