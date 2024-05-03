@@ -1,3 +1,4 @@
+import { Tables } from "@/utils/database.types";
 import { PostImage } from "./PostImage";
 import { User } from "./User";
 

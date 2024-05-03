@@ -6,6 +6,8 @@ import {
 } from "@tanstack/react-query";
 import { getUserInfo } from "./_lib/getUserInfo";
 import UserInfo from "./_component/UserInfo";
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default async function UserPage({
   params,
@@ -16,9 +18,15 @@ export default async function UserPage({
   const queryClient = new QueryClient();
   const dehydratedState = dehydrate(queryClient);
 
+  const cookieStore = cookies();
+  // const supabase = useSupabaseServer(cookieStore);
+  const supabase = createServerComponentClient({
+    cookies: () => cookieStore,
+  });
+
   await queryClient.prefetchQuery({
     queryKey: ["users", username],
-    queryFn: getUserInfo,
+    queryFn: () => getUserInfo(supabase),
   });
 
   return (

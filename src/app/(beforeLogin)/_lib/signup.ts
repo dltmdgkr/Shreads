@@ -1,10 +1,15 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { supabase } from "@/lib/supabase";
-import { redirect } from "next/navigation";
+import {
+  createClientComponentClient,
+  createServerComponentClient,
+} from "@supabase/auth-helpers-nextjs";
+import { redirect, useRouter } from "next/navigation";
 
 const signUpHandler = async (prevState: any, formData: FormData) => {
+  const supabase = createClientComponentClient();
+
   if (!formData?.get("email") || !(formData.get("email") as string)?.trim()) {
     return { message: "no_email" };
   }
@@ -24,6 +29,9 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
     });
     // shouldRedirect = true;
     // redirect("/login");

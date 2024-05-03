@@ -8,32 +8,40 @@ import PostArticle from "./PostArticle";
 import { faker } from "@faker-js/faker";
 import PostImages from "./PostImages";
 import { Post } from "@/model/Post";
+import { Tables } from "@/utils/database.types";
+import { PostWithProfiles } from "../(home)/_lib/getFollowingPosts";
 
 dayjs.locale("ko");
 
 dayjs.extend(relativeTime);
 
-export default function Post({ post }: { post: Post }) {
-  if (!post || !post.User) return;
+export default function Post({ post }: { post: PostWithProfiles }) {
+  if (!post) return;
   return (
     <PostArticle post={post}>
       <div className={style.postWrapper}>
         <div className={style.postUserSection}>
-          <Link href={`/${post.User.id}`} className={style.postUserImage}>
-            <img src={post.User.image} alt={post.User.name} />
+          <Link href={`/${post.user_id}`} className={style.postUserImage}>
+            <img
+              src={post.profiles.avatar_url!}
+              alt={post.profiles.user_name!}
+            />
+
             <div className={style.postShade} />
           </Link>
         </div>
         <div className={style.postBody}>
           <div className={style.postMeta}>
-            <Link href={`/${post.User.id}`}>
-              <span className={style.postUserName}>{post.User.name}</span>
+            <Link href={`/${post.user_id}`}>
+              <span className={style.postUserName}>
+                {post.profiles.user_name}
+              </span>
               &nbsp;
-              <span className={style.postUserId}>@{post.User.id}</span>
+              <span className={style.postUserId}>@{post.profiles.email}</span>
               &nbsp; · &nbsp;
             </Link>
             <span className={style.postDate}>
-              {dayjs(post.createdAt).fromNow(true)}
+              {dayjs(post.created_at).fromNow(true)}
             </span>
           </div>
           <div>{post.content}</div>

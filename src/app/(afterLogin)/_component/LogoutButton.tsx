@@ -1,11 +1,15 @@
 "use client";
 
-import { supabase } from "@/lib/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+// import { createClient } from "@/utils/supabase/client";
+// import useSupabaseBrowser from "@/utils/supabase/client";
+// import { createClient } from "@/utils/supabase/client";
 import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function LogoutButton() {
+export default function LogoutButton({ me }: any) {
+  const supabase = createClientComponentClient();
   const router = useRouter();
 
   const onLogout = async () => {
@@ -22,14 +26,14 @@ export default function LogoutButton() {
     <button className="flex" onClick={onLogout}>
       <div className="mr-3">
         <img
-          // src={me.user.image!}
+          src={me.avatar_url}
           alt="profile_image"
           style={{ width: "40px", borderRadius: "50%" }}
         />
       </div>
       <div>
-        {/* <div className="font-bold">{me.user.name}</div> */}
-        {/* <div className="text-sm text-left leading-3">@{me.user.email}</div> */}
+        <div className="font-bold">{me.user_name}</div>
+        <div className="text-sm text-left leading-3">@{me.email}</div>
       </div>
     </button>
   );
