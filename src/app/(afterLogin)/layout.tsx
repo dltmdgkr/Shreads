@@ -15,10 +15,6 @@ import { ReactNode } from "react";
 import LogoutButton from "./_component/LogoutButton";
 import Link from "next/link";
 import RQProvider from "./_component/RQProvider";
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/utils/database.types";
-// import useSupabaseServer from "@/utils/supabase/server";
 
 export default async function AfterLoginLayout({
   children,
@@ -27,17 +23,6 @@ export default async function AfterLoginLayout({
   children: ReactNode;
   modal: ReactNode;
 }) {
-  const cookieStore = cookies();
-  // const supabase = useSupabaseServer(cookieStore);
-  const supabase = createServerComponentClient<Database>({
-    cookies: () => cookieStore,
-  });
-  console.log("supabase", supabase);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const me = user!.user_metadata;
-  console.log("me", me);
   return (
     <RQProvider>
       <Container className="relative" fixed>
@@ -94,7 +79,7 @@ export default async function AfterLoginLayout({
                 <Divider />
               </MenuList>
               <MenuItem className="py-2">
-                <LogoutButton me={me} />
+                <LogoutButton />
               </MenuItem>
             </Paper>
           </Grid>

@@ -6,6 +6,7 @@ import { createBrowserClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 // import { createClient } from "@/utils/supabase/client";
 import { signIn } from "next-auth/react";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { useRouter, redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
@@ -13,7 +14,10 @@ import { ChangeEvent, FormEvent, useState } from "react";
 export default function Login() {
   // const supabase = useSupabaseBrowser();
   const supabase = createClientComponentClient();
-  const [data, setData] = useState<{ email: string; password: string }>({
+  const [data, setData] = useState<{
+    email: string;
+    password: string;
+  }>({
     email: "",
     password: "",
   });
@@ -32,8 +36,8 @@ export default function Login() {
       });
       if (dataUser) {
         console.log(dataUser);
+        router.replace("/");
       }
-      router.replace("/");
     } catch (err) {
       console.error(err);
       setMessage("아이디와 비밀번호가 일치하지 않습니다.");

@@ -1,13 +1,8 @@
-"use server";
-
-import { signIn } from "@/auth";
-import {
-  createClientComponentClient,
-  createServerComponentClient,
-} from "@supabase/auth-helpers-nextjs";
-import { redirect, useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { redirect } from "next/navigation";
 
 const signUpHandler = async (prevState: any, formData: FormData) => {
+  // const router = useRouter()
   const supabase = createClientComponentClient();
 
   if (!formData?.get("email") || !(formData.get("email") as string)?.trim()) {
@@ -21,7 +16,7 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
     return { message: "no_password" };
   }
 
-  // let shouldRedirect = false;
+  let shouldRedirect = false;
   try {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
@@ -33,14 +28,15 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
-    // shouldRedirect = true;
-    // redirect("/login");
+    console.log("data", data);
+    shouldRedirect = true;
   } catch (err) {
     console.error(err);
     return;
   }
-  // if (shouldRedirect) {
-  // }
+  if (shouldRedirect) {
+    redirect("/login");
+  }
   return { message: null };
 };
 

@@ -1,17 +1,40 @@
 "use client";
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 export default function CreatePostModal() {
+  const supabase = createClientComponentClient();
+
   const [content, setContent] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+
   const imageRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const me = {
-    id: "lee",
-    image: "/noneProfile.jpg",
-  };
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user) {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select("avatar_url")
+            .eq("id", user.id)
+            .single();
+          if (error) throw error;
+          if (data) setAvatarUrl(data.avatar_url);
+        }
+      } catch (error) {
+        console.error("Error fetching avatar:", error);
+      }
+    };
+
+    fetchAvatar();
+  }, []);
 
   const onSubmit = () => {};
 
@@ -23,14 +46,15 @@ export default function CreatePostModal() {
     imageRef.current?.click();
   };
 
-  const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) =>
+  const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
+  };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
       <div className="relative max-w-[80vw] min-w-[600px] bg-white rounded-lg flex flex-col">
         <button
-          className="absolute top-3 left-3 w-9 h-9 rounded-full border-0 bg-white flex items-center justify-center"
+          className="top-3 left-3 w-12 h-12 rounded-full border-0 bg-white flex items-center justify-center"
           onClick={onClickClose}
         >
           <svg
@@ -53,8 +77,8 @@ export default function CreatePostModal() {
           <div className="flex items-center py-3 px-4">
             <div className="w-10 h-10 mr-3">
               <img
-                src={me.image}
-                alt={me.id}
+                src={avatarUrl}
+                alt="profile-image"
                 className="w-full h-full rounded-full"
               />
             </div>

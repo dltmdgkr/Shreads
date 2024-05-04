@@ -37,7 +37,9 @@ export default function Post({ post }: { post: PostWithProfiles }) {
                 {post.profiles.user_name}
               </span>
               &nbsp;
-              <span className={style.postUserId}>@{post.profiles.email}</span>
+              <span className={style.postUserId}>
+                @{post.profiles.email?.split("@")[0]}
+              </span>
               &nbsp; · &nbsp;
             </Link>
             <span className={style.postDate}>

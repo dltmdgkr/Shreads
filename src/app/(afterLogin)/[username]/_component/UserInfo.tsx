@@ -20,14 +20,14 @@ export default function UserInfo({ username }: { username: string }) {
 
   const user = data.data;
 
-  console.log(user);
-
   return (
     <>
       <div className="flex mb-4">
         <div className="flex flex-col justify-center flex-1">
           <div className="text-xl font-bold text-left">{user[0].user_name}</div>
-          <div className="text-lg text-left">@{user[0].email}</div>
+          <div className="text-lg text-left">
+            @{user[0].email?.split("@")[0]}
+          </div>
         </div>
         <img
           className="w-24 h-24 rounded-full mx-auto"
@@ -44,9 +44,11 @@ export default function UserInfo({ username }: { username: string }) {
           <GitHubIcon />
         </Link>
       </div>
-      <button className="w-full border border-gray-300 px-4 py-1 rounded-xl text-gray-700 hover:bg-gray-100">
-        프로필 편집
-      </button>
+      <Link href="/edit-profile">
+        <button className="w-full border border-gray-300 px-4 py-1 rounded-xl text-gray-700 hover:bg-gray-100">
+          프로필 편집
+        </button>
+      </Link>
     </>
   );
 }
