@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "mock": "npx tsx watch ./src/mocks/http.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@auth/core": "^0.28.2",

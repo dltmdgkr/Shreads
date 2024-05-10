@@ -1,18 +1,11 @@
 "use client";
 
-// import useSupabaseBrowser from "@/utils/supabase/client";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { createBrowserClient } from "@supabase/ssr";
-import { createClient } from "@supabase/supabase-js";
-// import { createClient } from "@/utils/supabase/client";
-import { signIn } from "next-auth/react";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import { useRouter, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function Login() {
-  // const supabase = useSupabaseBrowser();
   const supabase = createClientComponentClient();
   const [data, setData] = useState<{
     email: string;
@@ -21,8 +14,6 @@ export default function Login() {
     email: "",
     password: "",
   });
-  // const [id, setId] = useState("");
-  // const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const router = useRouter();
 
