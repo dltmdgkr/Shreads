@@ -9,7 +9,6 @@ import ToggleButton from "./_component/ToggleButton";
 import PostsToggleProvider from "./_component/PostsToggleProvider";
 import PostDecider from "./_component/PostDecider";
 import { cookies } from "next/headers";
-// import useSupabaseServer from "@/utils/supabase/server";
 import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getFollowingPosts } from "./_lib/getFollowingPosts";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -26,7 +25,6 @@ export default async function Home() {
   const dehydratedState = dehydrate(queryClient);
 
   const cookieStore = cookies();
-  // const supabase = useSupabaseServer(cookieStore);
   const supabase = createServerComponentClient({
     cookies: () => cookieStore,
   });

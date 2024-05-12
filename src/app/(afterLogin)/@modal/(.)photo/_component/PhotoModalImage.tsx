@@ -16,11 +16,7 @@ export default function PhotoModalImage() {
     //   image: string;
     // };
     // createdAt: Date;
-    Images: [
-      { link: "/noneProfile.jpg" },
-      { link: "/ElonMusk.png" },
-      { link: "/nextjs.png" },
-    ],
+    Images: ["/noneProfile.jpg", "/ElonMusk.png", "/nextjs.png"],
   };
 
   const handlePrevImage = () => {
@@ -37,7 +33,7 @@ export default function PhotoModalImage() {
   return (
     <>
       <PhotoModalPrevButton handlePrevImage={handlePrevImage} />
-      <img src={post.Images[currentImageIndex]?.link} alt="" />
+      <img src={post.Images[currentImageIndex]} alt="" />
       <PhotoModalNextButton handleNextImage={handleNextImage} />
     </>
   );

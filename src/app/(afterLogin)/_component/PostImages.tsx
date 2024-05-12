@@ -14,11 +14,11 @@ export default function PostImages({
         href={`/photo`}
         className={cx(style.postImageSection, style.oneImage)}
         style={{
-          backgroundImage: `url(${post.images[0]?.link})`,
+          backgroundImage: `url(${post.images[0]})`,
           backgroundSize: "contain",
         }}
       >
-        <img src={post.images[0]} alt="" /> {/* TODO: images[0].link로 변경 */}
+        <img src={post.images[0]} alt="" />
       </Link>
     );
   }
@@ -28,14 +28,14 @@ export default function PostImages({
         <Link
           href={`/photo`}
           style={{
-            backgroundImage: `url(${post.images[0]?.link})`,
+            backgroundImage: `url(${post.images[0]})`,
             backgroundSize: "cover",
           }}
         ></Link>
         <Link
           href={`/photo`}
           style={{
-            backgroundImage: `url(${post.images[1]?.link})`,
+            backgroundImage: `url(${post.images[1]})`,
             backgroundSize: "cover",
           }}
         ></Link>
@@ -48,7 +48,7 @@ export default function PostImages({
         <Link
           href={`/photo`}
           style={{
-            backgroundImage: `url(${post.images[0]?.link})`,
+            backgroundImage: `url(${post.images[0]})`,
             backgroundSize: "cover",
           }}
         ></Link>
@@ -56,14 +56,14 @@ export default function PostImages({
           <Link
             href={`/photo`}
             style={{
-              backgroundImage: `url(${post.images[1]?.link})`,
+              backgroundImage: `url(${post.images[1]})`,
               backgroundSize: "cover",
             }}
           ></Link>
           <Link
             href={`/photo`}
             style={{
-              backgroundImage: `url(${post.images[2]?.link})`,
+              backgroundImage: `url(${post.images[2]})`,
               backgroundSize: "cover",
             }}
           ></Link>
@@ -77,28 +77,28 @@ export default function PostImages({
         <Link
           href={`/photo`}
           style={{
-            backgroundImage: `url(${post.images[0]?.link})`,
+            backgroundImage: `url(${post.images[0]})`,
             backgroundSize: "cover",
           }}
         ></Link>
         <Link
           href={`/photo`}
           style={{
-            backgroundImage: `url(${post.images[1]?.link})`,
+            backgroundImage: `url(${post.images[1]})`,
             backgroundSize: "cover",
           }}
         ></Link>
         <Link
           href={`/photo`}
           style={{
-            backgroundImage: `url(${post.images[2]?.link})`,
+            backgroundImage: `url(${post.images[2]})`,
             backgroundSize: "cover",
           }}
         ></Link>
         <Link
           href={`/photo`}
           style={{
-            backgroundImage: `url(${post.images[3]?.link})`,
+            backgroundImage: `url(${post.images[3]})`,
             backgroundSize: "cover",
           }}
         ></Link>
