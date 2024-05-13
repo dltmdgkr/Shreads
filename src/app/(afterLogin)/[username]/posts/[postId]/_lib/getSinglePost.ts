@@ -1,21 +1,19 @@
-export async function getSinglePost({
-  queryKey,
-}: {
-  queryKey: [_1: string, _2: string];
-}) {
-  const [_1, postId] = queryKey;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${postId}`,
-    {
-      next: {
-        tags: ["posts", postId],
-      },
-    }
-  );
+import { PostWithProfiles } from "@/app/(afterLogin)/(home)/_lib/getFollowingPosts";
+import { TypedSupabaseClient } from "@/utils/types";
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
+export async function getSinglePost(
+  client: TypedSupabaseClient,
+  postId: number
+) {
+  const { data, error } = await client
+    .from("posts")
+    .select("*, profiles (*)")
+    .eq("id", postId)
+    .single();
+
+  if (error || !data) {
+    throw new Error("Failed to fetch post");
   }
 
-  return res.json();
+  return data as PostWithProfiles;
 }

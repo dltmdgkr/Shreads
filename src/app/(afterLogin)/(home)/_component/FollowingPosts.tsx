@@ -4,10 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import Post from "../../_component/Post";
 import { getFollowingPosts } from "../_lib/getFollowingPosts";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-// import useSupabaseBrowser from "@/utils/supabase/client";
 
 export default function FollowingPosts() {
-  // const supabase = useSupabaseBrowser();
   const supabase = createClientComponentClient();
 
   const { data } = useQuery({
@@ -20,6 +18,5 @@ export default function FollowingPosts() {
 
   const posts = data.data || [];
 
-  console.log("posts", posts);
   return posts.map((post) => <Post key={post.id} post={post} />);
 }

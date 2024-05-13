@@ -9,19 +9,11 @@ import ToggleButton from "./_component/ToggleButton";
 import PostsToggleProvider from "./_component/PostsToggleProvider";
 import PostDecider from "./_component/PostDecider";
 import { cookies } from "next/headers";
-import { prefetchQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getFollowingPosts } from "./_lib/getFollowingPosts";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default async function Home() {
   const queryClient = new QueryClient();
-
-  // await queryClient.prefetchInfiniteQuery({
-  //   queryKey: ["posts", "recommends"],
-  //   queryFn: getPostRecommends,
-  //   initialPageParam: 0,
-  // });
-
   const dehydratedState = dehydrate(queryClient);
 
   const cookieStore = cookies();
@@ -32,6 +24,11 @@ export default async function Home() {
   await queryClient.prefetchQuery({
     queryKey: ["posts", "followings"],
     queryFn: () => getFollowingPosts(supabase),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["posts", "recommends"],
+    queryFn: () => getPostRecommends(supabase),
   });
 
   return (
