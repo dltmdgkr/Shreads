@@ -3,7 +3,7 @@ import { TypedSupabaseClient } from "@/utils/types";
 
 export async function getSinglePost(
   client: TypedSupabaseClient,
-  postId: number
+  postId: string
 ) {
   const { data, error } = await client
     .from("posts")

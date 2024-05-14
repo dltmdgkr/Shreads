@@ -5,7 +5,7 @@ import { getSinglePost } from "../_lib/getSinglePost";
 import Post from "@/app/(afterLogin)/_component/Post";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function SinglePost({ postId }: { postId: number }) {
+export default function SinglePost({ postId }: { postId: string }) {
   const supabase = createClientComponentClient();
 
   const { data } = useQuery({
@@ -15,7 +15,7 @@ export default function SinglePost({ postId }: { postId: number }) {
     gcTime: 300 * 1000,
   });
 
-  if (!data || !data) return null;
+  if (!data) return null;
 
   const post = data;
 

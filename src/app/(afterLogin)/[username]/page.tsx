@@ -19,7 +19,6 @@ export default async function UserPage({
   const dehydratedState = dehydrate(queryClient);
 
   const cookieStore = cookies();
-  // const supabase = useSupabaseServer(cookieStore);
   const supabase = createServerComponentClient({
     cookies: () => cookieStore,
   });
