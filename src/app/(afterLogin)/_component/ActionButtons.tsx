@@ -21,7 +21,7 @@ export default function ActionButtons() {
           onClick={onClickComment}
           className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-blue-100"
         >
-          <TfiComment className="text-xs" />
+          <TfiComment />
         </button>
         <div className="text-sm text-gray-600">{1 || ""}</div>
       </div>
@@ -30,7 +30,7 @@ export default function ActionButtons() {
           onClick={onClickRepost}
           className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-green-100"
         >
-          <HiArrowPathRoundedSquare />
+          <HiArrowPathRoundedSquare className="text-lg" />
         </button>
         <div className="text-sm text-gray-600">{1 || ""}</div>
       </div>
@@ -39,13 +39,13 @@ export default function ActionButtons() {
           onClick={onClickHeart}
           className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-pink-100"
         >
-          <CiHeart />
+          <CiHeart className="text-lg" />
         </button>
         <div className="text-sm text-gray-600">{0 || ""}</div>
       </div>
       <div className="flex items-center">
         <button className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-yellow-100">
-          <CiLocationArrow1 />
+          <CiLocationArrow1 className="text-lg" />
         </button>
       </div>
     </div>
