@@ -9,9 +9,9 @@
   transition-duration: 0.2s;
   cursor: pointer;
 }
-.post:hover {
+/* .post:hover {
   background-color: rgba(0, 0, 0, 0.03);
-}
+} */
 
 .postWrapper {
   display: flex;
@@ -169,7 +169,7 @@
   border-bottom-right-radius: 16px;
 }
 
-.actionButtons {
+/* .actionButtons {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -191,7 +191,8 @@
 
 .commentButton button,
 .repostButton button,
-.heartButton button {
+.heartButton button,
+.shareButton button {
   background: #ffffff;
   border: none;
   outline: none;
@@ -278,4 +279,4 @@
 .heartButton.liked .count,
 .heartButton:hover .count {
   color: rgb(228, 34, 126);
-}
+} */
