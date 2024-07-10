@@ -18,7 +18,11 @@ export default function Comments({ postId }: { postId: string }) {
 
   const comments = data.data || [];
 
-  return comments.map((comment) => (
-    <Comment key={comment.id} comment={comment} />
-  ));
+  return (
+    <div className="pb-20">
+      {comments.map((comment) => (
+        <Comment key={comment.id} comment={comment} />
+      ))}
+    </div>
+  );
 }

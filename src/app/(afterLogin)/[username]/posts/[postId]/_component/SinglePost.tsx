@@ -8,16 +8,14 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 export default function SinglePost({ postId }: { postId: string }) {
   const supabase = createClientComponentClient();
 
-  const { data } = useQuery({
+  const { data: post } = useQuery({
     queryKey: ["posts", postId],
     queryFn: () => getSinglePost(supabase, postId),
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
   });
 
-  if (!data) return null;
-
-  const post = data;
+  if (!post) return null;
 
   return <Post key={post.id} post={post} />;
 }

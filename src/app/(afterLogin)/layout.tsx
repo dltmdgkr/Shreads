@@ -16,7 +16,7 @@ import LogoutButton from "./_component/LogoutButton";
 import Link from "next/link";
 import RQProvider from "./_component/RQProvider";
 
-export default async function AfterLoginLayout({
+export default function AfterLoginLayout({
   children,
   modal,
 }: {
