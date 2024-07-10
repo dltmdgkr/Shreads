@@ -100,12 +100,11 @@ export default function PostForm() {
           const {
             data: { publicUrl },
           } = supabase.storage.from("images").getPublicUrl(data!.path);
-
           return publicUrl;
         })
       );
 
-      setPreview(uploadedUrls);
+      setPreview((prevPreview) => [...prevPreview, ...uploadedUrls]);
     } catch (error) {
       alert("Error uploading images!");
     }

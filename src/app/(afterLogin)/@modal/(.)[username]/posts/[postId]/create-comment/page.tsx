@@ -11,6 +11,8 @@ import dayjs from "dayjs";
 
 export default function CreateCommentModal() {
   const supabase = createClientComponentClient();
+  const [preview, setPreview] = useState<Array<string | null>>([]);
+  const imageRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const router = useRouter();
   const match = window.location.pathname.match(/\/posts\/(\d+)/);
@@ -22,6 +24,7 @@ export default function CreateCommentModal() {
     queryFn: () => getSinglePost(supabase, postId),
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
+    enabled: !!postId,
   });
 
   const [user, setUser] = useState({
@@ -59,6 +62,7 @@ export default function CreateCommentModal() {
       content: string;
       user_id: string;
       post_id: string;
+      images: string[] | null;
     }) => postComment(newComment),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -77,6 +81,7 @@ export default function CreateCommentModal() {
       content,
       user_id: user.id,
       post_id: postId,
+      images: preview.filter((url) => url !== null) as string[],
     });
     setContent("");
     onClickClose();
@@ -85,6 +90,68 @@ export default function CreateCommentModal() {
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
+
+  const onRemoveImage = async (index: number) => {
+    try {
+      const imageUrl = preview[index];
+      if (!imageUrl) return;
+      const fileName = imageUrl.split("/").pop() as string;
+
+      const { error } = await supabase.storage
+        .from("images")
+        .remove([fileName]);
+
+      if (error) {
+        throw error;
+      }
+
+      setPreview((prevPreview) => {
+        const prev = [...prevPreview];
+        prev[index] = null;
+        return prev;
+      });
+    } catch (error) {
+      alert("Error removing image!");
+    }
+  };
+
+  const onUploadImages = async (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (!event.target.files || event.target.files.length === 0) {
+        throw new Error("You must select an image to upload.");
+      }
+
+      const uploadedUrls = await Promise.all(
+        Array.from(event.target.files).map(async (file) => {
+          const fileExt = file.name.split(".").pop();
+          const filePath = `${Math.random()}.${fileExt}`;
+
+          const { data, error: uploadError } = await supabase.storage
+            .from("images")
+            .upload(filePath, file);
+
+          if (uploadError) {
+            throw uploadError;
+          }
+
+          const {
+            data: { publicUrl },
+          } = supabase.storage.from("images").getPublicUrl(data!.path);
+          return publicUrl;
+        })
+      );
+
+      setPreview((prevPreview) => [...prevPreview, ...uploadedUrls]);
+    } catch (error) {
+      alert("Error uploading images!");
+    }
+  };
+
+  const onClickButton = () => {
+    imageRef.current?.click();
+  };
+
+  if (!postId) return null;
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
@@ -120,13 +187,13 @@ export default function CreateCommentModal() {
           </div>
           <div className="pl-12">
             <div>{post?.content}</div>
-            <div className="flex gap-4 mt-4 overflow-scroll">
+            <div className="flex gap-4 mt-4 overflow-scroll mr-4">
               {post?.images?.map((image, index) => (
                 <img
                   key={index}
                   src={image}
-                  alt="업로드 이미지"
-                  style={{ width: 300, height: 300 }}
+                  alt="게시글 이미지"
+                  style={{ width: 250, height: 300 }}
                   className="cursor-pointer rounded-lg border border-gray-300"
                 />
               ))}
@@ -150,7 +217,44 @@ export default function CreateCommentModal() {
               placeholder={`${post?.profiles.user_name}님에게 답글 남기기`}
               className="w-full focus:outline-none resize-none pl-12 mb-2"
             />
-            <div className="flex justify-end w-full">
+            <div className="flex">
+              {preview.map(
+                (v, index) =>
+                  v && (
+                    <div
+                      className="flex-1"
+                      key={index}
+                      onClick={() => onRemoveImage(index)}
+                    >
+                      <img
+                        className="w-[100%] object-contain max-h-24"
+                        src={v}
+                        alt="미리보기"
+                      />
+                    </div>
+                  )
+              )}
+            </div>
+            <div className="flex justify-end items-center w-full">
+              <div className="flex-1 pl-12">
+                <input
+                  type="file"
+                  name="imageFiles"
+                  multiple
+                  hidden
+                  ref={imageRef}
+                  onChange={onUploadImages}
+                />
+                <button type="button" onClick={onClickButton}>
+                  <svg
+                    className="w-6 h-6 text-gray-700"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"></path>
+                  </svg>
+                </button>
+              </div>
               <button
                 type="submit"
                 className={`px-6 py-2 mr-2 mb-5 font-semibold border rounded-xl ${

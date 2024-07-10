@@ -32,7 +32,7 @@ export default async function Home() {
   });
 
   return (
-    <main className="h-screen overflow-y-auto">
+    <main className="h-screen overflow-y-auto scrollbar-hide">
       <HydrationBoundary state={dehydratedState}>
         <PostsToggleProvider>
           <PostForm />

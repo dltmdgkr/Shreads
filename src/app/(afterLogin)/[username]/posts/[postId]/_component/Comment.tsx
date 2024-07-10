@@ -11,6 +11,17 @@ export default function Comment({ comment }: { comment: CommentWithProfiles }) {
       <div className="flex-col">
         <p className="font-bold mb-1">{comment.profiles.user_name}</p>
         <p className="text-gray-700 mb-2">{comment.content}</p>
+        <div className="flex gap-4 overflow-scroll">
+          {comment.images?.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt="댓글 이미지"
+              style={{ width: 100, height: 100 }}
+              className="cursor-pointer rounded-lg"
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

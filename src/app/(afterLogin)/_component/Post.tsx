@@ -113,7 +113,7 @@ export default function Post({ post }: { post: PostWithProfiles }) {
             <div className="mt-3">
               <PostImages post={post} />
             </div>
-            <ActionButtons />
+            <ActionButtons post={post} />
           </div>
         </div>
       </div>
