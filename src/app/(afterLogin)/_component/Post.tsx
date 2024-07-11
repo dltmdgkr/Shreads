@@ -100,10 +100,6 @@ export default function Post({ post }: { post: PostWithProfiles }) {
                   {post.profiles.user_name}
                 </span>
                 &nbsp;
-                <span className="text-gray-500">
-                  @{post.profiles.email?.split("@")[0]}
-                </span>
-                &nbsp;·&nbsp;
               </Link>
               <span className="text-gray-500">
                 {dayjs(post.created_at).fromNow(true)}

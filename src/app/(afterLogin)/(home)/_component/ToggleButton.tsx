@@ -12,7 +12,7 @@ export default function ToggleButton() {
 
   return (
     <button
-      className="absolute flex bottom-10 left-10 border border-gray-500 py-4 px-5 rounded-full"
+      className="absolute flex bottom-10 left-8 border border-gray-500 py-4 px-5 rounded-full"
       onClick={onClick}
     >
       {recommendPosts === true ? "회원님을 위한 추천" : "팔로잉"}
