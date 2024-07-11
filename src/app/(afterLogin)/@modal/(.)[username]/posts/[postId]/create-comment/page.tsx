@@ -8,6 +8,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import { getSinglePost } from "../../../../../[username]/posts/[postId]/_lib/getSinglePost";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
+import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";
 
 export default function CreateCommentModal() {
   const supabase = createClientComponentClient();
@@ -255,17 +256,9 @@ export default function CreateCommentModal() {
                   </svg>
                 </button>
               </div>
-              <button
-                type="submit"
-                className={`px-6 py-2 mr-2 mb-5 font-semibold border rounded-xl ${
-                  content === ""
-                    ? "text-gray-400 border-gray-200 cursor-not-allowed"
-                    : "text-black border-gray-400"
-                }`}
-                disabled={content === ""}
-              >
-                게시
-              </button>
+              <div className="mr-2 mb-5">
+                <SubmitButton disabled={content === ""} />
+              </div>
             </div>
           </form>
         </div>

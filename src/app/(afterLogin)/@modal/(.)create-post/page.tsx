@@ -3,6 +3,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import SubmitButton from "../../_component/SubmitButton";
 
 export default function CreatePostModal() {
   const supabase = createClientComponentClient();
@@ -102,7 +103,7 @@ export default function CreatePostModal() {
                   ref={imageRef}
                 />
                 <button
-                  className="w-9 h-9 rounded-full border-0 cursor-pointer bg-gray-300 hover:bg-gray-400 flex items-center justify-center"
+                  className="w-9 h-9 cursor-pointer flex items-center justify-center"
                   type="button"
                   onClick={onClickButton}
                 >
@@ -115,16 +116,7 @@ export default function CreatePostModal() {
                   </svg>
                 </button>
               </div>
-              <button
-                className={`w-32 h-10 rounded-lg border-0 cursor-pointer ${
-                  content
-                    ? "bg-black text-white hover:bg-black"
-                    : "bg-gray-300 text-gray-600"
-                }`}
-                disabled={!content}
-              >
-                게시하기
-              </button>
+              <SubmitButton disabled={content === ""} />
             </div>
           </div>
         </form>
