@@ -1,7 +1,6 @@
 .post {
   display: flex;
   flex-direction: column;
-  padding: 12px 16px;
   border-color: rgb(239, 243, 244);
   border-bottom-width: 1px;
   border-bottom-style: solid;

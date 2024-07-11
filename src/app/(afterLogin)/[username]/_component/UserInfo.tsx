@@ -32,7 +32,7 @@ export default function UserInfo({ username }: { username: string }) {
         <img
           className="w-24 h-24 rounded-full mx-auto"
           src={user[0].avatar_url!}
-          alt="Profile Image"
+          alt="프로필 이미지"
         />
       </div>
       <div className="flex flex-start mb-8">

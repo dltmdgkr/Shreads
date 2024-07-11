@@ -116,7 +116,10 @@ export default function PostForm() {
   };
 
   return (
-    <form className="flex m-3 border-solid border-b pb-2" onSubmit={onSubmit}>
+    <form
+      className="hidden sm:flex m-3 border-solid border-b pb-2"
+      onSubmit={onSubmit}
+    >
       <div className="flex flex-1 items-center">
         <div className="mr-3">
           <img

@@ -75,7 +75,7 @@ export default function Post({ post }: { post: PostWithProfiles }) {
 
   return (
     <PostArticle post={post}>
-      <div className="flex flex-col cursor-pointer">
+      <div className="flex flex-col cursor-pointer sm:p-3 pt-4">
         <div className="flex">
           <div className="mr-3 w-10">
             <Link

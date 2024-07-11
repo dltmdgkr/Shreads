@@ -70,7 +70,7 @@ export default function AfterLoginLayout({
             </Link>
           </div>
 
-          <div className="flex-1 lg:ml-64 p-4 mt-16 lg:mt-0">{children}</div>
+          <div className="flex-1 lg:ml-64 sm:p-4 mt-16 lg:mt-0">{children}</div>
           {modal}
         </div>
       </Container>

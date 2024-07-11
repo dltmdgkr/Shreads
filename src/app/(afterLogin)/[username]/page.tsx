@@ -30,7 +30,7 @@ export default async function UserPage({
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="max-w-xl mx-auto p-6">
+      <div className="p-6">
         <UserInfo username={username} />
         <UserProfileBottomNavigation />
       </div>
