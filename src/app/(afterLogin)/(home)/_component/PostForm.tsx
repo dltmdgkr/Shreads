@@ -69,7 +69,6 @@ export default function PostForm() {
 
       if (imageError) throw imageError;
 
-      alert("Post and images uploaded successfully!");
       setContent("");
       setPreview([]);
     } catch (error) {
