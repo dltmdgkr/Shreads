@@ -15,6 +15,7 @@ export default function PostForm() {
   });
   const [content, setContent] = useState("");
   const [preview, setPreview] = useState<Array<string | null>>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const fetchAvatar = async () => {
@@ -37,21 +38,42 @@ export default function PostForm() {
     };
 
     fetchAvatar();
-  }, []);
+  }, [supabase]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const { error } = await supabase.from("posts").insert([
-        {
-          content,
-          images: [...preview],
-          user_id: user.id,
-        },
-      ]);
-      if (error) throw error;
+      const { data: post, error: postError } = await supabase
+        .from("posts")
+        .insert([
+          {
+            content,
+            user_id: user.id,
+          },
+        ])
+        .select();
+
+      if (postError) throw postError;
+      if (!post || post.length === 0) throw new Error("Failed to create post");
+
+      const postId = post[0].id;
+
+      const imageInserts = preview.map((imageUrl) => ({
+        post_id: postId,
+        image_url: imageUrl,
+      }));
+
+      const { error: imageError } = await supabase
+        .from("postImages")
+        .insert(imageInserts);
+
+      if (imageError) throw imageError;
+
+      alert("Post and images uploaded successfully!");
+      setContent("");
+      setPreview([]);
     } catch (error) {
-      alert("Error uploading the data!");
+      alert(`Error uploading the data: ${JSON.stringify(error)}`);
     }
   };
 
@@ -75,7 +97,7 @@ export default function PostForm() {
         return prev;
       });
     } catch (error) {
-      alert("Error removing image!");
+      alert(`Error removing image: ${JSON.stringify(error)}`);
     }
   };
 
@@ -84,6 +106,8 @@ export default function PostForm() {
       if (!event.target.files || event.target.files.length === 0) {
         throw new Error("You must select an image to upload.");
       }
+
+      setIsUploading(true);
 
       const uploadedUrls = await Promise.all(
         Array.from(event.target.files).map(async (file) => {
@@ -107,7 +131,9 @@ export default function PostForm() {
 
       setPreview((prevPreview) => [...prevPreview, ...uploadedUrls]);
     } catch (error) {
-      alert("Error uploading images!");
+      alert(`Error uploading images: ${JSON.stringify(error)}`);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -132,6 +158,7 @@ export default function PostForm() {
           <TextareaAutosize
             className="w-full h-full border-0 focus:outline-none"
             placeholder="슈레드를 시작하세요!"
+            value={content}
             onChange={(e) => {
               setContent(e.target.value);
             }}
@@ -165,7 +192,7 @@ export default function PostForm() {
           ref={imageRef}
           onChange={onUploadImages}
         />
-        <button type="button" onClick={onClickButton}>
+        <button type="button" onClick={onClickButton} disabled={isUploading}>
           <svg
             className="w-6 h-6 text-gray-700"
             viewBox="0 0 24 24"
@@ -174,7 +201,7 @@ export default function PostForm() {
             <path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"></path>
           </svg>
         </button>
-        <SubmitButton disabled={content === ""} />
+        <SubmitButton disabled={content === "" || isUploading} />
       </div>
     </form>
   );

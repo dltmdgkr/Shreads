@@ -1,4 +1,4 @@
-import { PostWithProfiles } from "@/app/(afterLogin)/(home)/_lib/getFollowingPosts";
+import { Post } from "@/model/Post";
 import { TypedSupabaseClient } from "@/utils/types";
 
 export async function getSinglePost(
@@ -7,7 +7,7 @@ export async function getSinglePost(
 ) {
   const { data, error } = await client
     .from("posts")
-    .select("*, profiles (*)")
+    .select("*, profiles (*), postImages (*)")
     .eq("id", postId)
     .single();
 
@@ -15,5 +15,5 @@ export async function getSinglePost(
     throw new Error("Failed to fetch post");
   }
 
-  return data as PostWithProfiles;
+  return data as Post;
 }

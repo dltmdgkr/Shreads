@@ -10,22 +10,23 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";
 
-export default function CreateCommentModal() {
+export default function CreateCommentModal({
+  params,
+}: {
+  params: { postId: string };
+}) {
   const supabase = createClientComponentClient();
   const [preview, setPreview] = useState<Array<string | null>>([]);
   const imageRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const router = useRouter();
-  const match = window.location.pathname.match(/\/posts\/(\d+)/);
-  if (!match) return;
-  const postId = match[1];
+  const { postId } = params;
 
   const { data: post } = useQuery({
     queryKey: ["posts", postId],
     queryFn: () => getSinglePost(supabase, postId),
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
-    enabled: !!postId,
   });
 
   const [user, setUser] = useState({
@@ -63,7 +64,7 @@ export default function CreateCommentModal() {
       content: string;
       user_id: string;
       post_id: string;
-      images: string[] | null;
+      images: string[];
     }) => postComment(newComment),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -85,6 +86,7 @@ export default function CreateCommentModal() {
       images: preview.filter((url) => url !== null) as string[],
     });
     setContent("");
+    setPreview([]);
     onClickClose();
   };
 
@@ -156,7 +158,7 @@ export default function CreateCommentModal() {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
-      <div className="relative max-w-[50vw] min-w-[600px] bg-white rounded-xl flex flex-col">
+      <div className="relative sm:max-w-[50vw] sm:min-w-[600px] bg-white rounded-xl flex flex-col">
         <button
           className="top-3 left-3 w-12 h-12 flex items-center justify-center"
           onClick={onClickClose}
@@ -189,10 +191,10 @@ export default function CreateCommentModal() {
           <div className="pl-12">
             <div>{post?.content}</div>
             <div className="flex gap-4 mt-4 overflow-scroll mr-4">
-              {post?.images?.map((image, index) => (
+              {post?.postImages?.map((image) => (
                 <img
-                  key={index}
-                  src={image}
+                  key={image.id}
+                  src={image.image_url!}
                   alt="게시글 이미지"
                   style={{ width: 250, height: 300 }}
                   className="cursor-pointer rounded-lg border border-gray-300"

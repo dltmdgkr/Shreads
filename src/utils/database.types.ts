@@ -9,12 +9,40 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      commentImages: {
+        Row: {
+          comment_id: number | null
+          created_at: string
+          id: number
+          image_url: string | null
+        }
+        Insert: {
+          comment_id?: number | null
+          created_at?: string
+          id?: number
+          image_url?: string | null
+        }
+        Update: {
+          comment_id?: number | null
+          created_at?: string
+          id?: number
+          image_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commentImages_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           content: string | null
           created_at: string
           id: number
-          images: string[] | null
           post_id: number | null
           user_id: string | null
         }
@@ -22,7 +50,6 @@ export type Database = {
           content?: string | null
           created_at?: string
           id?: number
-          images?: string[] | null
           post_id?: number | null
           user_id?: string | null
         }
@@ -30,7 +57,6 @@ export type Database = {
           content?: string | null
           created_at?: string
           id?: number
-          images?: string[] | null
           post_id?: number | null
           user_id?: string | null
         }
@@ -58,26 +84,52 @@ export type Database = {
           },
         ]
       }
+      postImages: {
+        Row: {
+          created_at: string
+          id: number
+          image_url: string | null
+          post_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          post_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          post_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "postImages_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           content: string | null
           created_at: string
           id: number
-          images: string[] | null
           user_id: string | null
         }
         Insert: {
           content?: string | null
           created_at?: string
           id?: number
-          images?: string[] | null
           user_id?: string | null
         }
         Update: {
           content?: string | null
           created_at?: string
           id?: number
-          images?: string[] | null
           user_id?: string | null
         }
         Relationships: [

@@ -53,7 +53,7 @@ export default function CreatePostModal() {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
-      <div className="relative max-w-[80vw] min-w-[600px] bg-white rounded-lg flex flex-col">
+      <div className="relative sm:max-w-[80vw] sm:min-w-[600px] bg-white rounded-lg flex flex-col">
         <button
           className="top-3 left-3 w-12 h-12 rounded-full border-0 bg-white flex items-center justify-center"
           onClick={onClickClose}

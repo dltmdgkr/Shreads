@@ -30,7 +30,7 @@ export default function UserInfo({ username }: { username: string }) {
           </div>
         </div>
         <img
-          className="w-24 h-24 rounded-full mx-auto"
+          className="sm:w-24 sm:h-24 w-20 h-20 rounded-full mx-auto"
           src={user[0].avatar_url!}
           alt="프로필 이미지"
         />

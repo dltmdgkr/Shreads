@@ -1,6 +1,6 @@
-import { CommentWithProfiles } from "../_lib/getComments";
+import { Comment } from "@/model/Comment";
 
-export default function Comment({ comment }: { comment: CommentWithProfiles }) {
+export default function Comment({ comment }: { comment: Comment }) {
   return (
     <div className="flex items-start mt-3 pl-3 pb-3 border-b border-gray-200">
       <img
@@ -12,10 +12,10 @@ export default function Comment({ comment }: { comment: CommentWithProfiles }) {
         <p className="font-bold mb-1">{comment.profiles.user_name}</p>
         <p className="text-gray-700 mb-2">{comment.content}</p>
         <div className="flex gap-4 overflow-scroll">
-          {comment.images?.map((image, index) => (
+          {comment.commentImages.map((image) => (
             <img
-              key={index}
-              src={image}
+              key={image.id}
+              src={image.image_url!}
               alt="댓글 이미지"
               style={{ width: 100, height: 100 }}
               className="cursor-pointer rounded-lg"

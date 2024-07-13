@@ -65,12 +65,12 @@ import "dayjs/locale/ko";
 import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
 import PostArticle from "./PostArticle";
 import PostImages from "./PostImages";
-import { PostWithProfiles } from "../(home)/_lib/getFollowingPosts";
+import { Post } from "@/model/Post";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Post({ post }: { post: PostWithProfiles }) {
+export default function Post({ post }: { post: Post }) {
   if (!post) return null;
 
   return (
