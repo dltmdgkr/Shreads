@@ -13,7 +13,7 @@ export default function PostImages({ post }: { post: Post }) {
       onMouseMove={onDragMove}
       onMouseUp={onDragEnd}
       onMouseLeave={onDragEnd}
-      className="flex gap-2 overflow-scroll"
+      className="flex gap-2 overflow-scroll scrollbar-hide"
     >
       {post.postImages?.map((image) => (
         <Link

@@ -208,7 +208,7 @@ export default function CreateCommentModal({
               onMouseMove={onDragMove}
               onMouseUp={onDragEnd}
               onMouseLeave={onDragEnd}
-              className="flex gap-4 mt-4 overflow-scroll mr-4"
+              className="flex gap-4 mt-4 overflow-scroll scrollbar-hide mr-4"
             >
               {post?.postImages?.map((image) => (
                 <img

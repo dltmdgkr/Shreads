@@ -21,7 +21,7 @@ export default function ActionButtons({ post }: { post: Post }) {
   const onClickHeart = () => {};
 
   return (
-    <div className="flex justify-between mt-3 space-x-1">
+    <div className="flex mt-3">
       <div className={cx("flex items-center", commented && "text-blue-500")}>
         <button
           onClick={onClickComment}
