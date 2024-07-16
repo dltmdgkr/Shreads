@@ -17,7 +17,7 @@ export default function Comment({ comment }: { comment: Comment }) {
               key={image.id}
               src={image.image_url!}
               alt="댓글 이미지"
-              style={{ width: 100, height: 100 }}
+              // style={{ width: 100, height: 100 }}
               className="cursor-pointer rounded-lg border border-gray-300"
             />
           ))}

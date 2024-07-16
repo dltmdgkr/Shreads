@@ -9,15 +9,18 @@ import { getSinglePost } from "../../../../../[username]/posts/[postId]/_lib/get
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";
+import { useDraggableScroll } from "@/app/(afterLogin)/_component/_lib/hooks/useDraggableScroll";
 
 export default function CreateCommentModal({
   params,
 }: {
   params: { postId: string };
 }) {
+  const { scrollRef, onDragStart, onDragEnd, onDragMove, onClick } =
+    useDraggableScroll();
   const supabase = createClientComponentClient();
   const [preview, setPreview] = useState<Array<string | null>>([]);
-  const imageRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const router = useRouter();
   const { postId } = params;
@@ -160,7 +163,7 @@ export default function CreateCommentModal({
   };
 
   const onClickButton = () => {
-    imageRef.current?.click();
+    inputRef.current?.click();
   };
 
   if (!postId) return null;
@@ -199,7 +202,14 @@ export default function CreateCommentModal({
           </div>
           <div className="pl-12">
             <div>{post?.content}</div>
-            <div className="flex gap-4 mt-4 overflow-scroll mr-4">
+            <div
+              ref={scrollRef}
+              onMouseDown={onDragStart}
+              onMouseMove={onDragMove}
+              onMouseUp={onDragEnd}
+              onMouseLeave={onDragEnd}
+              className="flex gap-4 mt-4 overflow-scroll mr-4"
+            >
               {post?.postImages?.map((image) => (
                 <img
                   key={image.id}
@@ -254,7 +264,7 @@ export default function CreateCommentModal({
                   name="imageFiles"
                   multiple
                   hidden
-                  ref={imageRef}
+                  ref={inputRef}
                   onChange={onUploadImages}
                 />
                 <button type="button" onClick={onClickButton}>
