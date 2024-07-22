@@ -4,10 +4,13 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import SubmitButton from "../../_component/SubmitButton";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { postBoard } from "../_lib/postBoard";
 
 export default function PostForm() {
   const supabase = createClientComponentClient();
   const imageRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
   const [user, setUser] = useState({
     avatar_url: "",
     user_name: "",
@@ -40,40 +43,28 @@ export default function PostForm() {
     fetchAvatar();
   }, [supabase]);
 
+  const postData = useMutation({
+    mutationFn: (newPost: {
+      content: string;
+      user_id: string;
+      images: string[];
+    }) => postBoard(newPost),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["posts", "followings"],
+      });
+    },
+  });
+
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const { data: post, error: postError } = await supabase
-        .from("posts")
-        .insert([
-          {
-            content,
-            user_id: user.id,
-          },
-        ])
-        .select();
-
-      if (postError) throw postError;
-      if (!post || post.length === 0) throw new Error("Failed to create post");
-
-      const postId = post[0].id;
-
-      const imageInserts = preview.map((imageUrl) => ({
-        post_id: postId,
-        image_url: imageUrl,
-      }));
-
-      const { error: imageError } = await supabase
-        .from("postImages")
-        .insert(imageInserts);
-
-      if (imageError) throw imageError;
-
-      setContent("");
-      setPreview([]);
-    } catch (error) {
-      alert(`Error uploading the data: ${JSON.stringify(error)}`);
-    }
+    postData.mutate({
+      content,
+      user_id: user.id,
+      images: preview.filter((url) => url !== null) as string[],
+    });
+    setContent("");
+    setPreview([]);
   };
 
   const onRemoveImage = async (index: number) => {
