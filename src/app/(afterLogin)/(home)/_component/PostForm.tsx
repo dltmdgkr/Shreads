@@ -1,47 +1,22 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import SubmitButton from "../../_component/SubmitButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postBoard } from "../_lib/postBoard";
+import { useFetchUser } from "../../_component/_lib/hooks/useFetchUser";
 
 export default function PostForm() {
   const supabase = createClientComponentClient();
   const imageRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
-  const [user, setUser] = useState({
-    avatar_url: "",
-    user_name: "",
-    id: "",
-  });
+  const { user } = useFetchUser();
+
   const [content, setContent] = useState("");
   const [preview, setPreview] = useState<Array<string | null>>([]);
   const [isUploading, setIsUploading] = useState(false);
-
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (user) {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", user.id)
-            .single();
-          if (error) throw error;
-          if (data) setUser(data);
-        }
-      } catch (error) {
-        console.error("Error fetching avatar:", error);
-      }
-    };
-
-    fetchAvatar();
-  }, [supabase]);
 
   const postData = useMutation({
     mutationFn: (newPost: {

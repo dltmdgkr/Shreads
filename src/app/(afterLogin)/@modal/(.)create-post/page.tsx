@@ -1,41 +1,15 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import SubmitButton from "../../_component/SubmitButton";
+import { useFetchUser } from "../../_component/_lib/hooks/useFetchUser";
 
 export default function CreatePostModal() {
-  const supabase = createClientComponentClient();
-
-  const [content, setContent] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-
+  const { user } = useFetchUser();
   const imageRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (user) {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("avatar_url")
-            .eq("id", user.id)
-            .single();
-          if (error) throw error;
-          if (data) setAvatarUrl(data.avatar_url);
-        }
-      } catch (error) {
-        console.error("Error fetching avatar:", error);
-      }
-    };
-
-    fetchAvatar();
-  }, []);
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
@@ -87,7 +61,7 @@ export default function CreatePostModal() {
           <div className="flex items-center py-3 px-4">
             <div className="w-10 h-10 mr-3">
               <img
-                src={avatarUrl}
+                src={user.avatar_url}
                 alt="profile-image"
                 className="w-full h-full rounded-full"
               />

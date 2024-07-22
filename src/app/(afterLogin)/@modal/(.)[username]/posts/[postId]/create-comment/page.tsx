@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";
 import { useDraggableScroll } from "@/app/(afterLogin)/_component/_lib/hooks/useDraggableScroll";
+import { useFetchUser } from "@/app/(afterLogin)/_component/_lib/hooks/useFetchUser";
 
 export default function CreateCommentModal({
   params,
@@ -22,6 +23,7 @@ export default function CreateCommentModal({
   const [preview, setPreview] = useState<Array<string | null>>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+  const { user } = useFetchUser();
   const router = useRouter();
   const { postId } = params;
 
@@ -32,35 +34,7 @@ export default function CreateCommentModal({
     gcTime: 300 * 1000,
   });
 
-  const [user, setUser] = useState({
-    avatar_url: "",
-    user_name: "",
-    id: "",
-  });
   const [content, setContent] = useState("");
-
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (user) {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", user.id)
-            .single();
-          if (error) throw error;
-          if (data) setUser(data);
-        }
-      } catch (error) {
-        console.error("Error fetching avatar:", error);
-      }
-    };
-
-    fetchAvatar();
-  }, []);
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
