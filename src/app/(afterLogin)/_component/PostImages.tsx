@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Post } from "@/model/Post";
-import { useDraggableScroll } from "./_lib/hooks/useDraggableScroll";
+import { useDraggableScroll } from "../_hook/useDraggableScroll";
 
 export default function PostImages({ post }: { post: Post }) {
   const { scrollRef, onDragStart, onDragEnd, onDragMove, onClick } =

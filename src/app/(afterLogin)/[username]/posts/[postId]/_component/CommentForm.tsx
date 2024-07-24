@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useFetchUser } from "@/app/(afterLogin)/_component/_lib/hooks/useFetchUser";
+import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
 
 export default function CommentForm({ post }: { post: any }) {
   const { user } = useFetchUser();

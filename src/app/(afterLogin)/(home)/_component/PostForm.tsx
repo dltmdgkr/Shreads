@@ -6,7 +6,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import SubmitButton from "../../_component/SubmitButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postBoard } from "../_lib/postBoard";
-import { useFetchUser } from "../../_component/_lib/hooks/useFetchUser";
+import { useFetchUser } from "../../_hook/useFetchUser";
 
 export default function PostForm() {
   const supabase = createClientComponentClient();
