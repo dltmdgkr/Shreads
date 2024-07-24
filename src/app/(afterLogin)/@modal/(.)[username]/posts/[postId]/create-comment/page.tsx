@@ -9,8 +9,9 @@ import { getSinglePost } from "../../../../../[username]/posts/[postId]/_lib/get
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";
-import { useDraggableScroll } from "@/app/(afterLogin)/_component/_lib/hooks/useDraggableScroll";
-import { useFetchUser } from "@/app/(afterLogin)/_component/_lib/hooks/useFetchUser";
+import { useDraggableScroll } from "@/app/(afterLogin)/_hook/useDraggableScroll";
+import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
+import useDisableBodyScroll from "@/app/(afterLogin)/_hook/useDisableBodyScroll";
 
 export default function CreateCommentModal({
   params,
@@ -25,6 +26,7 @@ export default function CreateCommentModal({
   const queryClient = useQueryClient();
   const { user } = useFetchUser();
   const router = useRouter();
+  useDisableBodyScroll();
   const { postId } = params;
 
   const { data: post } = useQuery({
@@ -35,15 +37,6 @@ export default function CreateCommentModal({
   });
 
   const [content, setContent] = useState("");
-
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
 
   const commentData = useMutation({
     mutationFn: (newComment: {

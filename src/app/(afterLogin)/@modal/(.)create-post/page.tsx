@@ -1,24 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import SubmitButton from "../../_component/SubmitButton";
-import { useFetchUser } from "../../_component/_lib/hooks/useFetchUser";
+import { useFetchUser } from "../../_hook/useFetchUser";
+import useDisableBodyScroll from "../../_hook/useDisableBodyScroll";
 
 export default function CreatePostModal() {
   const { user } = useFetchUser();
   const imageRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  useDisableBodyScroll();
+
   const [content, setContent] = useState("");
-
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
 
   const onSubmit = () => {};
 
