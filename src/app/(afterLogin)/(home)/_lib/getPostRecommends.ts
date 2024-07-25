@@ -4,6 +4,6 @@ import { TypedSupabaseClient } from "@/utils/types";
 export async function getPostRecommends(client: TypedSupabaseClient) {
   return await client
     .from("posts")
-    .select("*, profiles (*), postImages (*)")
+    .select("*, profiles (*), postImages (*), comments (*)")
     .returns<Post[]>();
 }

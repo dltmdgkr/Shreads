@@ -7,7 +7,7 @@ export async function getSinglePost(
 ) {
   const { data, error } = await client
     .from("posts")
-    .select("*, profiles (*), postImages (*)")
+    .select("*, profiles (*), postImages (*), comments (*)")
     .eq("id", postId)
     .single();
 

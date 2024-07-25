@@ -118,18 +118,24 @@ export type Database = {
           content: string | null
           created_at: string
           id: number
+          like_count: number | null
+          liked: boolean | null
           user_id: string | null
         }
         Insert: {
           content?: string | null
           created_at?: string
           id?: number
+          like_count?: number | null
+          liked?: boolean | null
           user_id?: string | null
         }
         Update: {
           content?: string | null
           created_at?: string
           id?: number
+          like_count?: number | null
+          liked?: boolean | null
           user_id?: string | null
         }
         Relationships: [
