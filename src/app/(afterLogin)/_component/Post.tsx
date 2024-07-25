@@ -6,12 +6,17 @@ import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
 import PostArticle from "./PostArticle";
 import PostImages from "./PostImages";
 import { Post } from "@/model/Post";
+import { MouseEventHandler } from "react";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
 export default function Post({ post }: { post: Post }) {
   if (!post) return null;
+
+  const stopPropagation: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.stopPropagation();
+  };
 
   return (
     <PostArticle post={post}>
@@ -20,6 +25,7 @@ export default function Post({ post }: { post: Post }) {
           <section className="mr-3 w-10">
             <Link
               href={`/${post.profiles.user_name}`}
+              onClick={stopPropagation}
               className="relative block w-10 h-10 rounded-full"
             >
               <img
@@ -34,6 +40,7 @@ export default function Post({ post }: { post: Post }) {
             <p className="flex items-center mb-2">
               <Link
                 href={`/${post.profiles.user_name}`}
+                onClick={stopPropagation}
                 className="flex items-center"
               >
                 <span className="font-bold hover:underline">
