@@ -16,7 +16,7 @@ export default function FollowingPosts() {
 
   if (!data || !data.data) return null;
 
-  const posts = data.data || [];
+  const posts = data.data.sort((a, b) => b.id - a.id);
 
   return posts.map((post) => <Post key={post.id} post={post} />);
 }
