@@ -30,6 +30,7 @@ export function useDraggableScroll() {
 
   const onClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      e.stopPropagation();
       if (Math.abs(e.pageX - moveX) > 5) {
         e.preventDefault();
         e.stopPropagation();
