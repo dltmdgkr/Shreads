@@ -6,6 +6,10 @@ export default function PostImages({ post }: { post: Post }) {
   const { scrollRef, onDragStart, onDragEnd, onDragMove, onClick } =
     useDraggableScroll();
 
+  const stopPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <div
       ref={scrollRef}
@@ -13,6 +17,7 @@ export default function PostImages({ post }: { post: Post }) {
       onMouseMove={onDragMove}
       onMouseUp={onDragEnd}
       onMouseLeave={onDragEnd}
+      onClick={stopPropagation}
       className="flex gap-2 overflow-scroll scrollbar-hide"
     >
       {post.postImages?.map((image) => (
