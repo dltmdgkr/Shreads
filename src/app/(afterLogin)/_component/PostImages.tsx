@@ -6,8 +6,12 @@ export default function PostImages({ post }: { post: Post }) {
   const { scrollRef, onDragStart, onDragEnd, onDragMove, onClick } =
     useDraggableScroll();
 
+  const hasMultipleImages = post.postImages?.length > 4;
+
   const stopPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
+    if (hasMultipleImages) {
+      e.stopPropagation();
+    }
   };
 
   return (
