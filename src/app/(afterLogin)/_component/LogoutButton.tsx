@@ -54,7 +54,7 @@ export default function LogoutButton() {
         <img
           src={me.avatar_url}
           alt="profile_image"
-          style={{ width: "40px", borderRadius: "50%" }}
+          className="w-10 h-10 rounded-full"
         />
       </div>
       <div>

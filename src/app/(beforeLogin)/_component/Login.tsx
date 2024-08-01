@@ -35,6 +35,16 @@ export default function Login() {
     }
   };
 
+  const signInWithKakao = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+    router.refresh();
+  };
+
   const signInWithGithub = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
@@ -129,6 +139,13 @@ export default function Login() {
             </div>
           </div>
         </form>
+        <button
+          type="button"
+          onClick={signInWithKakao}
+          className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+        >
+          카카오 로그인 하기
+        </button>
         <button
           type="button"
           onClick={signInWithGithub}
