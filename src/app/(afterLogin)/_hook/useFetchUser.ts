@@ -1,4 +1,3 @@
-// useFetchUser 훅 수정
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
 
@@ -9,11 +8,11 @@ export function useFetchUser() {
     user_name: "",
     id: "",
   });
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAvatar = async () => {
-      setLoading(true); // 데이터 로딩 시작
+      setLoading(true);
       try {
         const {
           data: { user },
@@ -30,7 +29,7 @@ export function useFetchUser() {
       } catch (error) {
         console.error("Error fetching avatar:", error);
       } finally {
-        setLoading(false); // 데이터 로딩 완료
+        setLoading(false);
       }
     };
 

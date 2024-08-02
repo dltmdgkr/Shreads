@@ -4,7 +4,6 @@ export async function postLike(postId: number, userId: string, liked: boolean) {
   const supabase = createClientComponentClient();
 
   if (liked) {
-    // 좋아요 추가
     const { error: insertLikeError } = await supabase
       .from("likes")
       .insert([{ post_id: postId, user_id: userId }]);
@@ -14,7 +13,6 @@ export async function postLike(postId: number, userId: string, liked: boolean) {
       throw insertLikeError;
     }
   } else {
-    // 좋아요 제거
     const { error: deleteLikeError } = await supabase
       .from("likes")
       .delete()
@@ -27,7 +25,6 @@ export async function postLike(postId: number, userId: string, liked: boolean) {
     }
   }
 
-  // 게시물의 like_count 업데이트
   const { count: likeCount, error: likeCountError } = await supabase
     .from("likes")
     .select("*", { count: "exact", head: true })
