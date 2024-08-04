@@ -47,7 +47,7 @@ export default function CommentForm({ post }: { post: any }) {
         <img
           src={user.avatar_url}
           alt="프로필 이미지"
-          className="w-8 h-8 rounded-full mr-2"
+          className="w-8 h-8 rounded-full mr-2 border"
         />
         <input
           placeholder={`${post?.profiles.user_name}님에게 답글 남기기`}

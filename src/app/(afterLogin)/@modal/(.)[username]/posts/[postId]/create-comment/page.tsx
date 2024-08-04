@@ -160,7 +160,7 @@ export default function CreateCommentModal({
             <img
               src={post?.profiles.avatar_url!}
               alt="프로필 이미지"
-              className="w-10 h-10 rounded-full mr-2"
+              className="w-10 h-10 rounded-full mr-2 border"
             />
             <p className="font-bold mr-2">{post?.profiles.user_name}</p>
             <span className="text-gray-500">
@@ -196,7 +196,7 @@ export default function CreateCommentModal({
               <img
                 src={user.avatar_url}
                 alt="프로필 이미지"
-                className="w-10 h-10 rounded-full mr-2"
+                className="w-10 h-10 rounded-full mr-2 border"
               />
               <span className="font-bold mr-2">{user.user_name}</span>
             </div>

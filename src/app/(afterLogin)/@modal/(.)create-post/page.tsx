@@ -56,8 +56,8 @@ export default function CreatePostModal() {
             <div className="w-10 h-10 mr-3">
               <img
                 src={user.avatar_url}
-                alt="profile-image"
-                className="w-full h-full rounded-full"
+                alt="프로필 이미지"
+                className="w-full h-full rounded-full border"
               />
             </div>
             <div className="flex-1">

@@ -53,8 +53,8 @@ export default function LogoutButton() {
       <div className="mr-3">
         <img
           src={me.avatar_url}
-          alt="profile_image"
-          className="w-10 h-10 rounded-full"
+          alt="프로필 이미지"
+          className="w-10 h-10 rounded-full border"
         />
       </div>
       <div>

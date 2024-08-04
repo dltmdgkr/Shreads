@@ -109,7 +109,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
         <img
           src={selectedUserQuery.data?.avatar_url}
           alt="프로필 이미지"
-          style={{ width: 64, height: 64, borderRadius: "50%" }}
+          className="w-12 h-12 rounded-full border"
         />
         <div className="flex flex-col items-center mt-3">
           <b>{selectedUserQuery.data?.user_name}</b>
@@ -131,7 +131,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
         <img
           src={user.avatar_url}
           alt="프로필 이미지"
-          className="w-8 h-8 rounded-full mr-2"
+          className="w-8 h-8 rounded-full mr-2 border"
         />
         <input
           value={message}
