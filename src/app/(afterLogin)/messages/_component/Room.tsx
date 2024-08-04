@@ -1,50 +1,49 @@
 "use client";
 
-import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
-import { useRouter } from "next/navigation";
-import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { useRouter } from "next/navigation";
+import { getAllMessages } from "../_lib/getAllMessages";
+import { useQuery } from "@tanstack/react-query";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Room() {
+export default function Room({ user }: any) {
   const router = useRouter();
-  const user = {
-    id: "hero",
-    name: "영웅",
-    Messages: [
-      { roomId: 123, content: "안녕하세요.", createdAt: new Date() },
-      { roomId: 123, content: "안녕히가세요.", createdAt: new Date() },
-    ],
+
+  const onClick = (userId: string) => {
+    router.push(`/messages/${userId}`);
   };
 
-  const onClick = () => {
-    router.push(`/messages/${user.Messages.at(-1)?.roomId}`);
-  };
+  const getAllMessagesQuery = useQuery({
+    queryKey: ["messages", user.id],
+    queryFn: () => getAllMessages({ chatUserId: user.id }),
+  });
 
   return (
     <div
+      key={user.id}
       className="p-4 flex flex-row transition duration-200 cursor-pointer hover:bg-opacity-3"
-      onClickCapture={onClick}
+      onClick={() => onClick(user.id)}
     >
       <div className="mr-4">
         <img
-          src={faker.image.avatar()}
-          alt=""
+          src={user.avatar_url}
+          alt={user.user_name}
           style={{ width: 50, height: 50, borderRadius: "50%" }}
         />
       </div>
       <div className="flex flex-col text-gray-700 text-base">
         <div>
-          <b>{user.name}</b>
+          <b>{user.user_name}</b>
           &nbsp;
-          <span>@{user.id}</span>
+          <span>@{user.email?.split("@")[0]}</span>
           &nbsp; · &nbsp;
-          <span>{dayjs(user.Messages?.at(-1)?.createdAt).fromNow(true)}</span>
+          <span>{dayjs().fromNow(true)}</span>
         </div>
-        <div>{user.Messages?.at(-1)?.content}</div>
+        <div>{getAllMessagesQuery.data?.at(-1)?.message}</div>
       </div>
     </div>
   );

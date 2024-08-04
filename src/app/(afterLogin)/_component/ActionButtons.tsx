@@ -27,7 +27,6 @@ export default function ActionButtons({ post }: { post: Post }) {
     if (loading) return;
 
     const fetchLikeStatus = async () => {
-      console.log("userId", user.id, "postId", postId);
       if (!user.id || !postId) {
         console.error("유효하지 않은 userId 또는 postId");
         return;

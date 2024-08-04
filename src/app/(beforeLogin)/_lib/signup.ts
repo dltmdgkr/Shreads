@@ -28,7 +28,6 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
-    console.log("data", data);
     shouldRedirect = true;
   } catch (err) {
     console.error(err);

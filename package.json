@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-types": "npx supabase gen types typescript --project-id alyhbogvmpckksxjiubn >> ./src/utils/database.types.ts"
   },
   "dependencies": {
     "@auth/core": "^0.28.2",

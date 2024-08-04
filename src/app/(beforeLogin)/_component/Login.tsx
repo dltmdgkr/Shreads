@@ -26,7 +26,6 @@ export default function Login() {
         password: data.password,
       });
       if (dataUser) {
-        console.log(dataUser);
         router.replace("/");
       }
     } catch (err) {

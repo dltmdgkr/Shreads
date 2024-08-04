@@ -9,8 +9,6 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  console.log("session!!!!", session);
-
   if (!session) {
     return NextResponse.redirect("http://localhost:3000/login");
   }
