@@ -14,9 +14,7 @@ export default function PostRecommends() {
     staleTime: 60 * 1000,
   });
 
-  if (!data || !data.data) return null;
-
-  const posts = data.data.sort((a, b) => b.id - a.id);
+  const posts = data?.data || [];
 
   return posts.map((post) => <Post key={post.id} post={post} />);
 }

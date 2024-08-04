@@ -5,5 +5,6 @@ export async function getPostRecommends(client: TypedSupabaseClient) {
   return await client
     .from("posts")
     .select("*, profiles (*), postImages (*), comments (*)")
-    .returns<Post[]>();
+    .returns<Post[]>()
+    .order("created_at", { ascending: false });
 }
