@@ -9,14 +9,20 @@ import { ReactNode } from "react";
 import LogoutButton from "./_component/LogoutButton";
 import Link from "next/link";
 import RQProvider from "./_component/RQProvider";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
-export default function AfterLoginLayout({
+export default async function AfterLoginLayout({
   children,
   modal,
 }: {
   children: ReactNode;
   modal: ReactNode;
 }) {
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   return (
     <RQProvider>
       <Container fixed>
@@ -36,7 +42,10 @@ export default function AfterLoginLayout({
                 <MailOutlineIcon className="mr-3" fontSize="small" />
                 <span>쪽지</span>
               </Link>
-              <Link href="/dltmdgkr" className="flex items-center py-2">
+              <Link
+                href={`${session?.user.id}`}
+                className="flex items-center py-2"
+              >
                 <PermIdentityIcon className="mr-3" fontSize="small" />
                 <span>프로필</span>
               </Link>
@@ -65,7 +74,7 @@ export default function AfterLoginLayout({
             <Link href="/messages">
               <MailOutlineIcon />
             </Link>
-            <Link href="/dltmdgkr">
+            <Link href={`${session?.user.id}`}>
               <PermIdentityIcon />
             </Link>
           </div>

@@ -103,7 +103,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
         <BackButton />
       </div>
       <Link
-        href={`/${selectedUserQuery.data?.user_name}`}
+        href={`/${selectedUserQuery.data?.id}`}
         className="px-16 py-4 flex flex-col items-center transition duration-200 border-b border-gray-200 hover:bg-gray-100"
       >
         <img

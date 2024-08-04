@@ -7,7 +7,7 @@ type Props = {
 export default function PhotoModalNextButton({ handleNextImage }: Props) {
   return (
     <button
-      className="w-34 h-34 bg-white border-none rounded-full absolute right-20 flex items-center justify-center cursor-pointer"
+      className="w-34 h-34 border-none rounded-full bg-gray-600 bg-opacity-75 absolute right-20 flex items-center justify-center cursor-pointer"
       onClick={handleNextImage}
     >
       <svg

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import PhotoModalPrevButton from "./PhotoModalPrevButton";
 import PhotoModalNextButton from "./PhotoModalNextButton";
 import { useQuery } from "@tanstack/react-query";
-import { getSinglePost } from "@/app/(afterLogin)/[username]/posts/[postId]/_lib/getSinglePost";
+import { getSinglePost } from "@/app/(afterLogin)/(profile)/[userId]/posts/[postId]/_lib/getSinglePost";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function PhotoModalImage({

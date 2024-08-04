@@ -26,7 +26,7 @@ export default function PostForm() {
     }) => postBoard(newPost),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["posts", "followings"],
+        queryKey: ["posts"],
       });
     },
   });

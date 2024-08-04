@@ -24,14 +24,14 @@ export default function Post({ post }: { post: Post }) {
         <header className="flex">
           <section className="mr-3 w-10">
             <Link
-              href={`/${post.profiles.user_name}`}
+              href={`/${post.profiles.id}`}
               onClick={stopPropagation}
               className="relative block w-10 h-10 rounded-full"
             >
               <img
                 src={post.profiles.avatar_url!}
-                alt={post.profiles.user_name!}
-                className="w-10 h-10 rounded-full"
+                alt="프로필 이미지"
+                className="w-10 h-10 rounded-full border"
               />
               <p className="absolute top-0 left-0 w-10 h-10 rounded-full" />
             </Link>
@@ -39,17 +39,17 @@ export default function Post({ post }: { post: Post }) {
           <section className="flex flex-col w-full">
             <p className="flex items-center mb-2">
               <Link
-                href={`/${post.profiles.user_name}`}
+                href={`/${post.profiles.id}`}
                 onClick={stopPropagation}
                 className="flex items-center"
               >
-                <span className="font-bold hover:underline">
+                <span className="font-bold hover:underline mr-2">
                   {post.profiles.user_name}
                 </span>
                 &nbsp;
               </Link>
               <span className="text-gray-500">
-                {dayjs(post.created_at).fromNow(true)}
+                {dayjs(post.created_at).fromNow()}
               </span>
             </p>
             <p>{post.content}</p>
