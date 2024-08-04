@@ -24,7 +24,7 @@ export default function Message({ message, isFromMe }: MessageProps) {
         {message.message}
       </div>
       <div className="mt-2 text-gray-700 text-xs">
-        {dayjs(message.created_at).format("YYYY년 MM월 DD일 A HH시 mm분")}
+        {dayjs(message.created_at).format("YY/MM/DD HH:mm")}
       </div>
     </div>
   );

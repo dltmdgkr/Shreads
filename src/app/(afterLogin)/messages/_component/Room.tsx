@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
 
-export default function Room({ user }: any) {
+export default function Room({ user, onlineAt }: any) {
   const router = useRouter();
 
   const onClick = (userId: string) => {
@@ -22,26 +22,31 @@ export default function Room({ user }: any) {
     queryFn: () => getAllMessages({ chatUserId: user.id }),
   });
 
+  const isOnlineNow = onlineAt && dayjs().diff(dayjs(onlineAt), "minute") < 5;
+  const lastOnline = isOnlineNow ? " · 지금 활동 중" : "";
+
   return (
     <div
       key={user.id}
       className="p-4 flex flex-row transition duration-200 cursor-pointer hover:bg-opacity-3"
       onClick={() => onClick(user.id)}
     >
-      <div className="mr-4">
+      <div className="relative mr-4">
         <img
           src={user.avatar_url}
           alt="프로필 이미지"
           className="w-12 h-12 rounded-full border"
         />
+        {isOnlineNow && (
+          <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+        )}
       </div>
       <div className="flex flex-col text-gray-700 text-base">
         <div>
           <b>{user.user_name}</b>
           &nbsp;
           <span>@{user.email?.split("@")[0]}</span>
-          &nbsp; · &nbsp;
-          <span>{dayjs().fromNow(true)}</span>
+          <span>{lastOnline}</span>
         </div>
         <div>{getAllMessagesQuery.data?.at(-1)?.message}</div>
       </div>
