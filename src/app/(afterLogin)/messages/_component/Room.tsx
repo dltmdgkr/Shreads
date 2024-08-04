@@ -31,8 +31,8 @@ export default function Room({ user }: any) {
       <div className="mr-4">
         <img
           src={user.avatar_url}
-          alt={user.user_name}
-          style={{ width: 50, height: 50, borderRadius: "50%" }}
+          alt="프로필 이미지"
+          className="w-12 h-12 rounded-full border"
         />
       </div>
       <div className="flex flex-col text-gray-700 text-base">
