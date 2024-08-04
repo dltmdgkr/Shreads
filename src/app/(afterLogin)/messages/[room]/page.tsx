@@ -141,7 +141,10 @@ export default function ChatRoom({ params }: ChatRoomProps) {
         />
         <button
           onClick={() => sendMessageMutation.mutate()}
-          className="px-4 py-2 rounded-full bg-black text-white text-sm"
+          className={`px-4 py-2 rounded-full text-sm ${
+            message === "" ? "bg-gray-300 text-gray-100" : "bg-black text-white"
+          }`}
+          disabled={message === ""}
         >
           <span>전송</span>
         </button>
