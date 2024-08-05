@@ -53,6 +53,7 @@ export default function Login() {
     });
     router.refresh();
   };
+  console.log("location.origin", location.origin);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -131,7 +132,7 @@ export default function Login() {
               type="submit"
               className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
             >
-              로그인 하기
+              로그인 하기(테스트 중)
             </button>
             <div className="font-bold text-rose-500 text-center mt-2">
               {message}
