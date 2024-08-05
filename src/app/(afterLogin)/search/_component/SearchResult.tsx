@@ -17,5 +17,5 @@ export default function SearchResult({ searchParams }: Props) {
     gcTime: 300 * 1000,
   });
 
-  return data?.map((post: IPost) => <Post key={post.postId} post={post} />);
+  return data?.map((post: IPost) => <Post key={post.id} post={post} />);
 }
