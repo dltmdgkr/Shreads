@@ -38,7 +38,9 @@ export default function Login() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: process.env.NEXT_PUBLIC_SHREADS_URL
+          ? `${process.env.NEXT_PUBLIC_SHREADS_URL}/auth/callback`
+          : "http://localhost:3000/auth/callback",
       },
     });
     router.refresh();
@@ -48,12 +50,13 @@ export default function Login() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: process.env.NEXT_PUBLIC_SHREADS_URL
+          ? `${process.env.NEXT_PUBLIC_SHREADS_URL}/auth/callback`
+          : "http://localhost:3000/auth/callback",
       },
     });
     router.refresh();
   };
-  console.log("location.origin", location.origin);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

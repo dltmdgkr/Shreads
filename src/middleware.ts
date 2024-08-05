@@ -11,7 +11,11 @@ export async function middleware(req: NextRequest) {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    return NextResponse.redirect(`${req.url}/login`);
+    return NextResponse.redirect(
+      process.env.NEXT_PUBLIC_SHREADS_URL
+        ? `${process.env.NEXT_PUBLIC_SHREADS_URL}/login`
+        : "http://localhost:3000/login"
+    );
   }
 
   return res;

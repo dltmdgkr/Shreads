@@ -25,7 +25,9 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: process.env.NEXT_PUBLIC_SHREADS_URL
+          ? `${process.env.NEXT_PUBLIC_SHREADS_URL}/auth/callback`
+          : "http://localhost:3000/auth/callback",
       },
     });
     shouldRedirect = true;
