@@ -5,4 +5,5 @@ export interface User extends Tables<"profiles"> {
   avatar_url: string;
   email: string;
   user_name: string;
+  followers: number;
 }

@@ -6,12 +6,12 @@ export default function SearchList({ user }: { user: User }) {
       <div className="flex items-center justify-between p-3">
         <div className="flex items-center">
           <img
-            src={user.image}
+            src={user.avatar_url}
             alt="User Avatar"
             className="w-10 h-10 rounded-full mr-4"
           />
           <div>
-            <h2 className="text-md font-semibold">{user.name}</h2>
+            <h2 className="text-md font-semibold">{user.user_name}</h2>
             <p className="text-sm text-gray-600">@{user.id}</p>
           </div>
         </div>
