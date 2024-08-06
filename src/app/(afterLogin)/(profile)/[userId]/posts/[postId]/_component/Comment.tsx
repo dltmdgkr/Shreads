@@ -13,7 +13,7 @@ export default function Comment({ comment }: { comment: Comment }) {
         <div className="flex">
           <p className="font-bold mb-1 mr-2">{comment.profiles.user_name}</p>
           <span className="text-gray-500">
-            {dayjs(comment.created_at).fromNow()}
+            {dayjs(comment.created_at).fromNow(true)}
           </span>
         </div>
         <p className="text-gray-700 mb-2">{comment.content}</p>

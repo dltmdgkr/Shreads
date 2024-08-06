@@ -18,7 +18,10 @@ export default function PostArticle({
   };
 
   return (
-    <article className="lg:max-w-[50vw]" onClick={onClick}>
+    <article
+      className="lg:max-w-[50vw] border-b border-gray-200 md:pb-0 pb-2"
+      onClick={onClick}
+    >
       {children}
     </article>
   );

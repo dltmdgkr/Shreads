@@ -43,13 +43,13 @@ export default function Post({ post }: { post: Post }) {
                 onClick={stopPropagation}
                 className="flex items-center"
               >
-                <span className="font-bold hover:underline mr-2">
+                <span className="font-bold hover:underline mr-1">
                   {post.profiles.user_name}
                 </span>
                 &nbsp;
               </Link>
               <span className="text-gray-500">
-                {dayjs(post.created_at).fromNow()}
+                {dayjs(post.created_at).fromNow(true)}
               </span>
             </p>
             <p>{post.content}</p>
