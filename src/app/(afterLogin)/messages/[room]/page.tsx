@@ -116,7 +116,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
           <div>@{selectedUserQuery.data?.email?.split("@")[0]}</div>
         </div>
       </Link>
-      <div className="flex flex-col space-y-16 px-16 py-8 mb-48">
+      <div className="flex flex-col space-y-16 md:px-16 py-8 mb-48">
         {getAllMessagesQuery.data?.map((message) => (
           <Message
             key={message.id}
