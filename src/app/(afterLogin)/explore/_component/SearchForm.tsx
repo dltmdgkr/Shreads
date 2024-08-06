@@ -1,19 +1,46 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import { useEffect, useState } from "react";
 
-export default function SearchForm({ q }: { q: string }) {
-  const router = useRouter();
+interface SearchFormProps {
+  search: string;
+  setSearch: (value: string) => void;
+}
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    router.push(`/search?q=${event.currentTarget.search.value}`);
-  };
+export default function SearchForm({ search, setSearch }: SearchFormProps) {
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    if (typeof window !== "undefined") {
+      setWindowWidth(window.innerWidth);
+      window.addEventListener("resize", handleResize);
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", handleResize);
+      }
+    };
+  }, []);
+
+  let maxWidthClass;
+  if (windowWidth >= 1200) {
+    maxWidthClass = "max-w-4xl";
+  } else if (windowWidth >= 1024) {
+    maxWidthClass = "max-w-xl";
+  } else if (windowWidth >= 900) {
+    maxWidthClass = "max-w-4xl";
+  } else {
+    maxWidthClass = "max-w-xl";
+  }
 
   return (
-    <form className="fixed top-0 w-full" onSubmit={onSubmit}>
-      <div className="flex items-center w-full max-w-xl bg-gray-200 rounded-full mt-6 mb-12">
+    <form className={`fixed lg:top-0 top-15 w-full ${maxWidthClass}`}>
+      <div className="flex items-center w-full bg-gray-200 rounded-full mt-6 mb-12">
         <svg
           className="w-6 h-6 ml-4 text-gray-600"
           viewBox="0 0 24 24"
@@ -32,6 +59,8 @@ export default function SearchForm({ q }: { q: string }) {
           type="search"
           className="w-full py-2 px-4 text-gray-700 rounded-full bg-transparent focus:outline-none"
           placeholder="검색"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </div>
     </form>

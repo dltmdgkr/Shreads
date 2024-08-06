@@ -1,15 +1,29 @@
 "use client";
 
-import { User } from "@/model/User";
 import { useQuery } from "@tanstack/react-query";
-import { getFollowRecommends } from "../_lib/getFollowRecommends";
 import SearchList from "./SearchList";
+import { searchUsers } from "../_lib/searchUsers";
+import { useFetchUser } from "../../_hook/useFetchUser";
 
-export default function FollowRecommends() {
-  const { data } = useQuery<User[]>({
-    queryKey: ["users", "followRecommends"],
-    queryFn: getFollowRecommends,
-    staleTime: 60 * 1000,
+export default function FollowRecommends({ search }: { search: string }) {
+  const { user, loading } = useFetchUser();
+
+  const { data } = useQuery({
+    queryKey: ["users", search],
+    queryFn: async () => {
+      const recommendUsers = await searchUsers(search);
+      return recommendUsers?.filter(
+        (recommendUser) => recommendUser.id !== user.id
+      );
+    },
+    enabled: !loading,
   });
-  return data?.map((user) => <SearchList user={user} key={user.id} />);
+
+  if (loading) return null;
+
+  if (data?.length === 0) {
+    return <div className="ml-2">검색 결과가 없습니다.</div>;
+  }
+
+  return data?.map((user) => <SearchList key={user.id} user={user} />);
 }
