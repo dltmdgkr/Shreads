@@ -1,57 +1,79 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { followUser } from "../_lib/followUser";
 import { useFetchUser } from "../../_hook/useFetchUser";
 import { useEffect, useState } from "react";
-import { createBrowserSupabaseClient } from "@/utils/supabase/client";
+import { getFollowerCount } from "../_lib/getFollowerCount";
+import { isFollowingUser } from "../_lib/isFollowingUser";
+
+type FollowerData = {
+  follower_count: number;
+};
 
 export default function SearchList({ user }: { user: any }) {
-  const supabase = createBrowserSupabaseClient();
   const { user: me } = useFetchUser();
-  const [following, setFollowing] = useState(false);
-  const [followers, setFollowers] = useState(0);
+  const queryClient = useQueryClient();
+
+  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const fetchFollowerCount = async () => {
-      // Supabase에서 팔로워 수를 가져오는 쿼리 실행
-      const { data, error } = await supabase
-        .from("follows")
-        .select("follower_id", { count: "exact" })
-        .eq("followed_id", user.id);
-
-      if (error) {
-        console.error("Error fetching follower count:", error);
-      } else {
-        // 팔로워 수 업데이트
-        setFollowers(data.length);
+    const fetchFollowStatus = async () => {
+      if (me?.id && user?.id) {
+        const followingStatus = await isFollowingUser(user.id, me.id);
+        setIsFollowing(followingStatus);
       }
     };
 
-    fetchFollowerCount();
-  }, [user.id]);
-
-  const queryClient = useQueryClient();
+    fetchFollowStatus();
+  }, [me?.id, user?.id]);
 
   const followMutationQuery = useMutation({
     mutationKey: ["users", "follows"],
-    mutationFn: () => followUser(user.id, me.id, following),
-    onMutate: () => {
-      const queryCache = queryClient.getQueryCache();
-      const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
-      console.log(queryKeys);
+    mutationFn: async () => {
+      await followUser(user.id, me.id, isFollowing);
+    },
+    onMutate: async () => {
+      const queryKey = ["users", "follows"];
+
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData = queryClient.getQueryData<FollowerData>(queryKey);
+
+      queryClient.setQueryData<FollowerData>(queryKey, (oldData) => ({
+        ...oldData,
+        follower_count: (oldData?.follower_count || 0) + (isFollowing ? -1 : 1),
+      }));
+
+      return { previousData };
     },
     onError: (err, variables, context) => {
-      console.error("Error updating like:", err);
+      const queryKey = ["users", "follows"];
+      queryClient.setQueryData(queryKey, context?.previousData);
+      console.error("Error updating follow:", err);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({
+        queryKey: ["users", "follows"],
+      });
     },
   });
 
   const onClickFollow = () => {
     followMutationQuery.mutate();
-    setFollowing((prev) => !prev);
+    setIsFollowing((prev) => !prev);
   };
+
+  const { data: followerData } = useQuery<FollowerData>({
+    queryKey: ["users", "follows"],
+    queryFn: async () => {
+      const followerCount = await getFollowerCount(user.id);
+      return { follower_count: followerCount };
+    },
+  });
+
+  if (isFollowing === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -72,14 +94,14 @@ export default function SearchList({ user }: { user: any }) {
         <button
           onClick={onClickFollow}
           className={`border border-gray-300 text-sm py-1.5 px-8 rounded-xl ${
-            following ? "text-gray-500" : "text-black"
+            isFollowing ? "text-gray-500" : "text-black"
           }`}
         >
-          {following ? "팔로잉" : "팔로우"}
+          {isFollowing ? "팔로잉" : "팔로우"}
         </button>
       </div>
       <div className="ml-[70px] pb-3 border-b border-gray-200">
-        <p>팔로워 {followers}명</p>
+        <p>팔로워 {followerData?.follower_count || 0}명</p>
       </div>
     </div>
   );
