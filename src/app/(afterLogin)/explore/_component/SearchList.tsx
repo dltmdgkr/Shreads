@@ -28,12 +28,12 @@ export default function SearchList({ user }: { user: any }) {
   }, [me?.id, user?.id]);
 
   const followMutationQuery = useMutation({
-    mutationKey: ["users", "follows"],
+    mutationKey: ["users", user.id, "follows"],
     mutationFn: async () => {
       await followUser(user.id, me.id, isFollowing);
     },
     onMutate: async () => {
-      const queryKey = ["users", "follows"];
+      const queryKey = ["users", user.id, "follows"];
 
       await queryClient.cancelQueries({ queryKey });
 
@@ -47,13 +47,13 @@ export default function SearchList({ user }: { user: any }) {
       return { previousData };
     },
     onError: (err, variables, context) => {
-      const queryKey = ["users", "follows"];
+      const queryKey = ["users", user.id, "follows"];
       queryClient.setQueryData(queryKey, context?.previousData);
       console.error("Error updating follow:", err);
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["users", "follows"],
+        queryKey: ["users", user.id, "follows"],
       });
     },
   });
@@ -64,7 +64,7 @@ export default function SearchList({ user }: { user: any }) {
   };
 
   const { data: followerData } = useQuery<FollowerData>({
-    queryKey: ["users", "follows"],
+    queryKey: ["users", user.id, "follows"],
     queryFn: async () => {
       const followerCount = await getFollowerCount(user.id);
       return { follower_count: followerCount };

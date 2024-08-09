@@ -2,7 +2,7 @@
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
-export async function getFollowerCount(userId: string): Promise<number> {
+export async function getFollowerCount(userId: string) {
   const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase
@@ -12,7 +12,6 @@ export async function getFollowerCount(userId: string): Promise<number> {
 
   if (error) {
     console.error("Error fetching follower count:", error.message);
-    return 0;
   }
 
   return data?.length ?? 0;

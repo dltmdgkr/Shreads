@@ -37,14 +37,14 @@ export default function UserInfo({ userId }: { userId: string }) {
   }, [me?.id, data?.id]);
 
   const followMutationQuery = useMutation({
-    mutationKey: ["users", "follows"],
+    mutationKey: ["users", data?.id, "follows"],
     mutationFn: async () => {
       if (data && me?.id) {
         await followUser(data.id, me.id, isFollowing);
       }
     },
     onMutate: async () => {
-      const queryKey = ["users", "follows"];
+      const queryKey = ["users", data?.id, "follows"];
 
       await queryClient.cancelQueries({ queryKey });
 
@@ -58,13 +58,13 @@ export default function UserInfo({ userId }: { userId: string }) {
       return { previousData };
     },
     onError: (err, variables, context) => {
-      const queryKey = ["users", "follows"];
+      const queryKey = ["users", data?.id, "follows"];
       queryClient.setQueryData(queryKey, context?.previousData);
       console.error("Error updating follow:", err);
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["users", "follows"],
+        queryKey: ["users", data?.id, "follows"],
       });
     },
   });
@@ -75,7 +75,7 @@ export default function UserInfo({ userId }: { userId: string }) {
   };
 
   const { data: followerData } = useQuery<FollowerData>({
-    queryKey: ["users", "follows"],
+    queryKey: ["users", data?.id, "follows"],
     queryFn: async () => {
       if (!data) return { follower_count: 0 };
       const followerCount = await getFollowerCount(data.id);
