@@ -3,18 +3,32 @@
 import { useQuery } from "@tanstack/react-query";
 import Post from "../../_component/Post";
 import { getFollowingPosts } from "../_lib/getFollowingPosts";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { getFollowingUsers } from "../_lib/getFollowingUsers";
+import { useFetchUser } from "../../_hook/useFetchUser";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 export default function FollowingPosts() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
+  const { user, loading } = useFetchUser();
 
-  const { data } = useQuery({
+  const { data: usersData } = useQuery<any[]>({
+    queryKey: ["users", "followings"],
+    queryFn: () => getFollowingUsers(user.id),
+    staleTime: 60 * 1000,
+    enabled: !loading,
+  });
+
+  const { data: postsData } = useQuery({
     queryKey: ["posts", "followings"],
     queryFn: () => getFollowingPosts(supabase),
     staleTime: 60 * 1000,
   });
 
-  const posts = data?.data || [];
+  const followingUsers = Array.isArray(usersData) ? usersData : [];
 
-  return posts.map((post) => <Post key={post.id} post={post} />);
+  const posts = postsData?.data?.filter((post) =>
+    followingUsers.includes(post.user_id)
+  );
+
+  return posts?.map((post) => <Post key={post.id} post={post} />);
 }
