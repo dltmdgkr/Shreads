@@ -11,6 +11,7 @@ import PostDecider from "./_component/PostDecider";
 import { cookies } from "next/headers";
 import { getFollowingPosts } from "./_lib/getFollowingPosts";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import PostNavigation from "./_component/PostNavigation";
 
 export default async function Home() {
   const queryClient = new QueryClient();
@@ -36,8 +37,13 @@ export default async function Home() {
       <HydrationBoundary state={dehydratedState}>
         <PostsToggleProvider>
           <PostForm />
-          <PostDecider />
-          <ToggleButton />
+          <div className="lg:hidden">
+            <PostNavigation />
+          </div>
+          <div className="hidden lg:block">
+            <PostDecider />
+            <ToggleButton />
+          </div>
         </PostsToggleProvider>
       </HydrationBoundary>
     </main>
