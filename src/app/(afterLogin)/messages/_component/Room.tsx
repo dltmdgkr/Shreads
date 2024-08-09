@@ -48,7 +48,11 @@ export default function Room({ user, onlineAt }: any) {
           <span>@{user.email?.split("@")[0]}</span>
           <span>{lastOnline}</span>
         </div>
-        <div>{getAllMessagesQuery.data?.at(-1)?.message}</div>
+        <div>
+          {getAllMessagesQuery.data?.length === 0
+            ? "대화 내용이 없습니다."
+            : getAllMessagesQuery.data?.at(-1)?.message}
+        </div>
       </div>
     </div>
   );

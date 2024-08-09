@@ -117,13 +117,17 @@ export default function ChatRoom({ params }: ChatRoomProps) {
         </div>
       </Link>
       <div className="flex flex-col space-y-16 md:px-16 py-8 mb-48">
-        {getAllMessagesQuery.data?.map((message) => (
-          <Message
-            key={message.id}
-            message={message}
-            isFromMe={message.receiver === params.room}
-          />
-        ))}
+        {getAllMessagesQuery.data?.length === 0 ? (
+          <div className="flex justify-center">대화 내용이 없습니다.</div>
+        ) : (
+          getAllMessagesQuery.data?.map((message) => (
+            <Message
+              key={message.id}
+              message={message}
+              isFromMe={message.receiver === params.room}
+            />
+          ))
+        )}
       </div>
       <div
         className={`flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white ${maxWidthClass}`}
