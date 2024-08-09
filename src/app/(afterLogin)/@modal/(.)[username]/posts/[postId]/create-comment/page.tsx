@@ -244,7 +244,7 @@ export default function CreateCommentModal({
                   </svg>
                 </button>
               </div>
-              <div className="mr-2 mb-5">
+              <div className="mr-2">
                 <SubmitButton disabled={content === ""} />
               </div>
             </div>
