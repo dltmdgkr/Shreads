@@ -1,31 +1,118 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import SubmitButton from "../../_component/SubmitButton";
 import { useFetchUser } from "../../_hook/useFetchUser";
 import useDisableBodyScroll from "../../_hook/useDisableBodyScroll";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { postBoard } from "../../(home)/_lib/postBoard";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function CreatePostModal() {
-  const { user } = useFetchUser();
+  const supabase = createClientComponentClient();
   const imageRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+  const { user } = useFetchUser();
   const router = useRouter();
   useDisableBodyScroll();
 
   const [content, setContent] = useState("");
+  const [preview, setPreview] = useState<Array<string | null>>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const onSubmit = () => {};
+  const postData = useMutation({
+    mutationFn: (newPost: {
+      content: string;
+      user_id: string;
+      images: string[];
+    }) => postBoard(newPost),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+    },
+  });
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    postData.mutate({
+      content,
+      user_id: user.id,
+      images: preview.filter((url) => url !== null) as string[],
+    });
+    setContent("");
+    setPreview([]);
+    onClickClose();
+  };
 
   const onClickClose = () => {
     router.back();
   };
 
-  const onClickButton = () => {
-    imageRef.current?.click();
+  const onRemoveImage = async (index: number) => {
+    try {
+      const imageUrl = preview[index];
+      if (!imageUrl) return;
+      const fileName = imageUrl.split("/").pop() as string;
+
+      const { error } = await supabase.storage
+        .from("images")
+        .remove([fileName]);
+
+      if (error) {
+        throw error;
+      }
+
+      setPreview((prevPreview) => {
+        const prev = [...prevPreview];
+        prev[index] = null;
+        return prev;
+      });
+    } catch (error) {
+      alert(`Error removing image: ${JSON.stringify(error)}`);
+    }
   };
 
-  const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
+  const onUploadImages = async (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (!event.target.files || event.target.files.length === 0) {
+        throw new Error("You must select an image to upload.");
+      }
+
+      setIsUploading(true);
+
+      const uploadedUrls = await Promise.all(
+        Array.from(event.target.files).map(async (file) => {
+          const fileExt = file.name.split(".").pop();
+          const filePath = `${Math.random()}.${fileExt}`;
+
+          const { data, error: uploadError } = await supabase.storage
+            .from("images")
+            .upload(filePath, file);
+
+          if (uploadError) {
+            throw uploadError;
+          }
+
+          const {
+            data: { publicUrl },
+          } = supabase.storage.from("images").getPublicUrl(data!.path);
+          return publicUrl;
+        })
+      );
+
+      setPreview((prevPreview) => [...prevPreview, ...uploadedUrls]);
+    } catch (error) {
+      alert(`Error uploading images: ${JSON.stringify(error)}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const onClickButton = () => {
+    imageRef.current?.click();
   };
 
   return (
@@ -61,12 +148,30 @@ export default function CreatePostModal() {
               />
             </div>
             <div className="flex-1">
-              <textarea
+              <TextareaAutosize
                 className="w-full h-full border-0 outline-none text-lg"
                 placeholder="슈레드를 시작하세요!"
                 value={content}
-                onChange={onChangeContent}
+                onChange={(e) => setContent(e.target.value)}
               />
+              <div className="flex">
+                {preview.map(
+                  (v, index) =>
+                    v && (
+                      <div
+                        className="flex-1"
+                        key={index}
+                        onClick={() => onRemoveImage(index)}
+                      >
+                        <img
+                          className="w-[100%] object-contain max-h-24"
+                          src={v}
+                          alt="미리보기"
+                        />
+                      </div>
+                    )
+                )}
+              </div>
             </div>
           </div>
           <div className="border-t border-gray-300 py-3 px-4">
@@ -78,11 +183,13 @@ export default function CreatePostModal() {
                   multiple
                   hidden
                   ref={imageRef}
+                  onChange={onUploadImages}
                 />
                 <button
                   className="w-9 h-9 cursor-pointer flex items-center justify-center"
                   type="button"
                   onClick={onClickButton}
+                  disabled={isUploading}
                 >
                   <svg
                     className="w-6 h-6 text-gray-700"
@@ -93,7 +200,7 @@ export default function CreatePostModal() {
                   </svg>
                 </button>
               </div>
-              <SubmitButton disabled={content === ""} />
+              <SubmitButton disabled={content === "" || isUploading} />
             </div>
           </div>
         </form>
