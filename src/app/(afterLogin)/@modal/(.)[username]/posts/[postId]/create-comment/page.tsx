@@ -3,9 +3,9 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { postComment } from "../../../../../(profile)/[userId]/posts/[postId]/_lib/postComment";
+import { postComment } from "../../../../../[userId]/posts/[postId]/_lib/postComment";
 import TextareaAutosize from "react-textarea-autosize";
-import { getSinglePost } from "../../../../../(profile)/[userId]/posts/[postId]/_lib/getSinglePost";
+import { getSinglePost } from "../../../../../[userId]/posts/[postId]/_lib/getSinglePost";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";

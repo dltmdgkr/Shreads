@@ -10,11 +10,11 @@ export default function PostRecommends() {
 
   const { data } = useQuery({
     queryKey: ["posts", "recommends"],
-    queryFn: () => getPostRecommends(supabase),
+    queryFn: () => getPostRecommends(),
     staleTime: 60 * 1000,
   });
 
-  const posts = data?.data || [];
+  const posts = data || [];
 
   return posts.map((post) => <Post key={post.id} post={post} />);
 }

@@ -6,13 +6,13 @@ import {
 import SinglePost from "./_component/SinglePost";
 import { getSinglePost } from "./_lib/getSinglePost";
 import Comments from "./_component/Comments";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { getComments } from "./_lib/getComments";
 import CommentForm from "./_component/CommentForm";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 export default async function Page({ params }: { params: { postId: string } }) {
   const { postId } = params;
-  const supabase = createClientComponentClient();
+  const supabase = await createServerSupabaseClient();
   const queryClient = new QueryClient();
   const dehydratedState = dehydrate(queryClient);
 
@@ -28,9 +28,13 @@ export default async function Page({ params }: { params: { postId: string } }) {
     queryFn: () => getComments(supabase, postId),
   });
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <HydrationBoundary state={dehydratedState}>
-      <SinglePost postId={postId} />
+      <SinglePost postId={postId} userId={user?.id} />
       <Comments postId={postId} />
       <CommentForm post={post} />
     </HydrationBoundary>

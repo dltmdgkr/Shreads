@@ -3,7 +3,7 @@
 import Link from "next/link";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUserById } from "../../../messages/_lib/getUserById";
+import { getUserById } from "../../messages/_lib/getUserById";
 import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
 import { useEffect, useState } from "react";
 import { isFollowingUser } from "@/app/(afterLogin)/explore/_lib/isFollowingUser";
