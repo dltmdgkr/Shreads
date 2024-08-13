@@ -1,16 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import SubmitButton from "../../_component/SubmitButton";
-import { useFetchUser } from "../../_hook/useFetchUser";
-import useDisableBodyScroll from "../../_hook/useDisableBodyScroll";
+import SubmitButton from "../../../_component/SubmitButton";
+import { useFetchUser } from "../../../_hook/useFetchUser";
+import useDisableBodyScroll from "../../../_hook/useDisableBodyScroll";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postBoard } from "../../(home)/_lib/postBoard";
+import { editPost } from "../../../[userId]/posts/[postId]/_lib/editPost";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function CreatePostModal() {
+interface Props {
+  params: {
+    postId: string;
+  };
+}
+
+export default function EditPostModal({ params: { postId } }: Props) {
   const supabase = createClientComponentClient();
   const imageRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
@@ -22,12 +28,37 @@ export default function CreatePostModal() {
   const [preview, setPreview] = useState<Array<string | null>>([]);
   const [isUploading, setIsUploading] = useState(false);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*, postImages (*)")
+        .eq("id", postId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching data:", error);
+        return;
+      }
+
+      setContent(data.content);
+      setPreview(
+        data.postImages.map(
+          (postImage: { image_url: string }) => postImage.image_url
+        )
+      );
+    };
+
+    fetchData();
+  }, []);
+
   const postData = useMutation({
-    mutationFn: (newPost: {
+    mutationFn: (updatedPost: {
       content: string;
       user_id: string;
       images: string[];
-    }) => postBoard(newPost),
+      post_id: string;
+    }) => editPost(updatedPost),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["posts"],
@@ -41,9 +72,8 @@ export default function CreatePostModal() {
       content,
       user_id: user.id,
       images: preview.filter((url) => url !== null) as string[],
+      post_id: postId,
     });
-    setContent("");
-    setPreview([]);
     onClickClose();
   };
 
@@ -117,7 +147,7 @@ export default function CreatePostModal() {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
-      <div className="relative sm:max-w-[80vw] sm:min-w-[600px] bg-white rounded-lg flex flex-col">
+      <div className="relative sm:max-w-[50vw] sm:min-w-[600px] max-w-[90vw] bg-white rounded-lg flex flex-col">
         <button
           className="top-3 left-3 w-12 h-12 rounded-full border-0 bg-white flex items-center justify-center"
           onClick={onClickClose}
@@ -135,26 +165,21 @@ export default function CreatePostModal() {
             />
           </svg>
         </button>
-        <form
-          className="flex flex-col flex-1 bg-white rounded-full"
-          onSubmit={onSubmit}
-        >
+        <form className="w-full bg-white rounded-full" onSubmit={onSubmit}>
           <div className="flex items-center py-3 px-4">
-            <div className="w-10 h-10 mr-3">
-              <img
-                src={user.avatar_url}
-                alt="프로필 이미지"
-                className="w-full h-full rounded-full border"
-              />
-            </div>
-            <div className="flex-1">
+            <img
+              src={user.avatar_url}
+              alt="프로필 이미지"
+              className="w-10 h-10 rounded-full mr-3 border"
+            />
+            <div className="overflow-scroll">
               <TextareaAutosize
-                className="w-full h-full border-0 outline-none text-lg"
-                placeholder="슈레드를 시작하세요!"
+                className="w-full border-0 outline-none text-lg"
+                placeholder="내용을 입력하세요!"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
-              <div className="flex gap-2">
+              <div className="flex gap-2 overflow-scroll scrollbar-hide">
                 {preview?.map(
                   (v, index) =>
                     v && (

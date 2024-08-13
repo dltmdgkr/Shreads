@@ -19,10 +19,15 @@ export default function Comments({ postId }: { postId: string }) {
   const comments = data.data || [];
 
   return (
-    <div className="pb-20">
-      {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
-      ))}
-    </div>
+    <>
+      {comments.length > 0 ? (
+        <div className="font-semibold p-4 border-b">답글</div>
+      ) : null}
+      <div className="pb-20">
+        {comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
+      </div>
+    </>
   );
 }

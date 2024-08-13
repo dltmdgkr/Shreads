@@ -6,6 +6,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
+import { PiPencil } from "react-icons/pi";
+import { RiDeleteBinLine } from "react-icons/ri";
 import PostArticle from "./PostArticle";
 import PostImages from "./PostImages";
 import { Post } from "@/model/Post";
@@ -120,32 +122,34 @@ export default function Post({
         {/* Modal */}
         {isModalOpen && (
           <div
-            className="absolute right-0 z-50 rounded-lg p-4 bg-white shadow-lg -translate-x-1/2"
+            className="absolute right-0 z-50 rounded-lg p-4 px-8 bg-white shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="w-full text-left py-2 hover:bg-gray-100"
+              className="flex items-center w-full text-left py-2 hover:underline"
               onClick={() => {
-                // Handle edit action here
+                router.push(`/edit-post/${post.id}`);
                 closeModal();
               }}
             >
-              Edit
+              <span className="mr-2">수정</span>
+              <PiPencil />
             </button>
             <button
-              className="w-full text-left py-2 hover:bg-gray-100 text-red-500"
+              className="flex items-center w-full text-left py-2 hover:underline text-red-500"
               onClick={() => {
                 deletePostMutation.mutate();
                 closeModal();
               }}
             >
-              Delete
+              <span className="mr-2">삭제</span>
+              <RiDeleteBinLine />
             </button>
             <button
-              className="mt-4 w-full text-left py-2 hover:bg-gray-100"
+              className="mt-4 w-full text-left py-2 hover:underline"
               onClick={closeModal}
             >
-              Cancel
+              취소
             </button>
           </div>
         )}

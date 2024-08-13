@@ -128,19 +128,16 @@ export default function PostForm() {
               setContent(e.target.value);
             }}
           />
-          <div className="flex">
-            {preview.map(
+          <div className="flex gap-2">
+            {preview?.map(
               (v, index) =>
                 v && (
-                  <div
-                    className="flex-1"
-                    key={index}
-                    onClick={() => onRemoveImage(index)}
-                  >
+                  <div key={index} onClick={() => onRemoveImage(index)}>
                     <img
-                      className="w-[100%] object-contain max-h-24"
+                      className="border rounded-lg"
                       src={v}
                       alt="미리보기"
+                      style={{ minWidth: 150, minHeight: 150 }}
                     />
                   </div>
                 )

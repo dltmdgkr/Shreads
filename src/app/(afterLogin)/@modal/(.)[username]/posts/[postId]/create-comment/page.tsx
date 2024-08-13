@@ -137,7 +137,7 @@ export default function CreateCommentModal({
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
-      <div className="relative sm:max-w-[50vw] sm:min-w-[600px] bg-white rounded-xl flex flex-col">
+      <div className="relative sm:max-w-[50vw] sm:min-w-[600px] max-w-[90vw] bg-white rounded-xl flex flex-col">
         <button
           className="top-3 left-3 w-12 h-12 flex items-center justify-center"
           onClick={onClickClose}
