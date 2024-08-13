@@ -9,7 +9,7 @@ export async function getSinglePost(
     .from("posts")
     .select("*, profiles (*), postImages (*), comments (*)")
     .eq("id", postId)
-    .single();
+    .maybeSingle();
 
   if (error || !data) {
     throw new Error("Failed to fetch post");

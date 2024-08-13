@@ -14,8 +14,7 @@ export async function deletePost(postId: number, userId: string | undefined) {
     .from("posts")
     .delete()
     .eq("id", postId)
-    // .eq("user_id", userId);
-    .maybeSingle();
+    .eq("user_id", userId);
 
   if (error) {
     console.error("Error deleting post:", error.message);

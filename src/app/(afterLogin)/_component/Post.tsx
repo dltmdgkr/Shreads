@@ -28,6 +28,17 @@ export default function Post({
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const deletePostMutation = useMutation({
+    mutationFn: () => deletePost(post.id, userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      router.back();
+    },
+    onError: (error) => {
+      console.error("Failed to delete post:", error);
+    },
+  });
+
   if (!post) return null;
 
   const stopPropagation: MouseEventHandler<
@@ -45,22 +56,11 @@ export default function Post({
     setIsModalOpen(false);
   };
 
-  const deletePostMutation = useMutation({
-    mutationFn: () => deletePost(post.id, userId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      router.back();
-    },
-    onError: (error) => {
-      console.error("Failed to delete post:", error);
-    },
-  });
-
   return (
     <PostArticle post={post}>
-      <section className="flex flex-col cursor-pointer sm:p-3 pt-4">
-        <header className="flex">
-          <section className="mr-3 w-10">
+      <div className="flex flex-col cursor-pointer sm:p-3 pt-4">
+        <div className="flex">
+          <div className="mr-3 w-10">
             <Link
               href={`/${post.profiles.id}`}
               onClick={stopPropagation}
@@ -71,26 +71,25 @@ export default function Post({
                 alt="프로필 이미지"
                 className="w-10 h-10 rounded-full border"
               />
-              {/* <p className="absolute top-0 left-0 w-10 h-10 rounded-full" /> */}
             </Link>
-          </section>
-          <section className="flex flex-col w-full">
-            <p className="flex items-center mb-2 justify-between">
-              <span className="flex items-center">
+          </div>
+          <div className="flex flex-col w-full">
+            <div className="flex items-center mb-2 justify-between">
+              <div className="flex items-center">
                 <Link
                   href={`/${post.profiles.id}`}
                   onClick={stopPropagation}
                   className="flex items-center"
                 >
-                  <span className="font-bold hover:underline mr-1">
+                  <div className="font-bold hover:underline mr-1">
                     {post.profiles.user_name}
-                  </span>
+                  </div>
                   &nbsp;
                 </Link>
-                <span className="text-gray-500">
+                <div className="text-gray-500">
                   {dayjs(post.created_at).fromNow(true)}
-                </span>
-              </span>
+                </div>
+              </div>
               {userId === post.user_id && (
                 <svg
                   onClick={(e) => {
@@ -109,14 +108,14 @@ export default function Post({
                   <circle cx="18" cy="12" r="1.5"></circle>
                 </svg>
               )}
-            </p>
-            <p>{post.content}</p>
-            <section className="mt-3">
+            </div>
+            <div>{post.content}</div>
+            <div className="mt-3">
               <PostImages post={post} />
-            </section>
+            </div>
             <ActionButtons post={post} />
-          </section>
-        </header>
+          </div>
+        </div>
 
         {/* Modal */}
         {isModalOpen && (
@@ -150,7 +149,7 @@ export default function Post({
             </button>
           </div>
         )}
-      </section>
+      </div>
     </PostArticle>
   );
 }
