@@ -166,13 +166,16 @@ export default function EditPostModal({ params: { postId } }: Props) {
           </svg>
         </button>
         <form className="w-full bg-white rounded-full" onSubmit={onSubmit}>
-          <div className="flex items-center py-3 px-4">
+          <div className="flex pl-4 mb-2">
             <img
               src={user.avatar_url}
               alt="프로필 이미지"
               className="w-10 h-10 rounded-full mr-3 border"
             />
-            <div className="overflow-scroll">
+            <p className="font-bold">{user.user_name}</p>
+          </div>
+          <div className="flex items-center py-3 px-4">
+            <div className="w-full overflow-scroll">
               <TextareaAutosize
                 className="w-full border-0 outline-none text-lg"
                 placeholder="내용을 입력하세요!"

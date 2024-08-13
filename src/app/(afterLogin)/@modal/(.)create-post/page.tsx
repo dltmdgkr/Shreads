@@ -117,7 +117,7 @@ export default function CreatePostModal() {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
-      <div className="relative sm:max-w-[80vw] sm:min-w-[600px] bg-white rounded-lg flex flex-col">
+      <div className="relative sm:max-w-[50vw] sm:min-w-[600px] max-w-[90vw] bg-white rounded-lg flex flex-col">
         <button
           className="top-3 left-3 w-12 h-12 rounded-full border-0 bg-white flex items-center justify-center"
           onClick={onClickClose}
@@ -135,26 +135,24 @@ export default function CreatePostModal() {
             />
           </svg>
         </button>
-        <form
-          className="flex flex-col flex-1 bg-white rounded-full"
-          onSubmit={onSubmit}
-        >
+        <form className="w-full bg-white rounded-full" onSubmit={onSubmit}>
+          <div className="flex pl-4 mb-2">
+            <img
+              src={user.avatar_url}
+              alt="프로필 이미지"
+              className="w-10 h-10 rounded-full mr-3 border"
+            />
+            <p className="font-bold">{user.user_name}</p>
+          </div>
           <div className="flex items-center py-3 px-4">
-            <div className="w-10 h-10 mr-3">
-              <img
-                src={user.avatar_url}
-                alt="프로필 이미지"
-                className="w-full h-full rounded-full border"
-              />
-            </div>
-            <div className="flex-1">
+            <div className="w-full overflow-scroll">
               <TextareaAutosize
-                className="w-full h-full border-0 outline-none text-lg"
+                className="w-full border-0 outline-none text-lg"
                 placeholder="슈레드를 시작하세요!"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
-              <div className="flex gap-2">
+              <div className="flex gap-2 overflow-scroll scrollbar-hide">
                 {preview?.map(
                   (v, index) =>
                     v && (
