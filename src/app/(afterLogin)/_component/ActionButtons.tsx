@@ -3,6 +3,7 @@
 import { TfiComment } from "react-icons/tfi";
 import { HiArrowPathRoundedSquare } from "react-icons/hi2";
 import { CiHeart, CiLocationArrow1 } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 import cx from "classnames";
 import { Post } from "@/model/Post";
 import { MouseEventHandler, useEffect, useState } from "react";
@@ -21,40 +22,13 @@ export default function ActionButtons({ post }: { post: Post }) {
   const postId = post.id;
   const { user, loading } = useFetchUser();
 
-  // const [liked, setLiked] = useState(false);
   const { data: liked, isLoading } = useFetchLikes(user?.id, postId);
   const [likeCount, setLikeCount] = useState(post.like_count || 0);
+  const [isLiked, setIsLiked] = useState(liked);
 
-  // useEffect(() => {
-  //   if (loading) return;
-
-  //   const fetchLikeStatus = async () => {
-  //     if (!user.id || !postId) {
-  //       console.error("유효하지 않은 userId 또는 postId");
-  //       return;
-  //     }
-
-  //     try {
-  //       const supabase = createClientComponentClient();
-  //       const { data: likeData, error: likeError } = await supabase
-  //         .from("likes")
-  //         .select("*")
-  //         .eq("post_id", postId)
-  //         .eq("user_id", user.id)
-  //         .maybeSingle();
-
-  //       if (likeError) {
-  //         console.error("좋아요 상태를 가져오는 중 오류 발생:", likeError);
-  //       } else {
-  //         setLiked(!!likeData);
-  //       }
-  //     } catch (error) {
-  //       console.error("좋아요 상태를 가져오는 중 오류 발생:", error);
-  //     }
-  //   };
-
-  //   fetchLikeStatus();
-  // }, [postId, user?.id]);
+  useEffect(() => {
+    setIsLiked(liked);
+  }, [liked]);
 
   const { mutate: likePost } = useMutation({
     mutationFn: (params: { postId: number; userId: string; liked: boolean }) =>
@@ -97,7 +71,6 @@ export default function ActionButtons({ post }: { post: Post }) {
       console.error("Error updating like:", err);
     },
     onSettled: () => {
-      // queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["likes", user.id, postId] });
     },
   });
@@ -110,9 +83,9 @@ export default function ActionButtons({ post }: { post: Post }) {
 
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
-    // setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-    likePost({ postId, userId: user.id, liked: !liked });
+    setIsLiked((prev) => !prev);
+    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+    likePost({ postId, userId: user.id, liked: !isLiked });
   };
 
   if (isLoading) {
@@ -141,14 +114,18 @@ export default function ActionButtons({ post }: { post: Post }) {
         </button>
         <div className="text-sm text-gray-600">{1 || ""}</div>
       </div>
-      <div className={cx("flex items-center", liked && "text-pink-500")}>
+      <div className={cx("flex items-center", isLiked && "text-red-500")}>
         <button
           onClick={onClickHeart}
           className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-pink-100"
         >
-          <CiHeart className="text-2xl" />
+          {isLiked ? (
+            <FaHeart className="text-xl text-red-500" />
+          ) : (
+            <CiHeart className="text-2xl" />
+          )}
         </button>
-        <div className={cx("text-sm text-gray-600", liked && "text-pink-500")}>
+        <div className={cx("text-sm text-gray-600", isLiked && "text-red-500")}>
           {likeCount}
         </div>
       </div>
