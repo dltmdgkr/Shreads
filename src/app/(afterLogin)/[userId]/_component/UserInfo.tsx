@@ -97,7 +97,7 @@ export default function UserInfo({ userId }: { userId: string }) {
           <div className="text-lg text-left">@{data.email?.split("@")[0]}</div>
         </div>
         <img
-          src={data.avatar_url}
+          src={data.avatar_url!}
           alt="프로필 이미지"
           className="sm:w-24 sm:h-24 w-20 h-20 rounded-full mx-auto border"
         />

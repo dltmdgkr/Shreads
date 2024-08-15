@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useFetchUser } from "../_hook/useFetchUser";
+import { useFetchLikes } from "../_hook/useFetchLikes";
 
 export default function ActionButtons({ post }: { post: Post }) {
   const commented = false; // TODO: 실제 데이터에 맞게 설정
@@ -20,68 +21,66 @@ export default function ActionButtons({ post }: { post: Post }) {
   const postId = post.id;
   const { user, loading } = useFetchUser();
 
-  const [liked, setLiked] = useState(false);
+  // const [liked, setLiked] = useState(false);
+  const { data: liked, isLoading } = useFetchLikes(user?.id, postId);
   const [likeCount, setLikeCount] = useState(post.like_count || 0);
 
-  useEffect(() => {
-    if (loading) return;
+  // useEffect(() => {
+  //   if (loading) return;
 
-    const fetchLikeStatus = async () => {
-      if (!user.id || !postId) {
-        console.error("유효하지 않은 userId 또는 postId");
-        return;
-      }
+  //   const fetchLikeStatus = async () => {
+  //     if (!user.id || !postId) {
+  //       console.error("유효하지 않은 userId 또는 postId");
+  //       return;
+  //     }
 
-      try {
-        const supabase = createClientComponentClient();
-        const { data: likeData, error: likeError } = await supabase
-          .from("likes")
-          .select("*")
-          .eq("post_id", postId)
-          .eq("user_id", user.id)
-          .maybeSingle();
+  //     try {
+  //       const supabase = createClientComponentClient();
+  //       const { data: likeData, error: likeError } = await supabase
+  //         .from("likes")
+  //         .select("*")
+  //         .eq("post_id", postId)
+  //         .eq("user_id", user.id)
+  //         .maybeSingle();
 
-        if (likeError) {
-          console.error("좋아요 상태를 가져오는 중 오류 발생:", likeError);
-        } else {
-          setLiked(!!likeData);
-        }
-      } catch (error) {
-        console.error("좋아요 상태를 가져오는 중 오류 발생:", error);
-      }
-    };
+  //       if (likeError) {
+  //         console.error("좋아요 상태를 가져오는 중 오류 발생:", likeError);
+  //       } else {
+  //         setLiked(!!likeData);
+  //       }
+  //     } catch (error) {
+  //       console.error("좋아요 상태를 가져오는 중 오류 발생:", error);
+  //     }
+  //   };
 
-    fetchLikeStatus();
-  }, [postId, user.id]);
+  //   fetchLikeStatus();
+  // }, [postId, user?.id]);
 
   const { mutate: likePost } = useMutation({
     mutationFn: (params: { postId: number; userId: string; liked: boolean }) =>
       postLike(params.postId, params.userId, params.liked),
-    onMutate: (variables) => {
+    onMutate: async (variables) => {
       const queryCache = queryClient.getQueryCache();
       const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
 
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
           const postData: any = queryClient.getQueryData(queryKey);
-          if (Array.isArray(postData.data)) {
-            const index = postData.data.findIndex(
+          if (Array.isArray(postData)) {
+            const index = postData.findIndex(
               (v: { id: number }) => v.id === postId
             );
 
             if (index > -1) {
-              const updatedPosts = [...postData.data];
+              const updatedPosts = [...postData];
               updatedPosts[index] = {
                 ...updatedPosts[index],
                 like_count: variables.liked
-                  ? postData.data[index].like_count + 1
-                  : postData.data[index].like_count - 1,
+                  ? postData[index].like_count + 1
+                  : postData[index].like_count - 1,
               };
 
-              queryClient.setQueryData(queryKey, {
-                ...postData,
-                data: updatedPosts,
-              });
+              queryClient.setQueryData(queryKey, updatedPosts);
             }
           } else if (postData.id === postId) {
             queryClient.setQueryData(queryKey, {
@@ -98,7 +97,8 @@ export default function ActionButtons({ post }: { post: Post }) {
       console.error("Error updating like:", err);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      // queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["likes", user.id, postId] });
     },
   });
 
@@ -110,10 +110,14 @@ export default function ActionButtons({ post }: { post: Post }) {
 
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
-    setLiked((prev) => !prev);
+    // setLiked((prev) => !prev);
     setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
     likePost({ postId, userId: user.id, liked: !liked });
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex mt-3">

@@ -11,7 +11,7 @@ export default function PostRecommends() {
     staleTime: 60 * 1000,
   });
 
-  const posts = data || [];
+  const posts = Array.isArray(data) ? data : [];
 
   return posts.map((post) => <Post key={post.id} post={post} />);
 }

@@ -45,7 +45,7 @@ export default function CommentForm({ post }: { post: any }) {
         className={`flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white ${maxWidthClass}`}
       >
         <img
-          src={user.avatar_url}
+          src={user?.avatar_url}
           alt="프로필 이미지"
           className="w-8 h-8 rounded-full mr-2 border"
         />

@@ -21,7 +21,7 @@ export default function PostForm() {
       <div className="flex lg:mt-3 mt-8 mx-3 border-b">
         <div className="flex flex-1">
           <img
-            src={user.avatar_url}
+            src={user?.avatar_url}
             alt="프로필 이미지"
             className="w-10 h-10 rounded-full border mr-3"
             onClick={onImageClick}
