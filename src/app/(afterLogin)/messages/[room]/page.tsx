@@ -107,7 +107,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
         className="px-16 py-4 flex flex-col items-center transition duration-200 border-b border-gray-200 hover:bg-gray-100"
       >
         <img
-          src={selectedUserQuery.data?.avatar_url}
+          src={selectedUserQuery.data?.avatar_url!}
           alt="프로필 이미지"
           className="w-12 h-12 rounded-full border"
         />
@@ -133,7 +133,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
         className={`flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white ${maxWidthClass}`}
       >
         <img
-          src={user.avatar_url}
+          src={user?.avatar_url}
           alt="프로필 이미지"
           className="w-8 h-8 rounded-full mr-2 border"
         />
