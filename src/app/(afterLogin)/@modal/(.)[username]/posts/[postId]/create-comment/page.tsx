@@ -180,6 +180,7 @@ export default function CreateCommentModal({
             >
               {post?.postImages?.map((image) => (
                 <Link
+                  key={image.id}
                   href={`/${post.profiles.user_name}/posts/${post.id}/photo/${image.id}`}
                 >
                   <img

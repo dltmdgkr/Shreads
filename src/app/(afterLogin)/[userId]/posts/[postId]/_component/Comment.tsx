@@ -27,6 +27,7 @@ export default function Comment({ comment }: { comment: Comment }) {
         <div className="flex gap-2 overflow-scroll">
           {comment.commentImages?.map((image) => (
             <Link
+              key={image.id}
               href={`/${comment.profiles.user_name}/comments/${comment.id}/photo/${image.id}`}
             >
               <img
