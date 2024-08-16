@@ -69,7 +69,7 @@ export default function Post({
               className="relative block w-10 h-10 rounded-full"
             >
               <img
-                src={post.profiles.avatar_url!}
+                src={post.profiles?.avatar_url!}
                 alt="프로필 이미지"
                 className="w-10 h-10 rounded-full border"
               />
@@ -79,12 +79,12 @@ export default function Post({
             <div className="flex items-center mb-2 justify-between">
               <div className="flex items-center">
                 <Link
-                  href={`/${post.profiles.id}`}
+                  href={`/${post.profiles?.id}`}
                   onClick={stopPropagation}
                   className="flex items-center"
                 >
                   <div className="font-bold hover:underline mr-1">
-                    {post.profiles.user_name}
+                    {post.profiles?.user_name}
                   </div>
                   &nbsp;
                 </Link>

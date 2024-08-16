@@ -211,6 +211,7 @@ export type Database = {
           created_at: string
           id: number
           like_count: number | null
+          repost_count: number | null
           user_id: string | null
         }
         Insert: {
@@ -218,6 +219,7 @@ export type Database = {
           created_at?: string
           id?: number
           like_count?: number | null
+          repost_count?: number | null
           user_id?: string | null
         }
         Update: {
@@ -225,6 +227,7 @@ export type Database = {
           created_at?: string
           id?: number
           like_count?: number | null
+          repost_count?: number | null
           user_id?: string | null
         }
         Relationships: [
@@ -271,6 +274,42 @@ export type Database = {
             foreignKeyName: "profiles_id_fkey"
             columns: ["id"]
             isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reposts: {
+        Row: {
+          created_at: string
+          id: number
+          post_id: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          post_id?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          post_id?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reposts_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reposts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },

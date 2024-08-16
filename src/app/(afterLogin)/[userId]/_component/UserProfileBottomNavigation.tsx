@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import UserPosts from "./UserPosts";
 import UserComments from "./UserComments";
+import RepostedPosts from "./RepostedPosts";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -25,11 +26,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <div>{children}</div>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -81,10 +78,14 @@ export default function UserProfileBottomNavigation({
           </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <UserComments userId={userId} />
+          <div className="max-w-[50vw]">
+            <UserComments userId={userId} />
+          </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
-          리포스트 ...
+          <div className="max-w-[50vw]">
+            <RepostedPosts userId={userId} />
+          </div>
         </CustomTabPanel>
       </Box>
     </ThemeProvider>

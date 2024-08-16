@@ -10,21 +10,28 @@ import { MouseEventHandler, useEffect, useState } from "react";
 import { postLike } from "../(home)/_lib/postLike";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useFetchUser } from "../_hook/useFetchUser";
 import { useFetchLikes } from "../_hook/useFetchLikes";
+import { repostPost } from "../(home)/_lib/repostPost";
+import { useFetchReposts } from "../_hook/useFetchReposts";
 
 export default function ActionButtons({ post }: { post: Post }) {
-  const commented = false; // TODO: 실제 데이터에 맞게 설정
-  const reposted = false; // TODO: 실제 데이터에 맞게 설정
-
   const queryClient = useQueryClient();
   const postId = post.id;
   const { user, loading } = useFetchUser();
 
-  const { data: liked, isLoading } = useFetchLikes(user?.id, postId);
-  const [likeCount, setLikeCount] = useState(post.like_count || 0);
+  const { data: liked, isLoading: isLikeLoading } = useFetchLikes(
+    user?.id,
+    postId
+  );
+  const { data: reposted, isLoading: isRepostLoading } = useFetchReposts(
+    user?.id,
+    postId
+  );
   const [isLiked, setIsLiked] = useState(liked);
+  const [isReposted, setIsReposted] = useState(reposted);
+  const [likeCount, setLikeCount] = useState(post.like_count || 0);
+  const [repostCount, setRepostCount] = useState(post.repost_count || 0);
 
   useEffect(() => {
     setIsLiked(liked);
@@ -75,11 +82,64 @@ export default function ActionButtons({ post }: { post: Post }) {
     },
   });
 
+  const { mutate: repost } = useMutation({
+    mutationFn: (params: {
+      userId: string;
+      postId: number;
+      reposted: boolean;
+    }) => repostPost(params.userId, params.postId, params.reposted),
+    onMutate: async (variables) => {
+      const queryCache = queryClient.getQueryCache();
+      const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
+
+      queryKeys.forEach((queryKey) => {
+        if (queryKey[0] === "posts") {
+          const postData: any = queryClient.getQueryData(queryKey);
+          if (Array.isArray(postData)) {
+            const index = postData.findIndex(
+              (v: { id: number }) => v.id === postId
+            );
+
+            if (index > -1) {
+              const updatedPosts = [...postData];
+              updatedPosts[index] = {
+                ...updatedPosts[index],
+                repost_count: variables.reposted
+                  ? postData[index].repost_count + 1
+                  : postData[index].repost_count - 1,
+              };
+
+              queryClient.setQueryData(queryKey, updatedPosts);
+            }
+          } else if (postData.id === postId) {
+            queryClient.setQueryData(queryKey, {
+              ...postData,
+              repost_count: variables.reposted
+                ? postData.like_count + 1
+                : postData.like_count - 1,
+            });
+          }
+        }
+      });
+    },
+    onError: (err, variables, context) => {
+      console.error("Error updating repost:", err);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["reposts", user.id] });
+    },
+  });
+
   const stopPropagation: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.stopPropagation();
   };
 
-  const onClickRepost = () => {};
+  const onClickRepost: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    setIsReposted((prev) => !prev);
+    setRepostCount((prev) => (isReposted ? prev - 1 : prev + 1));
+    repost({ userId: user.id, postId, reposted: !isReposted });
+  };
 
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -88,31 +148,31 @@ export default function ActionButtons({ post }: { post: Post }) {
     likePost({ postId, userId: user.id, liked: !isLiked });
   };
 
-  if (isLoading) {
+  if (isLikeLoading || isRepostLoading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="flex mt-3">
-      <div className={cx("flex items-center", commented && "text-blue-500")}>
+      <div className="flex items-center">
         <Link
-          href={`/${post.profiles.user_name}/posts/${post.id}/create-comment`}
+          href={`/${post.profiles?.user_name}/posts/${post.id}/create-comment`}
           onClick={stopPropagation}
         >
           <button className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-blue-100">
             <TfiComment />
           </button>
         </Link>
-        <div className="text-sm text-gray-600">{post.comments.length}</div>
+        <div className="text-sm text-gray-600">{post.comments?.length}</div>
       </div>
-      <div className={cx("flex items-center", reposted && "text-green-500")}>
+      <div className="flex items-center">
         <button
           onClick={onClickRepost}
           className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-green-100"
         >
           <HiArrowPathRoundedSquare className="text-xl" />
         </button>
-        <div className="text-sm text-gray-600">{1 || ""}</div>
+        <div className="text-sm text-gray-600">{repostCount}</div>
       </div>
       <div className={cx("flex items-center", isLiked && "text-red-500")}>
         <button
