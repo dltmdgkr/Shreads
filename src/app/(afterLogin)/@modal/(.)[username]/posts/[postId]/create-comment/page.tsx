@@ -179,18 +179,18 @@ export default function CreateCommentModal({
               className="flex gap-4 mt-4 overflow-scroll scrollbar-hide mr-4"
             >
               {post?.postImages?.map((image) => (
-                <Link
+                <img
                   key={image.id}
-                  href={`/${post.profiles.user_name}/posts/${post.id}/photo/${image.id}`}
-                >
-                  <img
-                    key={image.id}
-                    src={image.image_url!}
-                    alt="게시글 이미지"
-                    style={{ width: 250, height: 300 }}
-                    className="cursor-pointer rounded-lg border border-gray-300"
-                  />
-                </Link>
+                  src={image.image_url!}
+                  alt="게시글 이미지"
+                  style={{ width: 250, height: 300 }}
+                  className="cursor-pointer rounded-lg border border-gray-300"
+                  onClick={() =>
+                    router.push(
+                      `/${post.profiles.user_name}/posts/${post.id}/photo/${image.id}`
+                    )
+                  }
+                />
               ))}
             </div>
           </div>
