@@ -1,5 +1,5 @@
 import PhotoModalCloseButton from "./_component/PhotoModalCloseButton";
-import PhotoModalImage from "./_component/PhotoModalImage";
+import PhotoModalPostImage from "./_component/PhotoModalPostImage";
 
 export default async function PhotoModal({
   params,
@@ -11,7 +11,7 @@ export default async function PhotoModal({
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black">
       <PhotoModalCloseButton />
-      <PhotoModalImage postId={postId} photoId={photoId} />
+      <PhotoModalPostImage postId={postId} photoId={photoId} />
     </div>
   );
 }

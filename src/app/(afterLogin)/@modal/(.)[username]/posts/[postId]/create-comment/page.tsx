@@ -12,6 +12,7 @@ import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";
 import { useDraggableScroll } from "@/app/(afterLogin)/_hook/useDraggableScroll";
 import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
 import useDisableBodyScroll from "@/app/(afterLogin)/_hook/useDisableBodyScroll";
+import Link from "next/link";
 
 export default function CreateCommentModal({
   params,
@@ -178,13 +179,17 @@ export default function CreateCommentModal({
               className="flex gap-4 mt-4 overflow-scroll scrollbar-hide mr-4"
             >
               {post?.postImages?.map((image) => (
-                <img
-                  key={image.id}
-                  src={image.image_url!}
-                  alt="게시글 이미지"
-                  style={{ width: 250, height: 300 }}
-                  className="cursor-pointer rounded-lg border border-gray-300"
-                />
+                <Link
+                  href={`/${post.profiles.user_name}/posts/${post.id}/photo/${image.id}`}
+                >
+                  <img
+                    key={image.id}
+                    src={image.image_url!}
+                    alt="게시글 이미지"
+                    style={{ width: 250, height: 300 }}
+                    className="cursor-pointer rounded-lg border border-gray-300"
+                  />
+                </Link>
               ))}
             </div>
           </div>

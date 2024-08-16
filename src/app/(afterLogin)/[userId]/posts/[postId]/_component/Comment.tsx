@@ -26,12 +26,16 @@ export default function Comment({ comment }: { comment: Comment }) {
         <p className="text-gray-700 mb-2">{comment.content}</p>
         <div className="flex gap-2 overflow-scroll">
           {comment.commentImages?.map((image) => (
-            <img
-              key={image.id}
-              src={image.image_url!}
-              alt="댓글 이미지"
-              className="cursor-pointer rounded-lg border border-gray-300"
-            />
+            <Link
+              href={`/${comment.profiles.user_name}/comments/${comment.id}/photo/${image.id}`}
+            >
+              <img
+                key={image.id}
+                src={image.image_url!}
+                alt="댓글 이미지"
+                className="cursor-pointer rounded-lg border border-gray-300"
+              />
+            </Link>
           ))}
         </div>
       </div>

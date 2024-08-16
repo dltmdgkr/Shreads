@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSinglePost } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/getSinglePost";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function PhotoModalImage({
+export default function PhotoModalPostImage({
   postId,
   photoId,
 }: {
