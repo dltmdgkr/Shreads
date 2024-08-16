@@ -62,7 +62,10 @@ export default function EditPostModal({ params: { postId } }: Props) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["posts"],
-      });
+      }),
+        queryClient.invalidateQueries({
+          queryKey: ["postsWithComments"],
+        });
     },
   });
 
