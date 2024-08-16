@@ -3,9 +3,10 @@
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import UserPosts from "./UserPosts";
+import UserComments from "./UserComments";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -26,7 +27,7 @@ function CustomTabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <div>{children}</div>
         </Box>
       )}
     </div>
@@ -48,7 +49,11 @@ const theme = createTheme({
   },
 });
 
-export default function UserProfileBottomNavigation() {
+export default function UserProfileBottomNavigation({
+  userId,
+}: {
+  userId: string;
+}) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -71,10 +76,12 @@ export default function UserProfileBottomNavigation() {
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          슈레드 ...
+          <div className="max-w-[50vw]">
+            <UserPosts userId={userId} />
+          </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          답글 ...
+          <UserComments userId={userId} />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
           리포스트 ...

@@ -19,7 +19,7 @@ export default async function UserPage({
     <HydrationBoundary state={dehydratedState}>
       <div className="p-6">
         <UserInfo userId={userId} />
-        <UserProfileBottomNavigation />
+        <UserProfileBottomNavigation userId={userId} />
       </div>
     </HydrationBoundary>
   );

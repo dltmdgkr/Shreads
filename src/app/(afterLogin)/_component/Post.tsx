@@ -64,7 +64,7 @@ export default function Post({
         <div className="flex">
           <div className="mr-3 w-10">
             <Link
-              href={`/${post.profiles.id}`}
+              href={`/${post.profiles?.id}`}
               onClick={stopPropagation}
               className="relative block w-10 h-10 rounded-full"
             >
