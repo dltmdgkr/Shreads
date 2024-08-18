@@ -1,10 +1,52 @@
+import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
 import { Comment } from "@/model/Comment";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { MouseEventHandler, useState } from "react";
+import { PiPencil } from "react-icons/pi";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { deleteComment } from "../_lib/deleteComment";
 
-export default function Comment({ comment }: { comment: Comment }) {
+export default function Comment({
+  comment,
+  post,
+}: {
+  comment: Comment;
+  post: any;
+}) {
+  const { user } = useFetchUser();
+  const queryClient = useQueryClient();
   const router = useRouter();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: () => deleteComment(comment.id, user.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      router.back();
+    },
+    onError: (error) => {
+      console.error("Failed to delete comment:", error);
+    },
+  });
+
+  const stopPropagation: MouseEventHandler<
+    HTMLAnchorElement | SVGSVGElement
+  > = (e) => {
+    e.stopPropagation();
+  };
+
+  const toggleModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="flex items-start mt-3 pl-3 pb-3 border-b border-gray-200">
@@ -16,15 +58,35 @@ export default function Comment({ comment }: { comment: Comment }) {
         />
       </Link>
       <div className="flex-col flex-1">
-        <div className="flex items-center">
-          <Link href={`/${comment.user_id}`}>
-            <p className="font-bold mb-1 mr-2 hover:underline">
-              {comment.profiles.user_name}
-            </p>
-          </Link>
-          <span className="text-gray-500 text-sm">
-            {dayjs(comment?.created_at).fromNow(true)}
-          </span>
+        <div className="flex">
+          <div className="flex flex-1 items-center">
+            <Link href={`/${comment.user_id}`}>
+              <p className="font-bold mb-1 mr-2 hover:underline">
+                {comment.profiles.user_name}
+              </p>
+            </Link>
+            <span className="text-gray-500 text-sm">
+              {dayjs(comment?.created_at).fromNow(true)}
+            </span>
+          </div>
+          {user?.id === comment.user_id && (
+            <svg
+              onClick={(e) => {
+                stopPropagation(e);
+                toggleModal(e);
+              }}
+              aria-label="더 보기"
+              role="img"
+              viewBox="0 0 24 24"
+              className="cursor-pointer x1lliihq xffa9am x2lah0s x1jwls1v x1n2onr6 x17fnjtu x1gaogpn"
+              style={{ fill: "#6B7280", height: "24px", width: "24px" }}
+            >
+              <title>더 보기</title>
+              <circle cx="12" cy="12" r="1.5"></circle>
+              <circle cx="6" cy="12" r="1.5"></circle>
+              <circle cx="18" cy="12" r="1.5"></circle>
+            </svg>
+          )}
         </div>
         <p className="text-gray-700 mb-2">{comment.content}</p>
         <div className="flex gap-2 overflow-x-auto max-w-full">
@@ -43,6 +105,42 @@ export default function Comment({ comment }: { comment: Comment }) {
           ))}
         </div>
       </div>
+
+      {isModalOpen && (
+        <div
+          className="absolute right-0 z-50 rounded-lg p-4 px-8 bg-white shadow-lg"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="flex items-center w-full text-left py-2 hover:underline"
+            onClick={() => {
+              router.push(
+                `/${post?.profiles?.user_name}/posts/${post?.id}/edit-comment/${comment.id}`
+              );
+              closeModal();
+            }}
+          >
+            <span className="mr-2">수정</span>
+            <PiPencil />
+          </button>
+          <button
+            className="flex items-center w-full text-left py-2 hover:underline text-red-500"
+            onClick={() => {
+              deleteCommentMutation.mutate();
+              closeModal();
+            }}
+          >
+            <span className="mr-2">삭제</span>
+            <RiDeleteBinLine />
+          </button>
+          <button
+            className="mt-4 w-full text-left py-2 hover:underline"
+            onClick={closeModal}
+          >
+            취소
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -45,7 +45,7 @@ export default function UserComments({ userId }: { userId: string }) {
                   key={comment.id}
                   className="bg-white p-3 rounded-lg border border-gray-300"
                 >
-                  <Comment comment={comment} />
+                  <Comment comment={comment} post={post} />
                 </div>
               ))}
           </div>

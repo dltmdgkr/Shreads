@@ -5,7 +5,13 @@ import Comment from "./Comment";
 import { getComments } from "../_lib/getComments";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function Comments({ postId }: { postId: string }) {
+export default function Comments({
+  postId,
+  post,
+}: {
+  postId: string;
+  post: any;
+}) {
   const supabase = createClientComponentClient();
   const { data } = useQuery({
     queryKey: ["posts", postId, "comments"],
@@ -25,7 +31,7 @@ export default function Comments({ postId }: { postId: string }) {
       ) : null}
       <div className="pb-20">
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+          <Comment key={comment.id} comment={comment} post={post} />
         ))}
       </div>
     </>

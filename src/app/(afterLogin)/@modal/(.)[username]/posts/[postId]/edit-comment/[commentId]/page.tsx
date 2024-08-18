@@ -3,31 +3,30 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { postComment } from "../../../../../[userId]/posts/[postId]/_lib/postComment";
 import TextareaAutosize from "react-textarea-autosize";
-import { getSinglePost } from "../../../../../[userId]/posts/[postId]/_lib/getSinglePost";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import SubmitButton from "@/app/(afterLogin)/_component/SubmitButton";
 import { useDraggableScroll } from "@/app/(afterLogin)/_hook/useDraggableScroll";
 import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
 import useDisableBodyScroll from "@/app/(afterLogin)/_hook/useDisableBodyScroll";
+import { getSinglePost } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/getSinglePost";
+import { editComment } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/editComment";
 
-export default function CreateCommentModal({
+export default function EditCommentModal({
   params,
 }: {
-  params: { postId: string };
+  params: { postId: string; commentId: string };
 }) {
   const { scrollRef, onDragStart, onDragEnd, onDragMove, onClick } =
     useDraggableScroll();
   const supabase = createClientComponentClient();
-  const [preview, setPreview] = useState<Array<string | null>>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { user } = useFetchUser();
   const router = useRouter();
   useDisableBodyScroll();
-  const { postId } = params;
+  const { postId, commentId } = params;
 
   const { data: post } = useQuery({
     queryKey: ["posts", postId],
@@ -37,18 +36,47 @@ export default function CreateCommentModal({
   });
 
   const [content, setContent] = useState("");
+  const [preview, setPreview] = useState<Array<string | null>>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("comments")
+        .select("*, commentImages (*)")
+        .eq("id", commentId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching data:", error);
+        return;
+      }
+
+      setContent(data.content);
+      setPreview(
+        data.commentImages.map(
+          (commentImage: { image_url: string }) => commentImage.image_url
+        )
+      );
+    };
+
+    fetchData();
+  }, []);
 
   const commentData = useMutation({
-    mutationFn: (newComment: {
+    mutationFn: (updatedComment: {
       content: string;
       user_id: string;
       post_id: string;
+      comment_id: string;
       images: string[];
-    }) => postComment(newComment),
+    }) => editComment(updatedComment),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["posts", postId, "comments"],
-      });
+      }),
+        queryClient.invalidateQueries({
+          queryKey: ["postsWithComments"],
+        });
     },
   });
 
@@ -63,6 +91,7 @@ export default function CreateCommentModal({
       user_id: user.id,
       post_id: postId,
       images: preview.filter((url) => url !== null) as string[],
+      comment_id: commentId,
     });
     setContent("");
     setPreview([]);

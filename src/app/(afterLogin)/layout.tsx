@@ -43,7 +43,7 @@ export default async function AfterLoginLayout({
                 <span>쪽지</span>
               </Link>
               <Link
-                href={`${session?.user.id}`}
+                href={`/${session?.user.id}`}
                 className="flex items-center py-2"
               >
                 <PermIdentityIcon className="mr-3" fontSize="small" />
@@ -74,7 +74,7 @@ export default async function AfterLoginLayout({
             <Link href="/messages">
               <MailOutlineIcon />
             </Link>
-            <Link href={`${session?.user.id}`}>
+            <Link href={`/${session?.user.id}`}>
               <PermIdentityIcon />
             </Link>
           </div>

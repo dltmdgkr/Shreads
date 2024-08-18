@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { postId: string } }) {
   return (
     <HydrationBoundary state={dehydratedState}>
       <SinglePost postId={postId} userId={user?.id} />
-      <Comments postId={postId} />
+      <Comments postId={postId} post={post} />
       <CommentForm post={post} />
     </HydrationBoundary>
   );
