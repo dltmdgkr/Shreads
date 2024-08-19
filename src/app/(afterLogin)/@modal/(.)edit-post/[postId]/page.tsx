@@ -189,13 +189,29 @@ export default function EditPostModal({ params: { postId } }: Props) {
                 {preview?.map(
                   (v, index) =>
                     v && (
-                      <div key={index} onClick={() => onRemoveImage(index)}>
+                      <div key={index} className="relative">
                         <img
                           className="border rounded-lg"
                           src={v}
                           alt="미리보기"
                           style={{ minWidth: 150, minHeight: 150 }}
                         />
+                        <div
+                          onClick={() => onRemoveImage(index)}
+                          className="absolute top-2 right-2 w-4 h-4 rounded-full border-none cursor-pointer bg-gray-300 bg-opacity-75 flex items-center justify-center"
+                        >
+                          <svg
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            className="text-white"
+                          >
+                            <g>
+                              <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path>
+                            </g>
+                          </svg>
+                        </div>
                       </div>
                     )
                 )}

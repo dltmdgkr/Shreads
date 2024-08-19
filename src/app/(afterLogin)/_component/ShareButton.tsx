@@ -62,7 +62,7 @@ export default function ShareButton({ post }: { post: Post }) {
           },
           social: {
             likeCount: post.like_count,
-            commentCount: post.comments.length,
+            commentCount: post.comments?.length || 0,
           },
           buttons: [
             {
