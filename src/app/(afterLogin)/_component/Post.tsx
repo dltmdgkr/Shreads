@@ -15,7 +15,7 @@ import { Post } from "@/model/Post";
 import { MouseEventHandler } from "react";
 import { deletePost } from "../[userId]/posts/[postId]/_lib/deletePost";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ConfirmModal from "./ConfirmModal";
 
 dayjs.locale("ko");
@@ -30,6 +30,7 @@ export default function Post({
 }) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
@@ -37,7 +38,9 @@ export default function Post({
     mutationFn: () => deletePost(post.id, userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
-      router.back();
+      if (pathname === `/${post.profiles.user_name}/posts/${post.id}`) {
+        router.back();
+      }
     },
     onError: (error) => {
       console.error("Failed to delete post:", error);
