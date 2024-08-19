@@ -14,6 +14,7 @@ import { useFetchUser } from "../_hook/useFetchUser";
 import { useFetchLikes } from "../_hook/useFetchLikes";
 import { repostPost } from "../(home)/_lib/repostPost";
 import { useFetchReposts } from "../_hook/useFetchReposts";
+import ShareButton from "./ShareButton";
 
 export default function ActionButtons({ post }: { post: Post }) {
   const queryClient = useQueryClient();
@@ -190,9 +191,7 @@ export default function ActionButtons({ post }: { post: Post }) {
         </div>
       </div>
       <div className="flex items-center">
-        <button className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-yellow-100">
-          <CiLocationArrow1 className="text-xl" />
-        </button>
+        <ShareButton post={post} />
       </div>
     </div>
   );
