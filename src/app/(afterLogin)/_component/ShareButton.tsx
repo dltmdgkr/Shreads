@@ -17,13 +17,21 @@ export default function ShareButton({ post }: { post: Post }) {
 
     if (post.postImages && post.postImages.length > 0) {
       const firstImage = post.postImages[0].image_url;
+
       if (firstImage) {
-        const { data } = supabase.storage
-          .from("images")
-          .getPublicUrl(firstImage);
-        if (data) {
-          setImageUrl(data.publicUrl);
+        if (!firstImage.startsWith("http")) {
+          const { data } = supabase.storage
+            .from("images")
+            .getPublicUrl(firstImage);
+
+          if (data) {
+            setImageUrl(data.publicUrl);
+          }
+        } else {
+          setImageUrl(firstImage);
         }
+      } else {
+        setImageUrl("");
       }
     }
   }, [post.postImages]);
