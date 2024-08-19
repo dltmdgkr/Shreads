@@ -9,6 +9,7 @@ import useDisableBodyScroll from "../../../_hook/useDisableBodyScroll";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editPost } from "../../../[userId]/posts/[postId]/_lib/editPost";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import ConfirmModal from "@/app/(afterLogin)/_component/ConfirmModal";
 
 interface Props {
   params: {
@@ -27,6 +28,7 @@ export default function EditPostModal({ params: { postId } }: Props) {
   const [content, setContent] = useState("");
   const [preview, setPreview] = useState<Array<string | null>>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -148,12 +150,20 @@ export default function EditPostModal({ params: { postId } }: Props) {
     imageRef.current?.click();
   };
 
+  const openConfirmModal = () => {
+    setIsConfirmModalOpen(true);
+  };
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40">
       <div className="relative sm:max-w-[50vw] sm:min-w-[600px] max-w-[90vw] bg-white rounded-lg flex flex-col">
         <button
           className="top-3 left-3 w-12 h-12 rounded-full border-0 bg-white flex items-center justify-center"
-          onClick={onClickClose}
+          onClick={openConfirmModal}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -249,6 +259,13 @@ export default function EditPostModal({ params: { postId } }: Props) {
           </div>
         </form>
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        message="작성중인 슈레드를 삭제하시겠어요?"
+        onConfirm={onClickClose}
+        onCancel={closeConfirmModal}
+      />
     </div>
   );
 }

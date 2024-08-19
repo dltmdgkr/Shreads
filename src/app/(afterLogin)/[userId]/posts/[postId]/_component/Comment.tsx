@@ -7,7 +7,9 @@ import { useRouter } from "next/navigation";
 import { MouseEventHandler, useState } from "react";
 import { PiPencil } from "react-icons/pi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import { deleteComment } from "../_lib/deleteComment";
+import ConfirmModal from "@/app/(afterLogin)/_component/ConfirmModal";
 
 export default function Comment({
   comment,
@@ -21,12 +23,13 @@ export default function Comment({
   const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const deleteCommentMutation = useMutation({
     mutationFn: () => deleteComment(comment.id, user.id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      router.back();
+      queryClient.invalidateQueries({ queryKey: ["posts"] }),
+        queryClient.invalidateQueries({ queryKey: ["postsWithComments"] });
     },
     onError: (error) => {
       console.error("Failed to delete comment:", error);
@@ -46,6 +49,20 @@ export default function Comment({
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const openConfirmModal = () => {
+    setIsConfirmModalOpen(true);
+    closeModal();
+  };
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    deleteCommentMutation.mutate();
+    closeConfirmModal();
   };
 
   return (
@@ -125,22 +142,27 @@ export default function Comment({
           </button>
           <button
             className="flex items-center w-full text-left py-2 hover:underline text-red-500"
-            onClick={() => {
-              deleteCommentMutation.mutate();
-              closeModal();
-            }}
+            onClick={openConfirmModal}
           >
             <span className="mr-2">삭제</span>
             <RiDeleteBinLine />
           </button>
           <button
-            className="mt-4 w-full text-left py-2 hover:underline"
+            className="flex items-center w-full text-left py-2 hover:underline"
             onClick={closeModal}
           >
-            취소
+            <span className="mr-2">취소</span>
+            <IoIosCloseCircleOutline />
           </button>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        message="정말로 삭제하시겠습니까?"
+        onConfirm={handleDelete}
+        onCancel={closeConfirmModal}
+      />
     </div>
   );
 }

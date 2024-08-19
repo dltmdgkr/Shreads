@@ -12,6 +12,7 @@ import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
 import useDisableBodyScroll from "@/app/(afterLogin)/_hook/useDisableBodyScroll";
 import { getSinglePost } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/getSinglePost";
 import { editComment } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/editComment";
+import ConfirmModal from "@/app/(afterLogin)/_component/ConfirmModal";
 
 export default function EditCommentModal({
   params,
@@ -37,6 +38,7 @@ export default function EditCommentModal({
 
   const [content, setContent] = useState("");
   const [preview, setPreview] = useState<Array<string | null>>([]);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -162,6 +164,14 @@ export default function EditCommentModal({
     inputRef.current?.click();
   };
 
+  const openConfirmModal = () => {
+    setIsConfirmModalOpen(true);
+  };
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
+
   if (!postId) return null;
 
   return (
@@ -169,7 +179,7 @@ export default function EditCommentModal({
       <div className="relative sm:max-w-[50vw] sm:min-w-[600px] max-w-[90vw] bg-white rounded-xl flex flex-col">
         <button
           className="top-3 left-3 w-12 h-12 flex items-center justify-center"
-          onClick={onClickClose}
+          onClick={openConfirmModal}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -298,6 +308,13 @@ export default function EditCommentModal({
           </form>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        message="작성중인 답글을 삭제하시겠어요?"
+        onConfirm={onClickClose}
+        onCancel={closeConfirmModal}
+      />
     </div>
   );
 }

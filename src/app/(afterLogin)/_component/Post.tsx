@@ -8,6 +8,7 @@ import "dayjs/locale/ko";
 import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
 import { PiPencil } from "react-icons/pi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import PostArticle from "./PostArticle";
 import PostImages from "./PostImages";
 import { Post } from "@/model/Post";
@@ -15,6 +16,7 @@ import { MouseEventHandler } from "react";
 import { deletePost } from "../[userId]/posts/[postId]/_lib/deletePost";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import ConfirmModal from "./ConfirmModal";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -29,6 +31,7 @@ export default function Post({
   const queryClient = useQueryClient();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const deletePostMutation = useMutation({
     mutationFn: () => deletePost(post.id, userId),
@@ -52,6 +55,20 @@ export default function Post({
   const toggleModal = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsModalOpen(!isModalOpen);
+  };
+
+  const openConfirmModal = () => {
+    setIsConfirmModalOpen(true);
+    closeModal();
+  };
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    deletePostMutation.mutate();
+    closeConfirmModal();
   };
 
   const closeModal = () => {
@@ -101,7 +118,7 @@ export default function Post({
                   aria-label="더 보기"
                   role="img"
                   viewBox="0 0 24 24"
-                  className="cursor-pointer x1lliihq xffa9am x2lah0s x1jwls1v x1n2onr6 x17fnjtu x1gaogpn"
+                  className="cursor-pointer"
                   style={{ fill: "#6B7280", height: "24px", width: "24px" }}
                 >
                   <title>더 보기</title>
@@ -137,22 +154,28 @@ export default function Post({
             </button>
             <button
               className="flex items-center w-full text-left py-2 hover:underline text-red-500"
-              onClick={() => {
-                deletePostMutation.mutate();
-                closeModal();
-              }}
+              onClick={openConfirmModal}
             >
               <span className="mr-2">삭제</span>
               <RiDeleteBinLine />
             </button>
             <button
-              className="mt-4 w-full text-left py-2 hover:underline"
+              className="flex items-center w-full text-left py-2 hover:underline"
               onClick={closeModal}
             >
-              취소
+              <span className="mr-2">취소</span>
+              <IoIosCloseCircleOutline />
             </button>
           </div>
         )}
+
+        {/* Confirm Modal */}
+        <ConfirmModal
+          isOpen={isConfirmModalOpen}
+          message="정말로 삭제하시겠습니까?"
+          onConfirm={handleDelete}
+          onCancel={closeConfirmModal}
+        />
       </div>
     </PostArticle>
   );
