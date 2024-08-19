@@ -1,8 +1,12 @@
 import { Post } from "@/model/Post";
-import { MouseEventHandler, useEffect } from "react";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { CiLocationArrow1 } from "react-icons/ci";
 
 export default function ShareButton({ post }: { post: Post }) {
+  const supabase = createBrowserSupabaseClient();
+  const [imageUrl, setImageUrl] = useState<string>("");
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const Kakao = (window as any).Kakao;
@@ -10,7 +14,19 @@ export default function ShareButton({ post }: { post: Post }) {
         Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
       }
     }
-  }, []);
+
+    if (post.postImages && post.postImages.length > 0) {
+      const firstImage = post.postImages[0].image_url;
+      if (firstImage) {
+        const { data } = supabase.storage
+          .from("images")
+          .getPublicUrl(firstImage);
+        if (data) {
+          setImageUrl(data.publicUrl);
+        }
+      }
+    }
+  }, [post.postImages]);
 
   const stopPropagation: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -30,7 +46,7 @@ export default function ShareButton({ post }: { post: Post }) {
               post.profiles.email?.split("@")[0]
             })님`,
             description: post.content,
-            imageUrl: post.postImages,
+            imageUrl: imageUrl || url,
             link: {
               mobileWebUrl: shareUrl,
               webUrl: shareUrl,
