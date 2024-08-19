@@ -23,27 +23,26 @@ export default function ShareButton({ post }: { post: Post }) {
         const url = "https://shreads-x.vercel.app";
         const shareUrl = window.location.href;
 
-        console.log("post", post);
-
         Kakao.Share.sendDefault({
           objectType: "feed",
           content: {
-            title: "슈레드",
+            title: `shreads의 ${post.profiles.user_name}(@${
+              post.profiles.email?.split("@")[0]
+            })님`,
             description: post.content,
-            imageUrl: url + post.postImages,
+            imageUrl: post.postImages,
             link: {
               mobileWebUrl: shareUrl,
               webUrl: shareUrl,
             },
           },
           social: {
-            likeCount: 10,
-            commentCount: 20,
-            sharedCount: 30,
+            likeCount: post.like_count,
+            commentCount: post.comments.length,
           },
           buttons: [
             {
-              title: "슈레드",
+              title: "상세보기",
               link: {
                 mobileWebUrl: url,
                 webUrl: url,
