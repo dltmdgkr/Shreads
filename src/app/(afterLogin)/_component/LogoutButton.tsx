@@ -2,16 +2,12 @@
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useFetchUser } from "../_hook/useFetchUser";
 
 export default function LogoutButton() {
   const supabase = createClientComponentClient();
-  const [me, setMe] = useState({
-    user_name: "",
-    email: "",
-    avatar_url: "",
-  });
   const router = useRouter();
+  const { user: me } = useFetchUser();
 
   const onLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -23,44 +19,19 @@ export default function LogoutButton() {
     router.replace("/login");
   };
 
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        if (user) {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("user_name, email, avatar_url")
-            .eq("id", user.id)
-            .single();
-
-          if (error) throw error;
-          if (data) setMe(data);
-        }
-      } catch (error) {
-        console.error("Error fetching avatar:", error);
-      }
-    };
-
-    fetchAvatar();
-  }, []);
-
   return (
     <button className="flex" onClick={onLogout}>
       <div className="mr-3">
         <img
-          src={me.avatar_url}
+          src={me?.avatar_url}
           alt="프로필 이미지"
           className="w-10 h-10 rounded-full border"
         />
       </div>
       <div>
-        <div className="font-bold text-left">{me.user_name}</div>
+        <div className="font-bold text-left">{me?.user_name}</div>
         <div className="text-sm text-left leading-3">
-          @{me.email.split("@")[0]}
+          @{me?.email.split("@")[0]}
         </div>
       </div>
     </button>

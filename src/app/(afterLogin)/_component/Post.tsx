@@ -139,7 +139,6 @@ export default function Post({
           </div>
         </div>
 
-        {/* Modal */}
         {isModalOpen && (
           <div
             className="absolute right-0 z-50 rounded-lg p-4 px-8 bg-white shadow-lg"
@@ -172,7 +171,6 @@ export default function Post({
           </div>
         )}
 
-        {/* Confirm Modal */}
         <ConfirmModal
           isOpen={isConfirmModalOpen}
           message="정말로 삭제하시겠습니까?"

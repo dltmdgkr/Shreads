@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/utils/database.types";
-import EditProfileForm from "./editProfile-form";
+import EditProfileForm from "./_component/editProfile-form";
 
 export default async function EditProfile() {
   const cookieStore = cookies();
