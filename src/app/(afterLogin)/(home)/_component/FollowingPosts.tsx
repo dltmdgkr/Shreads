@@ -22,7 +22,7 @@ export default function FollowingPosts() {
 
   const { data, fetchNextPage, isFetching, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["posts", "followings", followingUsers],
+      queryKey: ["posts", "followings"],
       queryFn: ({ pageParam = 1 }) =>
         getFollowingPosts({
           page: pageParam,
