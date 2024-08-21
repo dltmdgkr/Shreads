@@ -1,17 +1,46 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getPostRecommends } from "../_lib/getPostRecommends";
 import Post from "../../_component/Post";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 export default function PostRecommends() {
-  const { data } = useQuery({
-    queryKey: ["posts", "recommends"],
-    queryFn: () => getPostRecommends(),
-    staleTime: 60 * 1000,
+  const { data, fetchNextPage, isFetching, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["posts", "recommends"],
+      queryFn: ({ pageParam = 1 }) =>
+        getPostRecommends({ page: pageParam, pageSize: 5 }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        if (lastPage && typeof lastPage.page !== "undefined") {
+          return lastPage.hasNextPage ? lastPage.page + 1 : undefined;
+        }
+        return undefined;
+      },
+      staleTime: 60 * 1000,
+      gcTime: 300 * 1000,
+    });
+
+  const posts = data?.pages.flatMap((page) => page.data) || [];
+
+  const { inView, ref } = useInView({
+    threshold: 0,
   });
 
-  const posts = Array.isArray(data) ? data : [];
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetching && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, isFetching, isFetchingNextPage, hasNextPage, fetchNextPage]);
 
-  return posts.map((post) => <Post key={post.id} post={post} />);
+  return (
+    <>
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
+      <div ref={ref} />
+    </>
+  );
 }

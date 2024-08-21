@@ -71,6 +71,7 @@ export default function EditProfileForm({ user }: { user: User | null }) {
     queryClient.invalidateQueries({ queryKey: ["user"] });
     queryClient.invalidateQueries({ queryKey: ["users", user?.id] });
     queryClient.invalidateQueries({ queryKey: ["posts", user?.id] });
+    queryClient.invalidateQueries({ queryKey: ["postsWithComments"] });
   };
 
   const closeConfirmModal = () => {
