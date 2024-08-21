@@ -15,14 +15,18 @@ export default async function Home() {
   const queryClient = new QueryClient();
   const dehydratedState = dehydrate(queryClient);
 
-  await queryClient.prefetchQuery({
+  await queryClient.prefetchInfiniteQuery({
     queryKey: ["posts", "followings"],
-    queryFn: () => getFollowingPosts(),
+    queryFn: ({ pageParam = 1 }) =>
+      getFollowingPosts({ page: pageParam, pageSize: 5 }),
+    initialPageParam: 1,
   });
 
-  await queryClient.prefetchQuery({
+  await queryClient.prefetchInfiniteQuery({
     queryKey: ["posts", "recommends"],
-    queryFn: () => getPostRecommends(),
+    queryFn: ({ pageParam = 1 }) =>
+      getPostRecommends({ page: pageParam, pageSize: 5 }),
+    initialPageParam: 1,
   });
 
   return (

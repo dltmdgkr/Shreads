@@ -25,7 +25,6 @@ export default function FollowingPosts() {
       queryKey: ["posts", "followings", followingUsers],
       queryFn: ({ pageParam = 1 }) =>
         getFollowingPosts({
-          userId: user?.id,
           page: pageParam,
           pageSize: 5,
         }),
