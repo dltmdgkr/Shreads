@@ -4,4 +4,5 @@ export interface Post extends Tables<"posts"> {
   postImages: Tables<"postImages">[];
   comments: Tables<"comments">[];
   like_count: number;
+  repost_count: number;
 }

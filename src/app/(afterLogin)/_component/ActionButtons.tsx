@@ -8,7 +8,11 @@ import cx from "classnames";
 import { Post } from "@/model/Post";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { postLike } from "../(home)/_lib/postLike";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import Link from "next/link";
 import { useFetchUser } from "../_hook/useFetchUser";
 import { useFetchLikes } from "../_hook/useFetchLikes";
@@ -38,6 +42,11 @@ export default function ActionButtons({ post }: { post: Post }) {
     setIsLiked(liked);
   }, [liked]);
 
+  useEffect(() => {
+    setLikeCount(post.like_count || 0);
+    setRepostCount(post.repost_count || 0);
+  }, [post.like_count, post.repost_count]);
+
   const { mutate: likePost } = useMutation({
     mutationFn: (params: { postId: number; userId: string; liked: boolean }) =>
       postLike(params.postId, params.userId, params.liked),
@@ -47,24 +56,36 @@ export default function ActionButtons({ post }: { post: Post }) {
 
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
-          const postData: any = queryClient.getQueryData(queryKey);
-          if (Array.isArray(postData)) {
-            const index = postData.findIndex(
-              (v: { id: number }) => v.id === postId
-            );
+          const postData: Post | InfiniteData<Post[]> | undefined =
+            queryClient.getQueryData(queryKey);
+          if (postData && "pages" in postData) {
+            const obj = postData.pages.flat().find((v) => v?.id === postId);
 
-            if (index > -1) {
-              const updatedPosts = [...postData];
-              updatedPosts[index] = {
-                ...updatedPosts[index],
-                like_count: variables.liked
-                  ? postData[index].like_count + 1
-                  : postData[index].like_count - 1,
-              };
-
-              queryClient.setQueryData(queryKey, updatedPosts);
+            if (obj) {
+              const pageIndex = postData.pages.findIndex((page) =>
+                page?.includes(obj)
+              );
+              const index = postData.pages[pageIndex]?.findIndex(
+                (page) => page.id === postId
+              );
+              if (index !== undefined && index > -1) {
+                const updatedPages = [...postData.pages];
+                if (updatedPages[pageIndex]) {
+                  updatedPages[pageIndex] = [...updatedPages[pageIndex]!];
+                  updatedPages[pageIndex]![index] = {
+                    ...updatedPages[pageIndex]![index]!,
+                    like_count: variables.liked
+                      ? updatedPages[pageIndex]![index]!.like_count + 1
+                      : updatedPages[pageIndex]![index]!.like_count - 1,
+                  };
+                }
+                queryClient.setQueryData(queryKey, {
+                  ...postData,
+                  pages: updatedPages,
+                });
+              }
             }
-          } else if (postData.id === postId) {
+          } else if (postData && postData.id === postId) {
             queryClient.setQueryData(queryKey, {
               ...postData,
               like_count: variables.liked
@@ -79,6 +100,7 @@ export default function ActionButtons({ post }: { post: Post }) {
       console.error("Error updating like:", err);
     },
     onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["likes", user.id, postId] });
     },
   });
@@ -95,29 +117,44 @@ export default function ActionButtons({ post }: { post: Post }) {
 
       queryKeys.forEach((queryKey) => {
         if (queryKey[0] === "posts") {
-          const postData: any = queryClient.getQueryData(queryKey);
-          if (Array.isArray(postData)) {
-            const index = postData.findIndex(
-              (v: { id: number }) => v.id === postId
-            );
+          const postData: Post | InfiniteData<Post[]> | undefined =
+            queryClient.getQueryData(queryKey);
 
-            if (index > -1) {
-              const updatedPosts = [...postData];
-              updatedPosts[index] = {
-                ...updatedPosts[index],
-                repost_count: variables.reposted
-                  ? postData[index].repost_count + 1
-                  : postData[index].repost_count - 1,
-              };
+          if (postData && "pages" in postData) {
+            const obj = postData.pages.flat().find((v) => v?.id === postId);
 
-              queryClient.setQueryData(queryKey, updatedPosts);
+            if (obj) {
+              const pageIndex = postData.pages.findIndex((page) =>
+                page?.includes(obj)
+              );
+              const index = postData.pages[pageIndex]?.findIndex(
+                (page) => page?.id === postId
+              );
+
+              if (index !== undefined && index > -1) {
+                const updatedPages = [...postData.pages];
+                if (updatedPages[pageIndex] && updatedPages[pageIndex][index]) {
+                  updatedPages[pageIndex] = [...updatedPages[pageIndex]];
+                  updatedPages[pageIndex][index] = {
+                    ...updatedPages[pageIndex][index]!,
+                    repost_count: variables.reposted
+                      ? updatedPages[pageIndex][index].repost_count + 1
+                      : updatedPages[pageIndex][index].repost_count - 1,
+                  };
+                }
+
+                queryClient.setQueryData(queryKey, {
+                  ...postData,
+                  pages: updatedPages,
+                });
+              }
             }
-          } else if (postData.id === postId) {
+          } else if (postData && postData.id === postId) {
             queryClient.setQueryData(queryKey, {
               ...postData,
               repost_count: variables.reposted
-                ? postData.like_count + 1
-                : postData.like_count - 1,
+                ? postData.repost_count + 1
+                : postData.repost_count - 1,
             });
           }
         }
@@ -127,6 +164,7 @@ export default function ActionButtons({ post }: { post: Post }) {
       console.error("Error updating repost:", err);
     },
     onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["reposts", user.id] });
     },
   });
