@@ -7,15 +7,15 @@ function showMessage(message: any) {
   if (message === "no_email") {
     return "이메일을 입력해주세요";
   }
-  // if (message === "no_name") {
-  //   return "닉네임을 입력해주세요";
-  // }
+  if (message === "no_name") {
+    return "닉네임을 입력해주세요";
+  }
   if (message === "no_password") {
     return "비밀번호를 입력해주세요";
   }
-  // if (message === "no_image") {
-  //   return "이미지를 업로드 해주세요";
-  // }
+  if (message === "no_image") {
+    return "이미지를 업로드 해주세요";
+  }
   if (message === "no_exists") {
     return "이미 사용중인 아이디입니다";
   }
@@ -53,7 +53,7 @@ export default function Signup() {
               />
             </div>
           </div>
-          {/* <div>
+          <div>
             <label
               htmlFor="name"
               className="block text-sm font-medium leading-6 text-gray-900"
@@ -68,7 +68,7 @@ export default function Signup() {
               required
               className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
             />
-          </div> */}
+          </div>
           <div>
             <div className="flex items-center justify-between">
               <label
@@ -89,7 +89,7 @@ export default function Signup() {
               />
             </div>
           </div>
-          {/* <div>
+          <div>
             <label
               className="block text-sm font-medium leading-6 text-gray-900"
               htmlFor="image"
@@ -104,7 +104,7 @@ export default function Signup() {
               required
               className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
             />
-          </div> */}
+          </div>
           <div>
             <button
               type="submit"

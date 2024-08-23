@@ -14,7 +14,11 @@ export default function UserComments({ userId }: { userId: string }) {
   });
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+      </div>
+    );
   }
 
   const posts: PostType[] = Array.isArray(data) ? data : [];
@@ -26,7 +30,11 @@ export default function UserComments({ userId }: { userId: string }) {
   );
 
   if (filteredPosts.length === 0) {
-    return <span>작성한 답글이 없습니다.</span>;
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+        <p className="mt-2 text-gray-500">아직 답글을 게시하지 않았습니다.</p>
+      </div>
+    );
   }
 
   return (

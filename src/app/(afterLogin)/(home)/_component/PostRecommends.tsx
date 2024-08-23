@@ -23,7 +23,7 @@ export default function PostRecommends() {
       gcTime: 300 * 1000,
     });
 
-  const posts = data?.pages.flatMap((page) => page.data) || [];
+  const posts = data?.pages.flatMap((page) => page?.data) || [];
 
   const { inView, ref } = useInView({
     threshold: 0,
@@ -38,7 +38,7 @@ export default function PostRecommends() {
   return (
     <>
       {posts.map((post) => (
-        <Post key={post.id} post={post} />
+        <Post key={post?.id} post={post} />
       ))}
       <div ref={ref} />
     </>

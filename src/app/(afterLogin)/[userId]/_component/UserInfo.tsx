@@ -86,7 +86,11 @@ export default function UserInfo({ userId }: { userId: string }) {
   if (!data) return null;
 
   if (isFollowing === null) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+      </div>
+    );
   }
 
   return (

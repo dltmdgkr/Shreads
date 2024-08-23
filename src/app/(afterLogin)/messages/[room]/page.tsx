@@ -118,7 +118,9 @@ export default function ChatRoom({ params }: ChatRoomProps) {
       </Link>
       <div className="flex flex-col space-y-16 md:px-16 py-8 mb-48">
         {getAllMessagesQuery.data?.length === 0 ? (
-          <div className="flex justify-center">대화 내용이 없습니다.</div>
+          <div className="flex justify-center text-gray-500">
+            여기서 대화를 시작하고 새 이야기를 만들어보세요.
+          </div>
         ) : (
           getAllMessagesQuery.data?.map((message) => (
             <Message

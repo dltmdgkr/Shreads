@@ -12,13 +12,23 @@ export default function RepostedPosts({ userId }: { userId: string }) {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+      </div>
+    );
   }
 
   const posts: PostType[] = Array.isArray(data) ? data : [];
 
   if (posts.length === 0) {
-    return <div>리포스트한 게시글이 없습니다.</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+        <p className="mt-2 text-gray-500">
+          아직 게시글을 리포스트하지 않았습니다.
+        </p>
+      </div>
+    );
   }
 
   return posts.map((post: PostType) => <Post key={post.id} post={post} />);

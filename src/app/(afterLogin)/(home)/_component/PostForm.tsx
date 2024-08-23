@@ -28,7 +28,7 @@ export default function PostForm() {
           />
           <textarea
             className="border-0 focus:outline-none resize-none pt-2"
-            placeholder="슈레드를 시작하세요!"
+            placeholder="새로운 소식이 있나요?"
             style={{ color: "transparent" }}
           />
         </div>

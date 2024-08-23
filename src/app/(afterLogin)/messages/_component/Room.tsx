@@ -49,9 +49,11 @@ export default function Room({ user, onlineAt }: any) {
           <span>{lastOnline}</span>
         </div>
         <div>
-          {getAllMessagesQuery.data?.length === 0
-            ? "대화 내용이 없습니다."
-            : getAllMessagesQuery.data?.at(-1)?.message}
+          {getAllMessagesQuery.data?.length === 0 ? (
+            <p className="text-gray-500">대화 내용이 없습니다.</p>
+          ) : (
+            getAllMessagesQuery.data?.at(-1)?.message
+          )}
         </div>
       </div>
     </div>

@@ -158,7 +158,7 @@ export default function CreatePostModal() {
             <div className="w-full overflow-scroll">
               <TextareaAutosize
                 className="w-full border-0 outline-none text-lg"
-                placeholder="슈레드를 시작하세요!"
+                placeholder="새로운 소식이 있나요?"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />

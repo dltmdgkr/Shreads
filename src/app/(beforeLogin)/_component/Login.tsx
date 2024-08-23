@@ -1,12 +1,12 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function Login() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const [data, setData] = useState<{
     email: string;
     password: string;
@@ -25,11 +25,14 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
-      if (dataUser) {
+      if (error) {
+        console.error("Supabase Auth Error:", error.message);
+        setMessage("아이디와 비밀번호가 일치하지 않습니다.");
+      } else if (dataUser) {
         router.replace("/");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Unexpected Error:", err);
       setMessage("아이디와 비밀번호가 일치하지 않습니다.");
     }
   };

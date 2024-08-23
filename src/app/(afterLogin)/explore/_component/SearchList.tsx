@@ -72,7 +72,11 @@ export default function SearchList({ user }: { user: any }) {
   });
 
   if (isFollowing === null) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col h-full mt-8">
+        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+      </div>
+    );
   }
 
   return (
