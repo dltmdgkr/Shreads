@@ -112,12 +112,12 @@ export default function Login() {
                 비밀번호
               </label>
               <div className="text-sm">
-                <a
-                  href="#"
+                <Link
+                  href="/forgot-password"
                   className="font-semibold text-gray-500 hover:text-gray-600"
                 >
                   비밀번호를 잊어버렸나요?
-                </a>
+                </Link>
               </div>
             </div>
             <div className="mt-2">
