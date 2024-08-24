@@ -4,9 +4,14 @@ import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { RiKakaoTalkFill } from "react-icons/ri";
+import { FaGithub } from "react-icons/fa";
 
 export default function Login() {
   const supabase = createBrowserSupabaseClient();
+  const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState<{
     email: string;
     password: string;
@@ -14,12 +19,10 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState("");
-  const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setMessage("");
+    setErrorMessage("");
     try {
       const { data: dataUser, error } = await supabase.auth.signInWithPassword({
         email: data.email,
@@ -27,13 +30,13 @@ export default function Login() {
       });
       if (error) {
         console.error("Supabase Auth Error:", error.message);
-        setMessage("아이디와 비밀번호가 일치하지 않습니다.");
+        setErrorMessage("이메일과 비밀번호가 일치하지 않습니다.");
       } else if (dataUser) {
         router.replace("/");
       }
     } catch (err) {
       console.error("Unexpected Error:", err);
-      setMessage("아이디와 비밀번호가 일치하지 않습니다.");
+      setErrorMessage("이메일과 비밀번호가 일치하지 않습니다.");
     }
   };
 
@@ -88,7 +91,7 @@ export default function Login() {
               htmlFor="text"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
-              아이디
+              이메일
             </label>
             <div className="mt-2">
               <input
@@ -138,26 +141,33 @@ export default function Login() {
               type="submit"
               className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
             >
-              로그인 하기(테스트 중)
+              로그인 하기
             </button>
-            <div className="font-bold text-rose-500 text-center mt-2">
-              {message}
-            </div>
+            <p className="font-bold text-rose-500 text-center mt-2">
+              {errorMessage}
+            </p>
           </div>
         </form>
+        <div className="flex items-center justify-center my-6">
+          <hr className="flex-grow border-t border-gray-300" />
+          <span className="px-4 text-sm text-gray-500">간편 로그인</span>
+          <hr className="flex-grow border-t border-gray-300" />
+        </div>
         <button
           type="button"
           onClick={signInWithKakao}
-          className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+          className="flex w-full justify-center items-center rounded-full bg-[#FEE500] px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
         >
-          카카오 로그인 하기
+          <RiKakaoTalkFill className="mr-2 text-xl" />
+          Kakao로 시작하기
         </button>
         <button
           type="button"
           onClick={signInWithGithub}
-          className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+          className="flex w-full justify-center items-center border border-gray-200 rounded-full bg-white mt-2 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
         >
-          깃헙 로그인 하기
+          <FaGithub className="mr-2 text-lg" />
+          Github로 시작하기
         </button>
         <p className="mt-10 text-center text-sm text-gray-500">
           계정이 없으신가요?{" "}

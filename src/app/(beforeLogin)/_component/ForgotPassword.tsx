@@ -1,5 +1,6 @@
 "use client";
 
+import BackButton from "@/app/(afterLogin)/_component/BackButton";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { FormEventHandler, useState } from "react";
 
@@ -24,12 +25,12 @@ export default function ForgotPassword() {
         console.error("Error sending reset password email:", error.message);
         alert("Failed to send reset email. Please try again.");
       } else {
-        alert("Please check your email for the password reset link.");
+        alert("이메일에서 비밀번호 재설정 링크를 확인해주세요");
         setEmail("");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong. Please try again later.");
+      alert("문제가 발생했습니다. 잠시후 다시 시도해주세요");
     } finally {
       setIsLoading(false);
     }
@@ -37,7 +38,10 @@ export default function ForgotPassword() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-8">비밀번호 찾기</h2>
+      <div className="w-full max-w-sm">
+        <BackButton />
+      </div>
+      <h2 className="text-2xl font-bold text-gray-900 my-8">비밀번호 찾기</h2>
       <form
         onSubmit={resetPasswordHandler}
         className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg space-y-6"

@@ -10,19 +10,25 @@ export default function ResetPassword() {
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const updatePasswordHandler: FormEventHandler<HTMLFormElement> = async (
     e
   ) => {
     e.preventDefault();
 
-    if (!newPassword || !confirmPassword) {
-      alert("비밀번호와 비밀번호 확인을 입력해주세요.");
+    if (!newPassword) {
+      setErrorMessage("비밀번호를 입력해주세요.");
+      return;
+    }
+
+    if (!confirmPassword) {
+      setErrorMessage("비밀번호를 다시 한번 입력해주세요.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+      setErrorMessage("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
       return;
     }
 
@@ -67,7 +73,6 @@ export default function ResetPassword() {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-900"
-            required
           />
         </div>
 
@@ -86,7 +91,6 @@ export default function ResetPassword() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-900"
-            required
           />
         </div>
 
@@ -96,6 +100,9 @@ export default function ResetPassword() {
         >
           비밀번호 변경
         </button>
+        <p className="font-bold text-rose-500 text-center mt-2">
+          {errorMessage}
+        </p>
       </form>
     </div>
   );

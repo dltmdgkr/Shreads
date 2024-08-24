@@ -1,8 +1,13 @@
+"use server";
+
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 const signUpHandler = async (prevState: any, formData: FormData) => {
   const supabase = await createServerSupabaseClient();
+
+  const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirm_password") as string;
 
   if (!formData?.get("email") || !(formData.get("email") as string)?.trim()) {
     return { message: "no_email" };
@@ -10,11 +15,11 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
   if (!formData?.get("name") || !(formData.get("name") as string)?.trim()) {
     return { message: "no_name" };
   }
-  if (
-    !formData.get("password") ||
-    !(formData.get("password") as string)?.trim()
-  ) {
+  if (!password || !password.trim()) {
     return { message: "no_password" };
+  }
+  if (password !== confirmPassword) {
+    return { message: "password_mismatch" };
   }
 
   const imageFile = formData?.get("image");
@@ -27,7 +32,6 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
   try {
     const email = formData.get("email") as string;
     const username = formData.get("name") as string;
-    const password = formData.get("password") as string;
 
     const fileExt = imageFile.name.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
@@ -69,7 +73,12 @@ const signUpHandler = async (prevState: any, formData: FormData) => {
 
     if (error) {
       console.error("Sign up error:", error.message);
-      return { message: "sign_up_error" };
+      if (error.status === 422 && error.name === "AuthApiError") {
+        return { message: "user_exists" };
+      }
+      if (error.status === 422 && error.name === "AuthWeakPasswordError") {
+        return { message: "weak_password" };
+      }
     }
 
     shouldRedirect = true;
