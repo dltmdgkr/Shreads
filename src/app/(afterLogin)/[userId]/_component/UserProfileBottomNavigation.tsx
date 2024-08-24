@@ -59,35 +59,37 @@ export default function UserProfileBottomNavigation({
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ width: "100%", marginTop: 3 }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-            className="flex w-full"
-          >
-            <Tab label="슈레드" {...a11yProps(0)} className="flex-1" />
-            <Tab label="답글" {...a11yProps(1)} className="flex-1" />
-            <Tab label="리포스트" {...a11yProps(2)} className="flex-1" />
-          </Tabs>
+      <div className="xl:w-[100vh] w-[100%]">
+        <Box sx={{ marginTop: 3 }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+              className="flex w-full"
+            >
+              <Tab label="슈레드" {...a11yProps(0)} className="flex-1" />
+              <Tab label="답글" {...a11yProps(1)} className="flex-1" />
+              <Tab label="리포스트" {...a11yProps(2)} className="flex-1" />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <div className="max-w-[50vw]">
+              <UserPosts userId={userId} />
+            </div>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <div className="max-w-[50vw]">
+              <UserComments userId={userId} />
+            </div>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            <div className="max-w-[50vw]">
+              <RepostedPosts userId={userId} />
+            </div>
+          </CustomTabPanel>
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          <div className="max-w-[50vw]">
-            <UserPosts userId={userId} />
-          </div>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <div className="max-w-[50vw]">
-            <UserComments userId={userId} />
-          </div>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-          <div className="max-w-[50vw]">
-            <RepostedPosts userId={userId} />
-          </div>
-        </CustomTabPanel>
-      </Box>
+      </div>
     </ThemeProvider>
   );
 }

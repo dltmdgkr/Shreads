@@ -45,7 +45,7 @@ export default function UserComments({ userId }: { userId: string }) {
             <Post post={post} userId={user.id} />
           </div>
 
-          <div className="ml-6 pl-4 border-l-2 border-gray-300 space-y-4">
+          <div className="sm:w-full w-[30vh] ml-6 pl-4 border-l-2 border-gray-300 space-y-4">
             {(post.comments as CommentType[])
               .filter((comment) => comment.user_id === userId)
               .map((comment) => (
