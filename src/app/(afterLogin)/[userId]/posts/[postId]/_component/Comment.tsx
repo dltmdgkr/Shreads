@@ -75,7 +75,7 @@ export default function Comment({
         />
       </Link>
       <div className="flex-col flex-1">
-        <div className="flex">
+        <div className="flex md:w-[80vh] w-[40vw]">
           <div className="flex flex-1 items-center">
             <Link href={`/${comment.user_id}`}>
               <p className="font-bold mb-1 mr-2 hover:underline">
@@ -106,7 +106,7 @@ export default function Comment({
           )}
         </div>
         <p className="text-gray-700 mb-2">{comment.content}</p>
-        <div className="flex gap-2 overflow-x-auto max-w-full">
+        <div className="flex gap-2 overflow-x-auto md:w-[70vh] max-w-[50vw]">
           {comment.commentImages?.map((image) => (
             <img
               key={image.id}

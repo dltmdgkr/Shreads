@@ -74,17 +74,17 @@ export default function UserProfileBottomNavigation({
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
-            <div className="max-w-[50vw]">
+            <div className="md:max-w-[100vh] max-w-[50vw]">
               <UserPosts userId={userId} />
             </div>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <div className="max-w-[50vw]">
+            <div className="md:max-w-[100vh] max-w-[50vw]">
               <UserComments userId={userId} />
             </div>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-            <div className="max-w-[50vw]">
+            <div className="md:max-w-[100vh] max-w-[50vw]">
               <RepostedPosts userId={userId} />
             </div>
           </CustomTabPanel>

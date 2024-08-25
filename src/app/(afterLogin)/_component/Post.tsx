@@ -96,7 +96,7 @@ export default function Post({
             </Link>
           </div>
           <div className="flex flex-col w-full">
-            <div className="flex items-center mb-2 justify-between">
+            <div className="flex items-center mb-2 justify-between md:w-[80vh]">
               <div className="flex items-center">
                 <Link
                   href={`/${post.profiles?.id}`}
