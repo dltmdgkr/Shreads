@@ -22,7 +22,7 @@ export default function PostImages({ post }: { post: Post }) {
       onMouseUp={onDragEnd}
       onMouseLeave={onDragEnd}
       onClick={stopPropagation}
-      className="flex gap-2 overflow-scroll scrollbar-hide md:w-[80vh]"
+      className="flex gap-2 overflow-scroll scrollbar-hide md:w-[80vh] max-w-[70vw]"
     >
       {post.postImages?.map((image) => (
         <Link
