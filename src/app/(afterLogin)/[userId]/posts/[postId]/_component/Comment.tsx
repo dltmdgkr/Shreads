@@ -71,7 +71,7 @@ export default function Comment({
         <img
           src={comment.profiles.avatar_url!}
           alt="프로필 이미지"
-          className="min-w-10 min-h-10 rounded-full mr-4 mt-1 border object-cover"
+          className="min-w-10 max-w-10 min-h-8 max-h-10 rounded-full mr-4 mt-1 border object-cover"
         />
       </Link>
       <div className="flex-col flex-1">

@@ -78,7 +78,7 @@ export default function FollowingPosts() {
         </p>
         <p className="mt-2 text-gray-500">
           다양한 사용자들의 게시글을 확인하고 싶다면, 아래 버튼을 눌러
-          탐색해보세요!
+          탐색해보세요.
         </p>
         <Link
           href="/explore"

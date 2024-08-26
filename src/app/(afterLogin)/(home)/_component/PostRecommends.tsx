@@ -5,8 +5,10 @@ import { getPostRecommends } from "../_lib/getPostRecommends";
 import Post from "../../_component/Post";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { useFetchUser } from "../../_hook/useFetchUser";
 
 export default function PostRecommends() {
+  const { user } = useFetchUser();
   const { data, fetchNextPage, isFetching, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ["posts", "recommends"],
@@ -38,7 +40,7 @@ export default function PostRecommends() {
   return (
     <>
       {posts.map((post) => (
-        <Post key={post?.id} post={post} />
+        <Post key={post?.id} post={post} userId={user.id} />
       ))}
       <div ref={ref} />
     </>
