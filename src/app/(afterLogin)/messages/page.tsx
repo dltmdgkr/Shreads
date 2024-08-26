@@ -26,7 +26,7 @@ export default async function Page() {
 
   return (
     <div className="h-[100dvh] overflow-y-auto scrollbar-hide">
-      <div className="ml-4 mt-6 mb-2 hidden sm:block">
+      <div className="ml-4 mt-2 mb-2 hidden sm:block">
         <BackButton />
       </div>
       <main className="flex flex-col">

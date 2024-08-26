@@ -99,7 +99,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
 
   return (
     <>
-      <div className="ml-4 mt-6 mb-6 hidden sm:block">
+      <div className="ml-4 mt-2 mb-6 hidden sm:block">
         <BackButton />
       </div>
       <main className="w-full border-gray-200 flex flex-col h-screen overflow-y-auto scrollbar-hide">

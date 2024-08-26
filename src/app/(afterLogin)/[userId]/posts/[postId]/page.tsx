@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { postId: string } }) {
 
   return (
     <div className="h-[100dvh] overflow-y-auto scrollbar-hide">
-      <div className="ml-4 mt-6 mb-6 hidden sm:block">
+      <div className="ml-4 mt-2 mb-6 hidden sm:block">
         <BackButton />
       </div>
       <HydrationBoundary state={dehydratedState}>
