@@ -25,7 +25,7 @@ export default function Comments({
   const comments = data.data || [];
 
   return (
-    <>
+    <div className="h-[100dvh]">
       {comments.length > 0 ? (
         <div className="font-semibold p-4 border-b">답글</div>
       ) : null}
@@ -34,6 +34,6 @@ export default function Comments({
           <Comment key={comment.id} comment={comment} post={post} />
         ))}
       </div>
-    </>
+    </div>
   );
 }
