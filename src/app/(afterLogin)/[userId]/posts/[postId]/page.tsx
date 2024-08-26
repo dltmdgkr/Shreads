@@ -9,6 +9,7 @@ import Comments from "./_component/Comments";
 import { getComments } from "./_lib/getComments";
 import CommentForm from "./_component/CommentForm";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import BackButton from "@/app/(afterLogin)/_component/BackButton";
 
 export default async function Page({ params }: { params: { postId: string } }) {
   const { postId } = params;
@@ -33,10 +34,15 @@ export default async function Page({ params }: { params: { postId: string } }) {
   } = await supabase.auth.getUser();
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <SinglePost postId={postId} userId={user?.id} />
-      <Comments postId={postId} post={post} />
-      <CommentForm post={post} />
-    </HydrationBoundary>
+    <>
+      <div className="ml-4 mt-2 mb-6">
+        <BackButton />
+      </div>
+      <HydrationBoundary state={dehydratedState}>
+        <SinglePost postId={postId} userId={user?.id} />
+        <Comments postId={postId} post={post} />
+        <CommentForm post={post} />
+      </HydrationBoundary>
+    </>
   );
 }

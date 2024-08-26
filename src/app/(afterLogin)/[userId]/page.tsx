@@ -5,6 +5,7 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import UserInfo from "./_component/UserInfo";
+import BackButton from "../_component/BackButton";
 
 export default async function UserPage({
   params,
@@ -16,11 +17,16 @@ export default async function UserPage({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <div className="p-6">
-        <UserInfo userId={userId} />
-        <UserProfileBottomNavigation userId={userId} />
+    <>
+      <div className="ml-4 my-2">
+        <BackButton />
       </div>
-    </HydrationBoundary>
+      <HydrationBoundary state={dehydratedState}>
+        <div className="p-6">
+          <UserInfo userId={userId} />
+          <UserProfileBottomNavigation userId={userId} />
+        </div>
+      </HydrationBoundary>
+    </>
   );
 }

@@ -4,6 +4,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { getAllUsers } from "./_lib/getAllUsers";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import RoomList from "./_component/RoomList";
+import BackButton from "../_component/BackButton";
 
 export default async function Page() {
   const supabase = await createServerSupabaseClient();
@@ -24,8 +25,13 @@ export default async function Page() {
   });
 
   return (
-    <main className="flex flex-col">
-      <RoomList loggedInUser={session?.user} />
-    </main>
+    <>
+      <div className="ml-4 my-5">
+        <BackButton />
+      </div>
+      <main className="flex flex-col">
+        <RoomList loggedInUser={session?.user} />
+      </main>
+    </>
   );
 }

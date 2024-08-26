@@ -9,7 +9,7 @@ export default function BackButton() {
   };
   return (
     <button
-      className="w-34 h-34 bg-white border-none rounded-full flex items-center justify-center cursor-pointer :hover:bg-opacity-10:hover:bg-black"
+      className="w-34 h-34 bg-gray-200 border-none rounded-full flex items-center justify-center cursor-pointer :hover:bg-opacity-10:hover:bg-black"
       onClick={onClick}
     >
       <svg
