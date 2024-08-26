@@ -40,7 +40,7 @@ export default function PostRecommends() {
   return (
     <>
       {posts.map((post) => (
-        <Post key={post?.id} post={post} userId={user.id} />
+        <Post key={post?.id} post={post} userId={user?.id} />
       ))}
       <div ref={ref} />
     </>

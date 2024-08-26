@@ -98,63 +98,67 @@ export default function ChatRoom({ params }: ChatRoomProps) {
   }, []);
 
   return (
-    <main className="w-full min-h-screen border-gray-200 flex flex-col">
-      <div className="h-16 flex items-center px-4">
+    <>
+      <div className="ml-4 mt-6 mb-6 hidden sm:block">
         <BackButton />
       </div>
-      <Link
-        href={`/${selectedUserQuery.data?.id}`}
-        className="px-16 py-4 flex flex-col items-center transition duration-200 border-b border-gray-200 hover:bg-gray-100"
-      >
-        <img
-          src={selectedUserQuery.data?.avatar_url!}
-          alt="프로필 이미지"
-          className="w-12 h-12 rounded-full border"
-        />
-        <div className="flex flex-col items-center mt-3">
-          <b>{selectedUserQuery.data?.user_name}</b>
-          <div>@{selectedUserQuery.data?.email?.split("@")[0]}</div>
-        </div>
-      </Link>
-      <div className="flex flex-col space-y-16 md:px-16 py-8 mb-48">
-        {getAllMessagesQuery.data?.length === 0 ? (
-          <div className="flex justify-center text-gray-500">
-            여기서 대화를 시작하고 새 이야기를 만들어보세요.
-          </div>
-        ) : (
-          getAllMessagesQuery.data?.map((message) => (
-            <Message
-              key={message.id}
-              message={message}
-              isFromMe={message.receiver === params.room}
-            />
-          ))
-        )}
-      </div>
-      <div
-        className={`flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white ${maxWidthClass}`}
-      >
-        <img
-          src={user?.avatar_url}
-          alt="프로필 이미지"
-          className="w-8 h-8 rounded-full mr-2 border"
-        />
-        <input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder={`${selectedUserQuery.data?.user_name}님에게 메세지 보내기`}
-          className="flex-1 focus:outline-none resize-none"
-        />
-        <button
-          onClick={() => sendMessageMutation.mutate()}
-          className={`px-4 py-2 rounded-full text-sm ${
-            message === "" ? "bg-gray-300 text-gray-100" : "bg-black text-white"
-          }`}
-          disabled={message === ""}
+      <main className="w-full border-gray-200 flex flex-col h-screen overflow-y-auto scrollbar-hide">
+        <Link
+          href={`/${selectedUserQuery.data?.id}`}
+          className="px-16 py-4 flex flex-col items-center transition duration-200 border-b border-gray-200 hover:bg-gray-100"
         >
-          <span>전송</span>
-        </button>
-      </div>
-    </main>
+          <img
+            src={selectedUserQuery.data?.avatar_url!}
+            alt="프로필 이미지"
+            className="w-12 h-12 rounded-full border"
+          />
+          <div className="flex flex-col items-center mt-3">
+            <b>{selectedUserQuery.data?.user_name}</b>
+            <div>@{selectedUserQuery.data?.email?.split("@")[0]}</div>
+          </div>
+        </Link>
+        <div className="flex flex-col space-y-16 md:px-16 py-8 mb-48">
+          {getAllMessagesQuery.data?.length === 0 ? (
+            <div className="flex justify-center text-gray-500">
+              여기서 대화를 시작하고 새 이야기를 만들어보세요.
+            </div>
+          ) : (
+            getAllMessagesQuery.data?.map((message) => (
+              <Message
+                key={message.id}
+                message={message}
+                isFromMe={message.receiver === params.room}
+              />
+            ))
+          )}
+        </div>
+        <div
+          className={`flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white ${maxWidthClass}`}
+        >
+          <img
+            src={user?.avatar_url}
+            alt="프로필 이미지"
+            className="w-8 h-8 rounded-full mr-2 border"
+          />
+          <input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder={`${selectedUserQuery.data?.user_name}님에게 메세지 보내기`}
+            className="flex-1 focus:outline-none resize-none"
+          />
+          <button
+            onClick={() => sendMessageMutation.mutate()}
+            className={`px-4 py-2 rounded-full text-sm ${
+              message === ""
+                ? "bg-gray-300 text-gray-100"
+                : "bg-black text-white"
+            }`}
+            disabled={message === ""}
+          >
+            <span>전송</span>
+          </button>
+        </div>
+      </main>
+    </>
   );
 }

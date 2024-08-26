@@ -17,8 +17,8 @@ export default async function UserPage({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <>
-      <div className="ml-4 my-2">
+    <div className="h-screen overflow-y-auto scrollbar-hide">
+      <div className="ml-4 mt-6 hidden sm:block">
         <BackButton />
       </div>
       <HydrationBoundary state={dehydratedState}>
@@ -27,6 +27,6 @@ export default async function UserPage({
           <UserProfileBottomNavigation userId={userId} />
         </div>
       </HydrationBoundary>
-    </>
+    </div>
   );
 }

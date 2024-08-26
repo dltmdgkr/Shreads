@@ -34,8 +34,8 @@ export default async function Page({ params }: { params: { postId: string } }) {
   } = await supabase.auth.getUser();
 
   return (
-    <>
-      <div className="ml-4 mt-2 mb-6">
+    <div className="h-screen overflow-y-auto scrollbar-hide">
+      <div className="ml-4 mt-6 mb-6 hidden sm:block">
         <BackButton />
       </div>
       <HydrationBoundary state={dehydratedState}>
@@ -43,6 +43,6 @@ export default async function Page({ params }: { params: { postId: string } }) {
         <Comments postId={postId} post={post} />
         <CommentForm post={post} />
       </HydrationBoundary>
-    </>
+    </div>
   );
 }

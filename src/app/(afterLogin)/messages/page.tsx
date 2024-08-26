@@ -25,13 +25,13 @@ export default async function Page() {
   });
 
   return (
-    <>
-      <div className="ml-4 my-5">
+    <div className="h-screen overflow-y-auto scrollbar-hide">
+      <div className="ml-4 mt-6 mb-2 hidden sm:block">
         <BackButton />
       </div>
       <main className="flex flex-col">
         <RoomList loggedInUser={session?.user} />
       </main>
-    </>
+    </div>
   );
 }

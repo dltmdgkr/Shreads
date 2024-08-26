@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { isFollowingUser } from "@/app/(afterLogin)/explore/_lib/isFollowingUser";
 import { followUser } from "@/app/(afterLogin)/explore/_lib/followUser";
 import { getFollowerCount } from "@/app/(afterLogin)/explore/_lib/getFollowerCount";
+import { useRouter } from "next/navigation";
 
 type FollowerData = {
   follower_count: number;
@@ -16,6 +17,7 @@ type FollowerData = {
 
 export default function UserInfo({ userId }: { userId: string }) {
   const { user: me } = useFetchUser();
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
@@ -118,11 +120,12 @@ export default function UserInfo({ userId }: { userId: string }) {
         </Link>
       </div>
       {me?.id === userId ? (
-        <Link href="/edit-profile">
-          <button className="w-full border border-gray-300 px-4 py-1 rounded-xl text-gray-700 hover:bg-gray-100">
-            프로필 편집
-          </button>
-        </Link>
+        <button
+          onClick={() => router.push("/edit-profile")}
+          className="w-full border border-gray-300 px-4 py-1 rounded-xl text-gray-700 hover:bg-gray-100"
+        >
+          프로필 편집
+        </button>
       ) : (
         <button
           onClick={onClickFollow}
