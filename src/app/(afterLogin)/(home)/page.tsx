@@ -30,7 +30,7 @@ export default async function Home() {
   });
 
   return (
-    <main className="lg:max-w-[50vw] h-screen overflow-y-auto scrollbar-hide">
+    <main className="lg:max-w-[50vw] h-[100dvh] overflow-y-auto scrollbar-hide">
       <HydrationBoundary state={dehydratedState}>
         <PostsToggleProvider>
           <PostForm />

@@ -95,7 +95,7 @@ export default function FollowingPosts() {
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
-      <div ref={ref} />
+      <div className="h-24" ref={ref} />
     </>
   );
 }

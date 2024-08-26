@@ -17,7 +17,7 @@ export default async function UserPage({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="h-screen overflow-y-auto scrollbar-hide">
+    <div className="h-[100dvh] overflow-y-auto scrollbar-hide">
       <div className="ml-4 mt-6 hidden sm:block">
         <BackButton />
       </div>
