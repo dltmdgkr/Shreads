@@ -1,11 +1,11 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useFetchUser } from "../_hook/useFetchUser";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 export default function LogoutButton() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const router = useRouter();
   const { user: me } = useFetchUser();
 

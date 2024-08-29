@@ -1,20 +1,29 @@
+import dynamic from "next/dynamic";
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import PostForm from "./_component/PostForm";
 import { getPostRecommends } from "./_lib/getPostRecommends";
-import ToggleButton from "./_component/ToggleButton";
-import PostsToggleProvider from "./_component/PostsToggleProvider";
-import PostDecider from "./_component/PostDecider";
 import { getFollowingPosts } from "./_lib/getFollowingPosts";
-import PostNavigation from "./_component/PostNavigation";
+
+const PostForm = dynamic(() => import("./_component/PostForm"), { ssr: false });
+const PostDecider = dynamic(() => import("./_component/PostDecider"), {
+  ssr: false,
+});
+const ToggleButton = dynamic(() => import("./_component/ToggleButton"), {
+  ssr: false,
+});
+const PostNavigation = dynamic(() => import("./_component/PostNavigation"), {
+  ssr: false,
+});
+const PostsToggleProvider = dynamic(
+  () => import("./_component/PostsToggleProvider"),
+  { ssr: false }
+);
 
 export default async function Home() {
   const queryClient = new QueryClient();
-  const dehydratedState = dehydrate(queryClient);
-
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["posts", "followings"],
     queryFn: ({ pageParam = 1 }) =>
@@ -28,6 +37,8 @@ export default async function Home() {
       getPostRecommends({ page: pageParam, pageSize: 5 }),
     initialPageParam: 1,
   });
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <main className="lg:max-w-[50vw] h-[100dvh] overflow-y-auto scrollbar-hide">

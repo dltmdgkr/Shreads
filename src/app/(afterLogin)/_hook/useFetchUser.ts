@@ -1,7 +1,7 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
-const supabase = createClientComponentClient();
+const supabase = createBrowserSupabaseClient();
 
 async function fetchUser() {
   const {

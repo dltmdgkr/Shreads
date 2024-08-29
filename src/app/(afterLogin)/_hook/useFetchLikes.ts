@@ -1,4 +1,4 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchLikeStatus = async (userId: string, postId: number) => {
@@ -6,7 +6,7 @@ const fetchLikeStatus = async (userId: string, postId: number) => {
     throw new Error("Invalid userId or postId");
   }
 
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const { data: likeData, error } = await supabase
     .from("likes")
     .select("*")

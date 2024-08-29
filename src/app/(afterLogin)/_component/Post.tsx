@@ -17,6 +17,7 @@ import { deletePost } from "../[userId]/posts/[postId]/_lib/deletePost";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import ConfirmModal from "./ConfirmModal";
+import Image from "next/image";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -88,10 +89,14 @@ export default function Post({
               onClick={stopPropagation}
               className="relative block w-10 h-10 rounded-full"
             >
-              <img
+              <Image
                 src={post.profiles?.avatar_url!}
                 alt="프로필 이미지"
-                className="w-10 h-10 rounded-full border"
+                fill
+                style={{ objectFit: "cover" }}
+                priority
+                className="rounded-full border"
+                sizes="(max-width: 768px) 38px, (min-width: 769px) 38px"
               />
             </Link>
           </div>

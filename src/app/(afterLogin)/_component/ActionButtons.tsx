@@ -196,6 +196,7 @@ export default function ActionButtons({ post }: { post: Post }) {
       <div className="flex items-center">
         <Link
           href={`/${post.profiles?.user_name}/posts/${post.id}/create-comment`}
+          aria-label="댓글 버튼"
           onClick={stopPropagation}
         >
           <button className="flex items-center justify-center w-9 h-9 bg-white border-none outline-none rounded-full cursor-pointer transition-colors duration-200 hover:bg-blue-100">
