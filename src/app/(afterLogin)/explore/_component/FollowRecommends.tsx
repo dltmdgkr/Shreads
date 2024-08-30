@@ -1,26 +1,41 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import SearchList from "./SearchList";
 import { searchUsers } from "../_lib/searchUsers";
 import { useFetchUser } from "../../_hook/useFetchUser";
 import SearchListSkeleton from "./SearchListSkeleton";
+import { getFollowerCount } from "../_lib/getFollowerCount";
 
 export default function FollowRecommends({ search }: { search: string }) {
   const { user, loading } = useFetchUser();
 
-  const { data, isLoading } = useQuery({
+  const { data: recommendUsers, isLoading } = useQuery({
     queryKey: ["users", search],
     queryFn: async () => {
-      const recommendUsers = await searchUsers(search);
-      return recommendUsers?.filter(
-        (recommendUser) => recommendUser.id !== user.id
-      );
+      const users = await searchUsers(search);
+      return users?.filter((u) => u.id !== user.id) ?? [];
     },
     enabled: !loading,
   });
 
-  if (loading || isLoading) {
+  const followerQueries = useQueries({
+    queries:
+      recommendUsers?.map((user) => ({
+        queryKey: ["users", user.id, "follows"],
+        queryFn: async () => {
+          const followerCount = await getFollowerCount(user.id);
+          return { userId: user.id, follower_count: followerCount };
+        },
+        enabled: !!user.id,
+      })) ?? [],
+  });
+
+  const isFollowerCountLoading = followerQueries.some(
+    (query) => query.isLoading
+  );
+
+  if (loading || isLoading || isFollowerCountLoading) {
     return (
       <div className="flex flex-col gap-4 p-2">
         {[...Array(3)].map((_, index) => (
@@ -30,15 +45,21 @@ export default function FollowRecommends({ search }: { search: string }) {
     );
   }
 
-  if (data?.length === 0) {
+  if (recommendUsers?.length === 0) {
     return <div className="ml-2">검색 결과가 없습니다.</div>;
   }
 
   return (
     <>
-      {data?.map((user) => (
-        <SearchList key={user.id} user={user} />
-      ))}
+      {recommendUsers?.map((user) => {
+        const followerData = followerQueries.find(
+          (query) => query.data?.userId === user.id
+        )?.data;
+
+        return (
+          <SearchList key={user.id} user={user} followerData={followerData} />
+        );
+      })}
     </>
   );
 }

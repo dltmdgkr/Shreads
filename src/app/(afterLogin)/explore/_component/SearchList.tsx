@@ -2,18 +2,17 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { followUser } from "../_lib/followUser";
 import { useFetchUser } from "../../_hook/useFetchUser";
-import { getFollowerCount } from "../_lib/getFollowerCount";
 import { isFollowingUser } from "../_lib/isFollowingUser";
 
 type FollowerData = {
   follower_count: number;
 };
 
-export default function SearchList({ user }: { user: any }) {
+export default function SearchList({ user, followerData }: any) {
   const { user: me } = useFetchUser();
   const queryClient = useQueryClient();
 
-  const { data: isFollowing } = useQuery({
+  const { data: isFollowing, isLoading: isFollowingLoading } = useQuery({
     queryKey: ["users", user.id, "followStatus"],
     queryFn: () => isFollowingUser(user.id, me.id),
     enabled: !!me?.id && !!user?.id,
@@ -66,14 +65,6 @@ export default function SearchList({ user }: { user: any }) {
     const newIsFollowing = !isFollowing;
     followMutationQuery.mutate(newIsFollowing);
   };
-
-  const { data: followerData } = useQuery<FollowerData>({
-    queryKey: ["users", user.id, "follows"],
-    queryFn: async () => {
-      const followerCount = await getFollowerCount(user.id);
-      return { follower_count: followerCount };
-    },
-  });
 
   return (
     <>
