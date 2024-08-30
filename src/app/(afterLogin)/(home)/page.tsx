@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import {
   HydrationBoundary,
   QueryClient,
@@ -6,21 +5,11 @@ import {
 } from "@tanstack/react-query";
 import { getPostRecommends } from "./_lib/getPostRecommends";
 import { getFollowingPosts } from "./_lib/getFollowingPosts";
-
-const PostForm = dynamic(() => import("./_component/PostForm"), { ssr: false });
-const PostDecider = dynamic(() => import("./_component/PostDecider"), {
-  ssr: false,
-});
-const ToggleButton = dynamic(() => import("./_component/ToggleButton"), {
-  ssr: false,
-});
-const PostNavigation = dynamic(() => import("./_component/PostNavigation"), {
-  ssr: false,
-});
-const PostsToggleProvider = dynamic(
-  () => import("./_component/PostsToggleProvider"),
-  { ssr: false }
-);
+import PostsToggleProvider from "./_component/PostsToggleProvider";
+import PostForm from "./_component/PostForm";
+import PostNavigation from "./_component/PostNavigation";
+import PostDecider from "./_component/PostDecider";
+import ToggleButton from "./_component/ToggleButton";
 
 export default async function Home() {
   const queryClient = new QueryClient();
@@ -41,8 +30,8 @@ export default async function Home() {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <main className="lg:max-w-[50vw] h-[100dvh] overflow-y-auto scrollbar-hide">
-      <HydrationBoundary state={dehydratedState}>
+    <HydrationBoundary state={dehydratedState}>
+      <main className="lg:max-w-[50vw] h-[100dvh] overflow-y-auto scrollbar-hide">
         <PostsToggleProvider>
           <PostForm />
           <div className="lg:hidden">
@@ -53,7 +42,7 @@ export default async function Home() {
             <ToggleButton />
           </div>
         </PostsToggleProvider>
-      </HydrationBoundary>
-    </main>
+      </main>
+    </HydrationBoundary>
   );
 }

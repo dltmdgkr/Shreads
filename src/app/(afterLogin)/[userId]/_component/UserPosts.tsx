@@ -3,6 +3,7 @@ import { getPostsByUser } from "../_lib/getPostsByUser";
 import Post from "../../_component/Post";
 import { useFetchUser } from "../../_hook/useFetchUser";
 import Link from "next/link";
+import PostSkeleton from "../../_component/PostSkeleton";
 
 export default function UserPosts({ userId }: { userId: string }) {
   const { user } = useFetchUser();
@@ -13,8 +14,10 @@ export default function UserPosts({ userId }: { userId: string }) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+      <div className="flex flex-col gap-4 p-2">
+        {[...Array(3)].map((_, index) => (
+          <PostSkeleton key={index} />
+        ))}
       </div>
     );
   }

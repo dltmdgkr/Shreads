@@ -5,11 +5,12 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserById } from "../../messages/_lib/getUserById";
 import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
-import { useEffect, useState } from "react";
 import { isFollowingUser } from "@/app/(afterLogin)/explore/_lib/isFollowingUser";
 import { followUser } from "@/app/(afterLogin)/explore/_lib/followUser";
 import { getFollowerCount } from "@/app/(afterLogin)/explore/_lib/getFollowerCount";
 import { useRouter } from "next/navigation";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 type FollowerData = {
   follower_count: number;
@@ -20,60 +21,63 @@ export default function UserInfo({ userId }: { userId: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
-
-  const { data } = useQuery({
+  const { data, isLoading: isLoadingUser } = useQuery({
     queryKey: ["users", userId],
     queryFn: async () => await getUserById(userId),
   });
 
-  useEffect(() => {
-    const fetchFollowStatus = async () => {
-      if (me?.id && data?.id) {
-        const followingStatus = await isFollowingUser(data.id, me.id);
-        setIsFollowing(followingStatus);
-      }
-    };
-
-    fetchFollowStatus();
-  }, [me?.id, data?.id]);
+  const { data: isFollowing, isLoading: isLoadingFollowStatus } = useQuery({
+    queryKey: ["users", userId, "followStatus"],
+    queryFn: () => isFollowingUser(userId, me.id),
+    enabled: !!me?.id && !!userId,
+  });
 
   const followMutationQuery = useMutation({
-    mutationKey: ["users", data?.id, "follows"],
-    mutationFn: async () => {
-      if (data && me?.id) {
-        await followUser(data.id, me.id, isFollowing);
-      }
+    mutationKey: ["users", userId, "follow"],
+    mutationFn: async (newIsFollowing: boolean) => {
+      await followUser(userId, me.id, newIsFollowing);
     },
     onMutate: async () => {
-      const queryKey = ["users", data?.id, "follows"];
-
-      await queryClient.cancelQueries({ queryKey });
-
+      const queryKey = ["users", userId, "follows"];
       const previousData = queryClient.getQueryData<FollowerData>(queryKey);
+
+      const newIsFollowing = !isFollowing;
 
       queryClient.setQueryData<FollowerData>(queryKey, (oldData) => ({
         ...oldData,
-        follower_count: (oldData?.follower_count || 0) + (isFollowing ? -1 : 1),
+        follower_count:
+          (oldData?.follower_count || 0) + (newIsFollowing ? 1 : -1),
       }));
 
-      return { previousData };
+      queryClient.setQueryData(
+        ["users", userId, "followStatus"],
+        newIsFollowing
+      );
+
+      return { previousData, newIsFollowing };
     },
     onError: (err, variables, context) => {
-      const queryKey = ["users", data?.id, "follows"];
-      queryClient.setQueryData(queryKey, context?.previousData);
-      console.error("Error updating follow:", err);
+      console.error("Error in mutation:", err);
+      queryClient.setQueryData(
+        ["users", userId, "follows"],
+        context?.previousData
+      );
+      queryClient.setQueryData(
+        ["users", userId, "followStatus"],
+        context?.newIsFollowing
+      );
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["users", data?.id, "follows"],
-      });
+    onSuccess: (data, variables, context) => {
+      queryClient.setQueryData(
+        ["users", userId, "followStatus"],
+        context?.newIsFollowing
+      );
     },
   });
 
   const onClickFollow = () => {
-    followMutationQuery.mutate();
-    setIsFollowing((prev) => !prev);
+    const newIsFollowing = !isFollowing;
+    followMutationQuery.mutate(newIsFollowing);
   };
 
   const { data: followerData } = useQuery<FollowerData>({
@@ -83,17 +87,32 @@ export default function UserInfo({ userId }: { userId: string }) {
       const followerCount = await getFollowerCount(data.id);
       return { follower_count: followerCount };
     },
+    enabled: !!data,
   });
 
-  if (!data) return null;
-
-  if (isFollowing === null) {
+  if (isLoadingUser || isLoadingFollowStatus) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
-      </div>
+      <>
+        <div className="flex mb-4 items-center">
+          <div className="flex flex-col justify-center flex-1">
+            <Skeleton width={150} height={24} />
+            <Skeleton width={120} height={20} className="mt-2" />
+          </div>
+          <Skeleton circle height={80} width={80} />
+        </div>
+        <div className="flex flex-start mb-8 items-center">
+          <div className="flex flex-1">
+            <Skeleton width={80} height={24} />
+            <Skeleton width={60} height={24} className="ml-4" />
+          </div>
+          <Skeleton width={24} height={24} circle className="ml-2" />
+        </div>
+        <Skeleton width="100%" height={40} />
+      </>
     );
   }
+
+  if (!data) return null;
 
   return (
     <>

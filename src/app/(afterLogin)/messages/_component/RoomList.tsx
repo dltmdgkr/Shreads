@@ -5,6 +5,7 @@ import { getAllUsers } from "../_lib/getAllUsers";
 import Room from "./Room";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
+import RoomSkeleton from "./RoomSkeleton";
 
 type Presence = {
   [userId: string]: Array<{ onlineAt: string }>;
@@ -14,7 +15,7 @@ export default function RoomList({ loggedInUser }: any) {
   const supabase = createBrowserSupabaseClient();
   const [presence, setPresence] = useState<Presence | null>(null);
 
-  const getAllUsersQuery = useQuery({
+  const { data: getAllUsersQuery, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const allUsers = await getAllUsers();
@@ -52,9 +53,19 @@ export default function RoomList({ loggedInUser }: any) {
     };
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-4 p-2">
+        {[...Array(3)].map((_, index) => (
+          <RoomSkeleton key={index} />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <>
-      {getAllUsersQuery.data?.map((user) => (
+      {getAllUsersQuery?.map((user) => (
         <div key={user.id}>
           <Room user={user} onlineAt={presence?.[user.id]?.[0]?.onlineAt} />
         </div>

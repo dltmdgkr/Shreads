@@ -2,7 +2,6 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { followUser } from "../_lib/followUser";
 import { useFetchUser } from "../../_hook/useFetchUser";
-import { useEffect, useState } from "react";
 import { getFollowerCount } from "../_lib/getFollowerCount";
 import { isFollowingUser } from "../_lib/isFollowingUser";
 
@@ -14,53 +13,58 @@ export default function SearchList({ user }: { user: any }) {
   const { user: me } = useFetchUser();
   const queryClient = useQueryClient();
 
-  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const fetchFollowStatus = async () => {
-      if (me?.id && user?.id) {
-        const followingStatus = await isFollowingUser(user.id, me.id);
-        setIsFollowing(followingStatus);
-      }
-    };
-
-    fetchFollowStatus();
-  }, [me?.id, user?.id]);
+  const { data: isFollowing } = useQuery({
+    queryKey: ["users", user.id, "followStatus"],
+    queryFn: () => isFollowingUser(user.id, me.id),
+    enabled: !!me?.id && !!user?.id,
+  });
 
   const followMutationQuery = useMutation({
-    mutationKey: ["users", user.id, "follows"],
-    mutationFn: async () => {
-      await followUser(user.id, me.id, isFollowing);
+    mutationKey: ["users", user.id, "follow"],
+    mutationFn: async (newIsFollowing: boolean) => {
+      await followUser(user.id, me.id, newIsFollowing);
     },
     onMutate: async () => {
       const queryKey = ["users", user.id, "follows"];
-
-      await queryClient.cancelQueries({ queryKey });
-
       const previousData = queryClient.getQueryData<FollowerData>(queryKey);
+
+      const newIsFollowing = !isFollowing;
 
       queryClient.setQueryData<FollowerData>(queryKey, (oldData) => ({
         ...oldData,
-        follower_count: (oldData?.follower_count || 0) + (isFollowing ? -1 : 1),
+        follower_count:
+          (oldData?.follower_count || 0) + (newIsFollowing ? 1 : -1),
       }));
 
-      return { previousData };
+      queryClient.setQueryData(
+        ["users", user.id, "followStatus"],
+        newIsFollowing
+      );
+
+      return { previousData, newIsFollowing };
     },
     onError: (err, variables, context) => {
-      const queryKey = ["users", user.id, "follows"];
-      queryClient.setQueryData(queryKey, context?.previousData);
-      console.error("Error updating follow:", err);
+      console.error("Error in mutation:", err);
+      queryClient.setQueryData(
+        ["users", user.id, "follows"],
+        context?.previousData
+      );
+      queryClient.setQueryData(
+        ["users", user.id, "followStatus"],
+        context?.newIsFollowing
+      );
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["users", user.id, "follows"],
-      });
+    onSuccess: (data, variables, context) => {
+      queryClient.setQueryData(
+        ["users", user.id, "followStatus"],
+        context?.newIsFollowing
+      );
     },
   });
 
   const onClickFollow = () => {
-    followMutationQuery.mutate();
-    setIsFollowing((prev) => !prev);
+    const newIsFollowing = !isFollowing;
+    followMutationQuery.mutate(newIsFollowing);
   };
 
   const { data: followerData } = useQuery<FollowerData>({
@@ -71,16 +75,8 @@ export default function SearchList({ user }: { user: any }) {
     },
   });
 
-  if (isFollowing === null) {
-    return (
-      <div className="flex flex-col h-full mt-8">
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
-      </div>
-    );
-  }
-
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between p-3">
         <Link href={`/${user.id}`}>
           <div className="flex items-center">
@@ -107,6 +103,6 @@ export default function SearchList({ user }: { user: any }) {
       <div className="ml-[70px] pb-3 border-b border-gray-200">
         <p>팔로워 {followerData?.follower_count || 0}명</p>
       </div>
-    </div>
+    </>
   );
 }
