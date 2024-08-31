@@ -1,45 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 interface SearchFormProps {
   search: string;
   setSearch: (value: string) => void;
 }
 
 export default function SearchForm({ search, setSearch }: SearchFormProps) {
-  const [windowWidth, setWindowWidth] = useState(0);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    if (typeof window !== "undefined") {
-      setWindowWidth(window.innerWidth);
-      window.addEventListener("resize", handleResize);
-    }
-
-    return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("resize", handleResize);
-      }
-    };
-  }, []);
-
-  let maxWidthClass;
-  if (windowWidth >= 1200) {
-    maxWidthClass = "max-w-4xl";
-  } else if (windowWidth >= 1024) {
-    maxWidthClass = "max-w-xl";
-  } else if (windowWidth >= 900) {
-    maxWidthClass = "max-w-4xl";
-  } else {
-    maxWidthClass = "max-w-xl";
-  }
-
   return (
-    <form className={`fixed lg:top-0 top-15 w-full ${maxWidthClass}`}>
+    <form className="fixed top-15 w-full sm:max-w-xl md-lg:max-w-4xl lg-xl:max-w-4xl lg:max-w-xl xl:max-w-4xl pr-6">
       <div className="flex items-center w-full bg-gray-200 rounded-full mt-6 mb-12">
         <svg
           className="w-6 h-6 ml-4 text-gray-600"

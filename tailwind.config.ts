@@ -13,6 +13,10 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      screens: {
+        "md-lg": "900px",
+        "lg-xl": "1200px",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],
