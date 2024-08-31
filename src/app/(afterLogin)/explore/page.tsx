@@ -9,7 +9,7 @@ import { isFollowingUser } from "./_lib/isFollowingUser";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { User } from "@/model/User";
 
-export default async function Page({ search }: { search: string }) {
+export default async function Page() {
   const queryClient = new QueryClient();
   const supabase = await createServerSupabaseClient();
 
@@ -18,11 +18,11 @@ export default async function Page({ search }: { search: string }) {
   } = await supabase.auth.getSession();
 
   await queryClient.prefetchQuery({
-    queryKey: ["users", search],
-    queryFn: () => searchUsers(search),
+    queryKey: ["users", ""],
+    queryFn: () => searchUsers(""),
   });
 
-  const users = queryClient.getQueryData<User[]>(["users", search]);
+  const users = queryClient.getQueryData<User[]>(["users", ""]);
 
   if (users && session) {
     await Promise.all(
