@@ -1,18 +1,45 @@
-"use client";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+import ExploreContainer from "./_component/ExploreContainer";
+import { searchUsers } from "./_lib/searchUsers";
+import { isFollowingUser } from "./_lib/isFollowingUser";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { User } from "@/model/User";
 
-import { useState } from "react";
-import FollowRecommends from "./_component/FollowRecommends";
-import SearchForm from "./_component/SearchForm";
+export default async function Page({ search }: { search: string }) {
+  const queryClient = new QueryClient();
+  const supabase = await createServerSupabaseClient();
 
-export default function Page() {
-  const [search, setSearch] = useState<string>("");
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["users", search],
+    queryFn: () => searchUsers(search),
+  });
+
+  const users = queryClient.getQueryData<User[]>(["users", search]);
+
+  if (users && session) {
+    await Promise.all(
+      users.map(async (user: User) => {
+        await queryClient.prefetchQuery({
+          queryKey: ["users", user.id, "followStatus"],
+          queryFn: () => isFollowingUser(user.id, session.user.id),
+        });
+      })
+    );
+  }
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <>
-      <SearchForm search={search} setSearch={setSearch} />
-      <div className="mt-20">
-        <FollowRecommends search={search} />
-      </div>
-    </>
+    <HydrationBoundary state={dehydratedState}>
+      <ExploreContainer />
+    </HydrationBoundary>
   );
 }

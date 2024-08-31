@@ -5,7 +5,7 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 export async function followUser(
   followedId: string,
   followerId: string,
-  isFollowing: boolean | undefined | null
+  isFollowing: boolean
 ) {
   const supabase = await createServerSupabaseClient();
 

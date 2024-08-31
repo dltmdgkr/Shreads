@@ -12,7 +12,7 @@ export default function SearchList({ user, followerData }: any) {
   const { user: me } = useFetchUser();
   const queryClient = useQueryClient();
 
-  const { data: isFollowing, isLoading: isFollowingLoading } = useQuery({
+  const { data: isFollowing } = useQuery({
     queryKey: ["users", user.id, "followStatus"],
     queryFn: () => isFollowingUser(user.id, me.id),
     enabled: !!me?.id && !!user?.id,
@@ -74,7 +74,7 @@ export default function SearchList({ user, followerData }: any) {
             <img
               src={user.avatar_url}
               alt="User Avatar"
-              className="w-10 h-10 rounded-full mr-4"
+              className="w-10 h-10 rounded-full mr-4 border"
             />
             <div>
               <h2 className="text-md font-semibold">{user.user_name}</h2>
