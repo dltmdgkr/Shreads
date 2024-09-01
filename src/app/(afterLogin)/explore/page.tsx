@@ -4,10 +4,15 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import ExploreContainer from "./_component/ExploreContainer";
-import { searchUsers } from "./_lib/searchUsers";
-import { isFollowingUser } from "./_lib/isFollowingUser";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { User } from "@/model/User";
+import { searchUsers } from "./_lib/searchUsers";
+import { isFollowingUser } from "./_lib/isFollowingUser";
+
+async function searchUsersFiltered(excludeUserId: string) {
+  const allUsers = await searchUsers("");
+  return allUsers!.filter((user) => user.id !== excludeUserId);
+}
 
 export default async function Page() {
   const queryClient = new QueryClient();
@@ -19,7 +24,7 @@ export default async function Page() {
 
   await queryClient.prefetchQuery({
     queryKey: ["users", ""],
-    queryFn: () => searchUsers(""),
+    queryFn: () => searchUsersFiltered(session!.user.id),
   });
 
   const users = queryClient.getQueryData<User[]>(["users", ""]);
