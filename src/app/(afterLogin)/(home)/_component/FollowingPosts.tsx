@@ -8,7 +8,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { getFollowingUsers } from "../_lib/getFollowingUsers";
 import Link from "next/link";
-import { FadeLoader } from "react-spinners";
+import { FadeLoader, ClipLoader } from "react-spinners";
 
 export default function FollowingPosts() {
   const { user, loading } = useFetchUser();
@@ -96,6 +96,12 @@ export default function FollowingPosts() {
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
+
+      {isFetchingNextPage && (
+        <div className="flex justify-center mt-4 mb-4">
+          <ClipLoader color="#adb5bd" />
+        </div>
+      )}
       <div className="h-24" ref={ref} />
     </>
   );

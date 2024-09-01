@@ -6,6 +6,7 @@ import Post from "../../_component/Post";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useFetchUser } from "../../_hook/useFetchUser";
+import { ClipLoader } from "react-spinners";
 
 export default function PostRecommends() {
   const { user } = useFetchUser();
@@ -40,8 +41,14 @@ export default function PostRecommends() {
   return (
     <>
       {posts.map((post) => (
-        <Post key={post?.id} post={post} userId={user?.id} />
+        <Post key={post.id} post={post} />
       ))}
+
+      {isFetchingNextPage && (
+        <div className="flex justify-center mt-4 mb-4">
+          <ClipLoader color="#adb5bd" />
+        </div>
+      )}
       <div className="h-24" ref={ref} />
     </>
   );
