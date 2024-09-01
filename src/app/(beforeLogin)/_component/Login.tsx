@@ -6,12 +6,16 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { FaGithub } from "react-icons/fa";
+import { PulseLoader } from "react-spinners";
 
 export default function Login() {
   const supabase = createBrowserSupabaseClient();
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailLogin, setEmailLogin] = useState(false);
+  const [kakaoLogin, setKakaoLogin] = useState(false);
+  const [githubLogin, setGithubLogin] = useState(false);
   const [data, setData] = useState<{
     email: string;
     password: string;
@@ -23,6 +27,7 @@ export default function Login() {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
+    setEmailLogin(true);
     try {
       const { data: dataUser, error } = await supabase.auth.signInWithPassword({
         email: data.email,
@@ -41,6 +46,7 @@ export default function Login() {
   };
 
   const signInWithKakao = async () => {
+    setKakaoLogin(true);
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
@@ -53,6 +59,7 @@ export default function Login() {
   };
 
   const signInWithGithub = async () => {
+    setGithubLogin(true);
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
@@ -141,7 +148,15 @@ export default function Login() {
               type="submit"
               className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
             >
-              로그인 하기
+              {emailLogin ? (
+                <PulseLoader
+                  size={8}
+                  color="#ffffff"
+                  style={{ padding: 0.1 }}
+                />
+              ) : (
+                "로그인 하기"
+              )}
             </button>
             <p className="font-bold text-rose-500 text-center mt-2">
               {errorMessage}
@@ -158,16 +173,27 @@ export default function Login() {
           onClick={signInWithKakao}
           className="flex w-full justify-center items-center rounded-full bg-[#FEE500] px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
         >
-          <RiKakaoTalkFill className="mr-2 text-xl" />
-          Kakao로 시작하기
+          {kakaoLogin ? (
+            <PulseLoader size={8} style={{ padding: 0.1 }} />
+          ) : (
+            <>
+              <RiKakaoTalkFill className="mr-2 text-xl" />
+              Kakao로 시작하기
+            </>
+          )}
         </button>
         <button
           type="button"
           onClick={signInWithGithub}
           className="flex w-full justify-center items-center border border-gray-200 rounded-full bg-white mt-2 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
         >
-          <FaGithub className="mr-2 text-lg" />
-          Github로 시작하기
+          {githubLogin ? (
+            <PulseLoader size={8} style={{ padding: 0.1 }} />
+          ) : (
+            <>
+              <FaGithub className="mr-2 text-lg" /> Github로 시작하기
+            </>
+          )}
         </button>
         <p className="mt-10 text-center text-sm text-gray-500">
           계정이 없으신가요?{" "}

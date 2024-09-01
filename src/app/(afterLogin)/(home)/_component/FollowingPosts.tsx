@@ -8,6 +8,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { getFollowingUsers } from "../_lib/getFollowingUsers";
 import Link from "next/link";
+import { FadeLoader } from "react-spinners";
 
 export default function FollowingPosts() {
   const { user, loading } = useFetchUser();
@@ -65,7 +66,7 @@ export default function FollowingPosts() {
   if (isUsersLoading || isPostsLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center mt-8">
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+        <FadeLoader color="#adb5bd" />
       </div>
     );
   }

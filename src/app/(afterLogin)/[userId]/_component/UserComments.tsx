@@ -5,6 +5,7 @@ import { Comment as CommentType } from "@/model/Comment";
 import { Post as PostType } from "@/model/Post";
 import { getPostsWithComments } from "../_lib/getPostsWithUserComments";
 import { useFetchUser } from "../../_hook/useFetchUser";
+import { FadeLoader } from "react-spinners";
 
 export default function UserComments({ userId }: { userId: string }) {
   const { user } = useFetchUser();
@@ -16,7 +17,7 @@ export default function UserComments({ userId }: { userId: string }) {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center mt-8">
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+        <FadeLoader color="#adb5bd" />
       </div>
     );
   }

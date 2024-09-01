@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getRepostedPosts } from "../_lib/getRepostedPosts";
 import Post from "../../_component/Post";
 import { Post as PostType } from "@/model/Post";
+import { FadeLoader } from "react-spinners";
 
 export default function RepostedPosts({ userId }: { userId: string }) {
   const { data, isLoading } = useQuery({
@@ -14,7 +15,7 @@ export default function RepostedPosts({ userId }: { userId: string }) {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center mt-8">
-        <p className="text-lg font-semibold text-gray-700">Loading...</p>
+        <FadeLoader color="#adb5bd" />
       </div>
     );
   }

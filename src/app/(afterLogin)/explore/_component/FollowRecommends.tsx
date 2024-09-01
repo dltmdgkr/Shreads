@@ -10,11 +10,7 @@ import { getFollowerCount } from "../_lib/getFollowerCount";
 export default function FollowRecommends({ search }: { search: string }) {
   const { user, loading } = useFetchUser();
 
-  const {
-    data: recommendUsers,
-    isLoading: isUsersLoading,
-    isFetching,
-  } = useQuery({
+  const { data: recommendUsers, isLoading: isUsersLoading } = useQuery({
     queryKey: ["users", search],
     queryFn: async () => {
       const users = await searchUsers(search);
@@ -39,8 +35,7 @@ export default function FollowRecommends({ search }: { search: string }) {
     (query) => query.isLoading
   );
 
-  const isLoading =
-    loading || isUsersLoading || isFollowerCountLoading || isFetching;
+  const isLoading = loading || isUsersLoading || isFollowerCountLoading;
 
   if (isLoading) {
     return (
