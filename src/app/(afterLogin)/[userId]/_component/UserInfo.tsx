@@ -11,6 +11,8 @@ import { getFollowerCount } from "@/app/(afterLogin)/explore/_lib/getFollowerCou
 import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { RiLogoutCircleRLine } from "react-icons/ri";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 type FollowerData = {
   follower_count: number;
@@ -20,6 +22,7 @@ export default function UserInfo({ userId }: { userId: string }) {
   const { user: me } = useFetchUser();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const supabase = createBrowserSupabaseClient();
 
   const { data, isLoading: isLoadingUser } = useQuery({
     queryKey: ["users", userId],
@@ -90,6 +93,16 @@ export default function UserInfo({ userId }: { userId: string }) {
     enabled: !!data,
   });
 
+  const onLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error("ERROR:", error);
+    }
+
+    router.replace("/login");
+  };
+
   if (isLoadingUser || isLoadingFollowStatus) {
     return (
       <>
@@ -139,12 +152,21 @@ export default function UserInfo({ userId }: { userId: string }) {
         </Link>
       </div>
       {me?.id === userId ? (
-        <button
-          onClick={() => router.push("/edit-profile")}
-          className="w-full border border-gray-300 px-4 py-1 rounded-xl text-gray-700 hover:bg-gray-100"
-        >
-          프로필 편집
-        </button>
+        <>
+          <button
+            onClick={() => router.push("/edit-profile")}
+            className="w-full border border-gray-300 px-4 py-1 rounded-xl text-gray-700 hover:bg-gray-100"
+          >
+            프로필 편집
+          </button>
+          <button
+            onClick={() => onLogout()}
+            className="flex items-center justify-center space-x-2 w-full border border-gray-300 px-4 py-1.5 mt-1.5 rounded-xl text-red-500 lg:hidden block"
+          >
+            <RiLogoutCircleRLine size={16} />
+            <span className="text-sm">로그아웃</span>
+          </button>
+        </>
       ) : (
         <button
           onClick={onClickFollow}
@@ -152,7 +174,11 @@ export default function UserInfo({ userId }: { userId: string }) {
             isFollowing ? "text-gray-500" : "text-black"
           }`}
         >
-          {isFollowing ? "팔로잉" : "팔로우"}
+          {isFollowing ? (
+            "팔로잉"
+          ) : (
+            <span className="font-semibold">팔로우</span>
+          )}
         </button>
       )}
     </>

@@ -97,7 +97,11 @@ export default function SearchList({ user }: any) {
             isFollowing ? "text-gray-500" : "text-black"
           }`}
         >
-          {isFollowing ? "팔로잉" : "팔로우"}
+          {isFollowing ? (
+            "팔로잉"
+          ) : (
+            <span className="font-semibold">팔로우</span>
+          )}
         </button>
       </div>
       <div className="ml-[70px] pb-3 border-b border-gray-200">
