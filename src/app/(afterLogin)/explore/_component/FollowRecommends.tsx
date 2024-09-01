@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import SearchList from "./SearchList";
 import { searchUsers } from "../_lib/searchUsers";
 import { useFetchUser } from "../../_hook/useFetchUser";
@@ -10,7 +10,11 @@ import { getFollowerCount } from "../_lib/getFollowerCount";
 export default function FollowRecommends({ search }: { search: string }) {
   const { user, loading } = useFetchUser();
 
-  const { data: recommendUsers, isLoading } = useQuery({
+  const {
+    data: recommendUsers,
+    isLoading: isUsersLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["users", search],
     queryFn: async () => {
       const users = await searchUsers(search);
@@ -35,7 +39,10 @@ export default function FollowRecommends({ search }: { search: string }) {
     (query) => query.isLoading
   );
 
-  if (loading || isLoading || isFollowerCountLoading) {
+  const isLoading =
+    loading || isUsersLoading || isFollowerCountLoading || isFetching;
+
+  if (isLoading) {
     return (
       <div className="flex flex-col gap-4 p-2">
         {[...Array(3)].map((_, index) => (
