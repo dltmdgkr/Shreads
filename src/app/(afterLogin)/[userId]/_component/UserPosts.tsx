@@ -26,7 +26,7 @@ export default function UserPosts({ userId }: { userId: string }) {
 
   if (posts.length === 0 && user.id === userId) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+      <div className="flex flex-col items-center justify-center sm:w-full w-[60vw] h-full text-center mt-8">
         <p className="text-lg font-semibold text-gray-700">
           아직 게시글을 작성하지 않았습니다.
         </p>
@@ -43,7 +43,7 @@ export default function UserPosts({ userId }: { userId: string }) {
     );
   } else if (posts.length === 0 && user.id !== userId) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+      <div className="flex flex-col items-center justify-center sm:w-full w-[60vw] h-full text-center mt-8">
         <p className="mt-2 text-gray-500">아직 게시글을 작성하지 않았습니다.</p>
       </div>
     );

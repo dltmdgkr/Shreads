@@ -14,7 +14,7 @@ export default function RepostedPosts({ userId }: { userId: string }) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+      <div className="flex flex-col items-center justify-center sm:w-full w-[80vw] h-full text-center mt-8">
         <FadeLoader color="#adb5bd" />
       </div>
     );
@@ -24,7 +24,7 @@ export default function RepostedPosts({ userId }: { userId: string }) {
 
   if (posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+      <div className="flex flex-col items-center justify-center sm:w-full w-[65vw] h-full text-center mt-8">
         <p className="mt-2 text-gray-500">
           아직 게시글을 리포스트하지 않았습니다.
         </p>

@@ -16,7 +16,7 @@ export default function UserComments({ userId }: { userId: string }) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+      <div className="flex flex-col items-center justify-center sm:w-full w-[80vw] h-full text-center mt-8">
         <FadeLoader color="#adb5bd" />
       </div>
     );
@@ -32,7 +32,7 @@ export default function UserComments({ userId }: { userId: string }) {
 
   if (filteredPosts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center mt-8">
+      <div className="flex flex-col items-center justify-center sm:w-full w-[60vw] h-full text-center mt-8">
         <p className="mt-2 text-gray-500">아직 답글을 게시하지 않았습니다.</p>
       </div>
     );
@@ -46,7 +46,7 @@ export default function UserComments({ userId }: { userId: string }) {
             <Post post={post} userId={user.id} />
           </div>
 
-          <div className="sm:w-full w-[30vh] ml-6 pl-4 border-l-2 border-gray-300 space-y-4">
+          <div className="sm:w-full w-[75vw] sm:ml-6 pl-4 border-l-2 border-gray-300 space-y-4">
             {(post.comments as CommentType[])
               .filter((comment) => comment.user_id === userId)
               .map((comment) => (
