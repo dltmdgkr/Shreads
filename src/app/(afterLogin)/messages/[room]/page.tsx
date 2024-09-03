@@ -10,6 +10,8 @@ import { useFetchUser } from "../../_hook/useFetchUser";
 import { sendMessage } from "../_lib/sendMessage";
 import { getAllMessages } from "../_lib/getAllMessages";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
+import { usePresenceStore } from "@/store/usePresenceStore";
+import dayjs from "dayjs";
 
 interface ChatRoomProps {
   params: {
@@ -21,36 +23,12 @@ export default function ChatRoom({ params }: ChatRoomProps) {
   const { user } = useFetchUser();
   const supabase = createBrowserSupabaseClient();
 
-  const [windowWidth, setWindowWidth] = useState(0);
   const [message, setMessage] = useState("");
+  const presence = usePresenceStore((state) => state.presence);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    if (typeof window !== "undefined") {
-      setWindowWidth(window.innerWidth);
-      window.addEventListener("resize", handleResize);
-    }
-
-    return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("resize", handleResize);
-      }
-    };
-  }, []);
-
-  let maxWidthClass;
-  if (windowWidth >= 1200) {
-    maxWidthClass = "max-w-4xl";
-  } else if (windowWidth >= 1024) {
-    maxWidthClass = "max-w-xl";
-  } else if (windowWidth >= 900) {
-    maxWidthClass = "max-w-4xl";
-  } else {
-    maxWidthClass = "max-w-xl";
-  }
+  const onlineAt = presence?.[params.room]?.[0]?.onlineAt;
+  const isOnlineNow = onlineAt && dayjs().diff(dayjs(onlineAt), "minute") < 5;
+  const lastOnline = isOnlineNow ? "지금 활동 중" : "";
 
   const selectedUserQuery = useQuery({
     queryKey: ["users", params.room],
@@ -107,14 +85,20 @@ export default function ChatRoom({ params }: ChatRoomProps) {
           href={`/${selectedUserQuery.data?.id}`}
           className="px-16 py-4 flex flex-col items-center transition duration-200 border-b border-gray-200 hover:bg-gray-100"
         >
-          <img
-            src={selectedUserQuery.data?.avatar_url!}
-            alt="프로필 이미지"
-            className="w-12 h-12 rounded-full border"
-          />
+          <div className="relative">
+            <img
+              src={selectedUserQuery.data?.avatar_url!}
+              alt="프로필 이미지"
+              className="w-12 h-12 rounded-full border"
+            />
+            {isOnlineNow && (
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+            )}
+          </div>
           <div className="flex flex-col items-center mt-3">
             <b>{selectedUserQuery.data?.user_name}</b>
             <div>@{selectedUserQuery.data?.email?.split("@")[0]}</div>
+            <span className="mt-2 text-gray-800">{lastOnline}</span>
           </div>
         </Link>
         <div className="flex flex-col space-y-16 md:px-16 py-8 mb-48">
@@ -132,9 +116,7 @@ export default function ChatRoom({ params }: ChatRoomProps) {
             ))
           )}
         </div>
-        <div
-          className={`flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white ${maxWidthClass}`}
-        >
+        <div className="flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white sm:max-w-xl md-lg:max-w-4xl lg-xl:max-w-4xl lg:max-w-xl xl:max-w-4xl">
           <img
             src={user?.avatar_url}
             alt="프로필 이미지"

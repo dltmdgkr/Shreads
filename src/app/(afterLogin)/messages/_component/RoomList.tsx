@@ -3,17 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "../_lib/getAllUsers";
 import Room from "./Room";
-import { createBrowserSupabaseClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
 import RoomSkeleton from "./RoomSkeleton";
-
-type Presence = {
-  [userId: string]: Array<{ onlineAt: string }>;
-};
+import { usePresenceStore } from "@/store/usePresenceStore";
 
 export default function RoomList({ loggedInUser }: any) {
-  const supabase = createBrowserSupabaseClient();
-  const [presence, setPresence] = useState<Presence | null>(null);
+  const presence = usePresenceStore((state) => state.presence);
 
   const { data: getAllUsersQuery, isLoading } = useQuery({
     queryKey: ["users"],
@@ -22,36 +16,6 @@ export default function RoomList({ loggedInUser }: any) {
       return allUsers?.filter((user) => user.id !== loggedInUser.id);
     },
   });
-
-  useEffect(() => {
-    const channel = supabase.channel("online_users", {
-      config: {
-        presence: {
-          key: loggedInUser?.id,
-        },
-      },
-    });
-
-    channel.on("presence", { event: "sync" }, () => {
-      const newState = channel.presenceState();
-      const newStateObj = JSON.parse(JSON.stringify(newState));
-      setPresence(newStateObj);
-    });
-
-    channel.subscribe(async (status) => {
-      if (status !== "SUBSCRIBED") {
-        return;
-      }
-
-      await channel.track({
-        onlineAt: new Date().toISOString(),
-      });
-    });
-
-    return () => {
-      channel.unsubscribe();
-    };
-  }, []);
 
   if (isLoading) {
     return (
