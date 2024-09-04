@@ -32,7 +32,7 @@ export default function PostImages({ post }: { post: Post }) {
           onClick={onClick}
         >
           <div
-            style={{ position: "relative", width: "150px", height: "150px" }}
+            style={{ position: "relative", width: 150, height: 150 }}
           >
             <Image
               src={image.image_url!}
