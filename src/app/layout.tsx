@@ -24,12 +24,7 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://shreads-x.vercel.app",
     locale: "ko_KR",
-    images: [
-      {
-        url: "https://shreads-x.vercel.app/favicon.png",
-        alt: "Shreads",
-      },
-    ],
+    images: ["https://shreads-x.vercel.app/favicon.png"],
   },
 };
 
