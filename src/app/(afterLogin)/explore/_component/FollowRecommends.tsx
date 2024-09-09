@@ -7,13 +7,18 @@ import { useFetchUser } from "../../_hook/useFetchUser";
 import SearchListSkeleton from "./SearchListSkeleton";
 import { getFollowerCount } from "../_lib/getFollowerCount";
 
-export default function FollowRecommends({ search }: { search: string }) {
+export default function FollowRecommends({
+  debouncedValue,
+}: {
+  debouncedValue: string;
+}) {
   const { user, loading } = useFetchUser();
 
   const { data: recommendUsers, isLoading: isUsersLoading } = useQuery({
-    queryKey: ["users", search],
+    queryKey: ["users", debouncedValue],
     queryFn: async () => {
-      const users = await searchUsers(search);
+      console.log("함수 호출하는중...");
+      const users = await searchUsers(debouncedValue);
       return users?.filter((u) => u.id !== user.id) ?? [];
     },
     enabled: !loading,
