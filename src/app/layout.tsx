@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "https://shreads-x.vercel.app/api/og",
         alt: "Shreads",
       },
     ],
