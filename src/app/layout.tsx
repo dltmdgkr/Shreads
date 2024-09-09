@@ -26,9 +26,7 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     images: [
       {
-        url: "/favicon.png",
-        width: 800,
-        height: 600,
+        url: "https://shreads-x.vercel.app/favicon.png",
         alt: "Shreads",
       },
     ],
