@@ -6,13 +6,20 @@ import {
 } from "@tanstack/react-query";
 import UserInfo from "./_component/UserInfo";
 import BackButton from "../_component/BackButton";
+import { getUserById } from "../messages/_lib/getUserById";
 
-export default async function UserPage({
-  params,
-}: {
+interface UserPageProps {
   params: { userId: string };
-}) {
-  const { userId } = params;
+}
+
+export async function generateMetadata({ params: { userId } }: UserPageProps) {
+  const user = await getUserById(userId);
+  return {
+    title: `Shreads의 ${user?.user_name}(@${user?.email?.split("@")[0]})님`,
+  };
+}
+
+export default async function UserPage({ params: { userId } }: UserPageProps) {
   const queryClient = new QueryClient();
   const dehydratedState = dehydrate(queryClient);
 

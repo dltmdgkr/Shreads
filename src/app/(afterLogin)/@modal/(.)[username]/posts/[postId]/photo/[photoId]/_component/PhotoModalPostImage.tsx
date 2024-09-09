@@ -5,7 +5,6 @@ import PhotoModalPrevButton from "./PhotoModalPrevButton";
 import PhotoModalNextButton from "./PhotoModalNextButton";
 import { useQuery } from "@tanstack/react-query";
 import { getSinglePost } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/getSinglePost";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function PhotoModalPostImage({
   postId,
@@ -14,12 +13,11 @@ export default function PhotoModalPostImage({
   postId: string;
   photoId: string;
 }) {
-  const supabase = createClientComponentClient();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const { data: post } = useQuery({
     queryKey: ["posts", postId],
-    queryFn: () => getSinglePost(supabase, postId),
+    queryFn: () => getSinglePost(postId),
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
   });

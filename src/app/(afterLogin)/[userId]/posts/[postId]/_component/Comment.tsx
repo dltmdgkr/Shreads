@@ -1,5 +1,6 @@
 import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
 import { Comment } from "@/model/Comment";
+import { Post } from "@/model/Post";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -16,7 +17,7 @@ export default function Comment({
   post,
 }: {
   comment: Comment;
-  post: any;
+  post: Post;
 }) {
   const { user } = useFetchUser();
   const queryClient = useQueryClient();

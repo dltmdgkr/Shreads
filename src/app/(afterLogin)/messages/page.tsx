@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { QueryClient } from "@tanstack/react-query";
@@ -6,7 +7,11 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import RoomList from "./_component/RoomList";
 import BackButton from "../_component/BackButton";
 
-export default async function Page() {
+export const metadata: Metadata = {
+  title: "메시지함",
+};
+
+export default async function ChatRoomListPage() {
   const supabase = await createServerSupabaseClient();
   const queryClient = new QueryClient();
 

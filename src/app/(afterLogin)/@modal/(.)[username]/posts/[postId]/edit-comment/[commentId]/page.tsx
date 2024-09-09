@@ -1,6 +1,6 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
@@ -21,7 +21,7 @@ export default function EditCommentModal({
 }) {
   const { scrollRef, onDragStart, onDragEnd, onDragMove, onClick } =
     useDraggableScroll();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { user } = useFetchUser();
@@ -31,7 +31,7 @@ export default function EditCommentModal({
 
   const { data: post } = useQuery({
     queryKey: ["posts", postId],
-    queryFn: () => getSinglePost(supabase, postId),
+    queryFn: () => getSinglePost(postId),
     staleTime: 60 * 1000,
     gcTime: 300 * 1000,
   });

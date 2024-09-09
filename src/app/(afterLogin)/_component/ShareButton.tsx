@@ -50,7 +50,7 @@ export default function ShareButton({ post }: { post: Post }) {
         Kakao.Share.sendDefault({
           objectType: "feed",
           content: {
-            title: `shreads의 ${post.profiles.user_name}(@${
+            title: `Shreads의 ${post.profiles.user_name}(@${
               post.profiles.email?.split("@")[0]
             })님`,
             description: post.content,

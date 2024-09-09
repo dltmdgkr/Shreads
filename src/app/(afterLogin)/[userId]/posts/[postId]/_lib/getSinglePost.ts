@@ -1,11 +1,12 @@
-import { Post } from "@/model/Post";
-import { TypedSupabaseClient } from "@/utils/types";
+"use server";
 
-export async function getSinglePost(
-  client: TypedSupabaseClient,
-  postId: string
-) {
-  const { data, error } = await client
+import { Post } from "@/model/Post";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+export async function getSinglePost(postId: string) {
+  const supabase = await createServerSupabaseClient();
+
+  const { data, error } = await supabase
     .from("posts")
     .select("*, profiles (*), postImages (*), comments (*)")
     .eq("id", postId)

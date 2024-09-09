@@ -11,15 +11,29 @@ import CommentForm from "./_component/CommentForm";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import BackButton from "@/app/(afterLogin)/_component/BackButton";
 
-export default async function Page({ params }: { params: { postId: string } }) {
-  const { postId } = params;
+interface PostDetailPageProps {
+  params: { postId: string };
+}
+
+export async function generateMetadata({
+  params: { postId },
+}: PostDetailPageProps) {
+  const post = await getSinglePost(postId);
+  return {
+    title: `@${post.profiles.user_name} • ${post.content}`,
+  };
+}
+
+export default async function PostDetailPage({
+  params: { postId },
+}: PostDetailPageProps) {
   const supabase = await createServerSupabaseClient();
   const queryClient = new QueryClient();
   const dehydratedState = dehydrate(queryClient);
 
   await queryClient.prefetchQuery({
     queryKey: ["posts", postId],
-    queryFn: () => getSinglePost(supabase, postId),
+    queryFn: () => getSinglePost(postId),
   });
 
   const post = queryClient.getQueryData(["posts", postId]);

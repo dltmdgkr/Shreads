@@ -10,6 +10,11 @@ import PostForm from "./_component/PostForm";
 import PostNavigation from "./_component/PostNavigation";
 import PostDecider from "./_component/PostDecider";
 import ToggleButton from "./_component/ToggleButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "홈",
+};
 
 export default async function Home() {
   const queryClient = new QueryClient();

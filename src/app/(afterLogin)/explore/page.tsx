@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   HydrationBoundary,
   QueryClient,
@@ -9,12 +10,16 @@ import { User } from "@/model/User";
 import { searchUsers } from "./_lib/searchUsers";
 import { isFollowingUser } from "./_lib/isFollowingUser";
 
+export const metadata: Metadata = {
+  title: "검색",
+};
+
 async function searchUsersFiltered(excludeUserId: string) {
   const allUsers = await searchUsers("");
   return allUsers!.filter((user) => user.id !== excludeUserId);
 }
 
-export default async function Page() {
+export default async function ExplorePage() {
   const queryClient = new QueryClient();
   const supabase = await createServerSupabaseClient();
 
