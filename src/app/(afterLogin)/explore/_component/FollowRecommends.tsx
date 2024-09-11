@@ -17,7 +17,6 @@ export default function FollowRecommends({
   const { data: recommendUsers, isLoading: isUsersLoading } = useQuery({
     queryKey: ["users", debouncedValue],
     queryFn: async () => {
-      console.log("함수 호출하는중...");
       const users = await searchUsers(debouncedValue);
       return users?.filter((u) => u.id !== user.id) ?? [];
     },
