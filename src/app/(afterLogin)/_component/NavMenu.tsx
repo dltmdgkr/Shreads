@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Divider from "@mui/material/Divider";
 import HomeIcon from "@mui/icons-material/Home";
 import { LiaHomeSolid } from "react-icons/lia";
@@ -9,17 +10,17 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-import { useSelectedLayoutSegment } from "next/navigation";
 import { Session } from "@supabase/supabase-js";
+import { usePathname } from "next/navigation";
 
 export default function NavMenu({ session }: { session: Session | null }) {
-  const segment = useSelectedLayoutSegment();
+  const pathname = usePathname();
+
   return (
     <>
-      {/* 데스크탑 영역 네비게이션바 영역 */}
       <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:h-full lg:bg-white lg:shadow-md">
         <nav className="flex flex-col p-4 text-gray-700">
-          {segment === "(home)" ? (
+          {pathname === "/" ? (
             <Link href="/" className="flex items-center py-2">
               <HomeIcon className="mr-3" fontSize="medium" />
               <span className="font-bold text-lg">홈</span>
@@ -34,7 +35,7 @@ export default function NavMenu({ session }: { session: Session | null }) {
               <span>홈</span>
             </Link>
           )}
-          {segment === "explore" ? (
+          {pathname === "/explore" ? (
             <Link href="/explore" className="flex items-center py-2">
               <SearchIcon className="mr-3" fontSize="medium" />
               <span className="font-bold text-lg">탐색하기</span>
@@ -45,7 +46,7 @@ export default function NavMenu({ session }: { session: Session | null }) {
               <span>탐색하기</span>
             </Link>
           )}
-          {segment === "messages" ? (
+          {pathname === "/messages" ? (
             <Link href="/messages" className="flex items-center py-2">
               <MailOutlineIcon className="mr-3" fontSize="medium" />
               <span className="font-bold text-lg">쪽지</span>
@@ -56,7 +57,7 @@ export default function NavMenu({ session }: { session: Session | null }) {
               <span>쪽지</span>
             </Link>
           )}
-          {segment === `${session?.user.id}` ? (
+          {pathname === `/${session?.user.id}` ? (
             <Link
               href={`/${session?.user.id}`}
               className="flex items-center py-2"
@@ -86,7 +87,7 @@ export default function NavMenu({ session }: { session: Session | null }) {
 
       {/* 모바일 화면 네비게이션바 영역 */}
       <div className="flex lg:hidden fixed top-0 left-0 right-0 text-gray-700 bg-white shadow-md px-2 py-4 justify-around">
-        {segment === "(home)" ? (
+        {pathname === "/" ? (
           <Link href="/" className="border-b-2 border-gray-600">
             <HomeIcon />
           </Link>
@@ -95,7 +96,7 @@ export default function NavMenu({ session }: { session: Session | null }) {
             <HomeIcon />
           </Link>
         )}
-        {segment === "explore" ? (
+        {pathname === "/explore" ? (
           <Link href="/explore" className="border-b-2 border-gray-600">
             <SearchIcon />
           </Link>
@@ -107,7 +108,7 @@ export default function NavMenu({ session }: { session: Session | null }) {
         <Link href="/create-post">
           <PostAddIcon />
         </Link>
-        {segment === "messages" ? (
+        {pathname === "/messages" ? (
           <Link href="/messages" className="border-b-2 border-gray-600">
             <MailOutlineIcon />
           </Link>
@@ -116,7 +117,7 @@ export default function NavMenu({ session }: { session: Session | null }) {
             <MailOutlineIcon />
           </Link>
         )}
-        {segment === `${session?.user.id}` ? (
+        {pathname === `/${session?.user.id}` ? (
           <Link
             href={`/${session?.user.id}`}
             className="border-b-2 border-gray-600"
