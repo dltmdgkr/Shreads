@@ -157,7 +157,7 @@ export default function CreatePostModal() {
           <div className="flex items-center py-3 px-4">
             <div className="w-full overflow-scroll">
               <TextareaAutosize
-                className="w-full border-0 outline-none text-lg"
+                className="w-full border-0 outline-none text-lg whitespace-pre-line"
                 placeholder="새로운 소식이 있나요?"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -170,7 +170,12 @@ export default function CreatePostModal() {
                         className="border rounded-lg"
                         src={v}
                         alt="미리보기"
-                        style={{ minWidth: 150, minHeight: 150 }}
+                        style={{
+                          minWidth: 150,
+                          maxWidth: 200,
+                          minHeight: 150,
+                          maxHeight: 200,
+                        }}
                       />
                       <div
                         onClick={() => onRemoveImage(index)}

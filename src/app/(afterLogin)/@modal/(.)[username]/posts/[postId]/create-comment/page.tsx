@@ -237,7 +237,12 @@ export default function CreateCommentModal({
                         className="pl-4 border rounded-lg"
                         src={v}
                         alt="미리보기"
-                        style={{ minWidth: 150, minHeight: 150 }}
+                        style={{
+                          minWidth: 150,
+                          maxWidth: 200,
+                          minHeight: 150,
+                          maxHeight: 200,
+                        }}
                       />
                       <div
                         onClick={() => onRemoveImage(index)}

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { QueryClient } from "@tanstack/react-query";
 import { getAllUsers } from "./_lib/getAllUsers";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -14,11 +12,6 @@ export const metadata: Metadata = {
 export default async function ChatRoomListPage() {
   const supabase = await createServerSupabaseClient();
   const queryClient = new QueryClient();
-
-  const cookieStore = cookies();
-  createServerComponentClient({
-    cookies: () => cookieStore,
-  });
 
   const {
     data: { session },

@@ -136,7 +136,7 @@ export default function Post({
                 </svg>
               )}
             </div>
-            <div>{post.content}</div>
+            <div className="whitespace-pre-line">{post.content}</div>
             <div className="mt-3">
               <PostImages post={post} />
             </div>
