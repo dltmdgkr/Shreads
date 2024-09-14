@@ -180,7 +180,7 @@ export default function CreateCommentModal({
             </span>
           </div>
           <div className="pl-12">
-            <div>{post?.content}</div>
+            <div className="whitespace-pre-line">{post?.content}</div>
             <div
               ref={scrollRef}
               onMouseDown={onDragStart}
