@@ -26,7 +26,10 @@ export default function NavMenu({ session }: { session: Session | null }) {
               <span className="font-bold text-lg">홈</span>
             </Link>
           ) : (
-            <Link href="/" className="flex items-center py-2">
+            <Link
+              href="/"
+              className="flex items-center py-2 hover:bg-gray-100 transition duration-300 rounded-md px-2"
+            >
               <LiaHomeSolid
                 className="mr-3"
                 fontSize="medium"
@@ -41,7 +44,10 @@ export default function NavMenu({ session }: { session: Session | null }) {
               <span className="font-bold text-lg">탐색하기</span>
             </Link>
           ) : (
-            <Link href="/explore" className="flex items-center py-2">
+            <Link
+              href="/explore"
+              className="flex items-center py-2 hover:bg-gray-100 transition duration-300 rounded-md px-2"
+            >
               <SearchIcon className="mr-3" fontSize="small" />
               <span>탐색하기</span>
             </Link>
@@ -52,7 +58,10 @@ export default function NavMenu({ session }: { session: Session | null }) {
               <span className="font-bold text-lg">쪽지</span>
             </Link>
           ) : (
-            <Link href="/messages" className="flex items-center py-2">
+            <Link
+              href="/messages"
+              className="flex items-center py-2 hover:bg-gray-100 transition duration-300 rounded-md px-2"
+            >
               <MailOutlineIcon className="mr-3" fontSize="small" />
               <span>쪽지</span>
             </Link>
@@ -68,13 +77,16 @@ export default function NavMenu({ session }: { session: Session | null }) {
           ) : (
             <Link
               href={`/${session?.user.id}`}
-              className="flex items-center py-2"
+              className="flex items-center py-2 hover:bg-gray-100 transition duration-300 rounded-md px-2"
             >
               <PermIdentityIcon className="mr-3" fontSize="small" />
               <span>프로필</span>
             </Link>
           )}
-          <Link href="/create-post" className="flex items-center py-2">
+          <Link
+            href="/create-post"
+            className="flex items-center py-2 hover:bg-gray-100 transition duration-300 rounded-md px-2"
+          >
             <PostAddIcon className="mr-3" fontSize="small" />
             <span>게시하기</span>
           </Link>
@@ -92,7 +104,10 @@ export default function NavMenu({ session }: { session: Session | null }) {
             <HomeIcon />
           </Link>
         ) : (
-          <Link href="/">
+          <Link
+            href="/"
+            className="hover:bg-gray-100 transition duration-300 rounded-md"
+          >
             <HomeIcon />
           </Link>
         )}
@@ -101,11 +116,17 @@ export default function NavMenu({ session }: { session: Session | null }) {
             <SearchIcon />
           </Link>
         ) : (
-          <Link href="/explore">
+          <Link
+            href="/explore"
+            className="hover:bg-gray-100 transition duration-300 rounded-md"
+          >
             <SearchIcon />
           </Link>
         )}
-        <Link href="/create-post">
+        <Link
+          href="/create-post"
+          className="hover:bg-gray-100 transition duration-300 rounded-md"
+        >
           <PostAddIcon />
         </Link>
         {pathname === "/messages" ? (
@@ -113,7 +134,10 @@ export default function NavMenu({ session }: { session: Session | null }) {
             <MailOutlineIcon />
           </Link>
         ) : (
-          <Link href="/messages">
+          <Link
+            href="/messages"
+            className="hover:bg-gray-100 transition duration-300 rounded-md"
+          >
             <MailOutlineIcon />
           </Link>
         )}
@@ -125,7 +149,10 @@ export default function NavMenu({ session }: { session: Session | null }) {
             <PermIdentityIcon />
           </Link>
         ) : (
-          <Link href={`/${session?.user.id}`}>
+          <Link
+            href={`/${session?.user.id}`}
+            className="hover:bg-gray-100 transition duration-300 rounded-md"
+          >
             <PermIdentityIcon />
           </Link>
         )}
