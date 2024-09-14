@@ -7,7 +7,7 @@ interface SearchFormProps {
 
 export default function SearchForm({ search, setSearch }: SearchFormProps) {
   return (
-    <form className="fixed top-15 w-full sm:max-w-xl md-lg:max-w-4xl lg-xl:max-w-4xl lg:max-w-xl xl:max-w-4xl pr-6">
+    <form className="fixed top-15 lg:top-0 w-full sm:max-w-xl md-lg:max-w-4xl lg-xl:max-w-4xl lg:max-w-xl xl:max-w-4xl pr-6">
       <div className="flex items-center w-full bg-gray-200 rounded-full mt-6 mb-12">
         <svg
           className="w-6 h-6 ml-4 text-gray-600"

@@ -30,7 +30,10 @@ export default function RoomList({ loggedInUser }: any) {
   return (
     <>
       {getAllUsersQuery?.map((user) => (
-        <div key={user.id}>
+        <div
+          key={user.id}
+          className="hover:bg-gray-100 transition duration-300 rounded-md"
+        >
           <Room user={user} onlineAt={presence?.[user.id]?.[0]?.onlineAt} />
         </div>
       ))}

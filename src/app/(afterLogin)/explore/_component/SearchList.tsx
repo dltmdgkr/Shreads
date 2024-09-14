@@ -86,7 +86,9 @@ export default function SearchList({ user }: any) {
               className="w-10 h-10 rounded-full mr-4 border"
             />
             <div>
-              <h2 className="text-md font-semibold">{user.user_name}</h2>
+              <h2 className="text-md font-semibold hover:underline">
+                {user.user_name}
+              </h2>
               <p className="text-sm text-gray-600">{user.email}</p>
             </div>
           </div>
