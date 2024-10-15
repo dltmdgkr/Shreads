@@ -4,6 +4,7 @@ import RQProvider from "./_component/RQProvider";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import NavMenu from "./_component/NavMenu";
 import PresenceTracker from "./_component/PresenceTracker";
+import NotFound from "@/app/not-found";
 
 export default async function AfterLoginLayout({
   children,
@@ -16,6 +17,10 @@ export default async function AfterLoginLayout({
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  if (!session) {
+    return <NotFound />;
+  }
 
   return (
     <RQProvider>
