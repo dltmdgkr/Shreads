@@ -8,11 +8,11 @@ import { useFetchUser } from "../../_hook/useFetchUser";
 import useDisableBodyScroll from "../../_hook/useDisableBodyScroll";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postBoard } from "../../(home)/_lib/postBoard";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import ConfirmModal from "../../_component/ConfirmModal";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 export default function CreatePostModal() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const imageRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { user } = useFetchUser();
@@ -148,16 +148,16 @@ export default function CreatePostModal() {
         <form className="w-full bg-white rounded-full" onSubmit={onSubmit}>
           <div className="flex pl-4 mb-2">
             <img
-              src={user.avatar_url}
+              src={user?.avatar_url}
               alt="프로필 이미지"
               className="w-10 h-10 rounded-full mr-3 border"
             />
-            <p className="font-bold">{user.user_name}</p>
+            <p className="font-bold">{user?.user_name}</p>
           </div>
           <div className="flex items-center py-3 px-4">
-            <div className="w-full overflow-scroll">
+            <div className="w-full overflow-scroll scrollbar-hide">
               <TextareaAutosize
-                className="w-full border-0 outline-none text-lg whitespace-pre-line"
+                className="w-full border-0 outline-none text-lg whitespace-pre-line resize-none"
                 placeholder="새로운 소식이 있나요?"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
