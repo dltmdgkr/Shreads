@@ -36,12 +36,14 @@ export default function Login() {
       if (error) {
         console.error("Supabase Auth Error:", error.message);
         setErrorMessage("이메일과 비밀번호가 일치하지 않습니다.");
+        setEmailLogin(false);
       } else if (dataUser) {
         router.replace("/");
       }
     } catch (err) {
       console.error("Unexpected Error:", err);
       setErrorMessage("이메일과 비밀번호가 일치하지 않습니다.");
+      setEmailLogin(false);
     }
   };
 
