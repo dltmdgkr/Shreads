@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { useFetchUser } from "@/app/(afterLogin)/_hook/useFetchUser";
-import { Post } from "@/model/Post";
 import Image from "next/image";
 
-export default function CommentForm({ post }: { post: Post }) {
+export default function CommentForm({ post }: { post: any }) {
   const { user } = useFetchUser();
 
   return (
