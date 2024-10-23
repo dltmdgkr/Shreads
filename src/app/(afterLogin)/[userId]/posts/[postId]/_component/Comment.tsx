@@ -11,6 +11,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { deleteComment } from "../_lib/deleteComment";
 import ConfirmModal from "@/app/(afterLogin)/_component/ConfirmModal";
+import Image from "next/image";
 
 export default function Comment({
   comment,
@@ -69,10 +70,12 @@ export default function Comment({
   return (
     <div className="flex items-start mt-3 pl-3 pb-3 border-b border-gray-200">
       <Link href={`/${comment.user_id}`}>
-        <img
+        <Image
           src={comment.profiles.avatar_url!}
           alt="프로필 이미지"
           className="min-w-10 max-w-10 min-h-8 max-h-10 rounded-full mr-4 mt-1 border object-cover"
+          width={40}
+          height={40}
         />
       </Link>
       <div className="flex-col flex-1">
@@ -111,11 +114,13 @@ export default function Comment({
         </p>
         <div className="flex gap-2 overflow-x-auto md:w-[70vh] max-w-[50vw]">
           {comment.commentImages?.map((image) => (
-            <img
+            <Image
               key={image.id}
               src={image.image_url!}
               alt="댓글 이미지"
               className="cursor-pointer rounded-lg border border-gray-300 object-cover min-w-24 min-h-24"
+              width={96}
+              height={96}
               onClick={() =>
                 router.push(
                   `/${comment.profiles.user_name}/comments/${comment.id}/photo/${image.id}`

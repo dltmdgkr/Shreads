@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editPost } from "../../../[userId]/posts/[postId]/_lib/editPost";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import ConfirmModal from "@/app/(afterLogin)/_component/ConfirmModal";
+import Image from "next/image";
 
 interface Props {
   params: {
@@ -180,10 +181,12 @@ export default function EditPostModal({ params: { postId } }: Props) {
         </button>
         <form className="w-full bg-white rounded-full" onSubmit={onSubmit}>
           <div className="flex pl-4 mb-2">
-            <img
+            <Image
               src={user.avatar_url}
               alt="프로필 이미지"
               className="w-10 h-10 rounded-full mr-3 border"
+              width={40}
+              height={40}
             />
             <p className="font-bold">{user.user_name}</p>
           </div>
@@ -200,11 +203,13 @@ export default function EditPostModal({ params: { postId } }: Props) {
                   (v, index) =>
                     v && (
                       <div key={index} className="relative">
-                        <img
+                        <Image
                           className="border rounded-lg"
                           src={v}
                           alt="미리보기"
                           style={{ minWidth: 150, minHeight: 150 }}
+                          width={150}
+                          height={150}
                         />
                         <div
                           onClick={() => onRemoveImage(index)}

@@ -13,6 +13,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
+import Image from "next/image";
 
 type FollowerData = {
   follower_count: number;
@@ -134,10 +135,12 @@ export default function UserInfo({ userId }: { userId: string }) {
           <div className="text-xl font-bold text-left">{data.user_name}</div>
           <div className="text-lg text-left">@{data.email?.split("@")[0]}</div>
         </div>
-        <img
+        <Image
           src={data.avatar_url!}
           alt="프로필 이미지"
           className="sm:w-24 sm:h-24 w-20 h-20 rounded-full mx-auto border"
+          width={80}
+          height={80}
         />
       </div>
       <div className="flex flex-start mb-8">

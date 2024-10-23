@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useFetchUser } from "../_hook/useFetchUser";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
+import Image from "next/image";
 
 export default function LogoutButton() {
   const supabase = createBrowserSupabaseClient();
@@ -22,10 +23,12 @@ export default function LogoutButton() {
   return (
     <button className="flex" onClick={onLogout}>
       <div className="mr-3">
-        <img
+        <Image
           src={me?.avatar_url}
           alt="프로필 이미지"
           className="w-10 h-10 rounded-full border"
+          width={40}
+          height={40}
         />
       </div>
       <div>

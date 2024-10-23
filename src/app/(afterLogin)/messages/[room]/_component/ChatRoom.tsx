@@ -13,6 +13,7 @@ import { getAllMessages } from "../../_lib/getAllMessages";
 import BackButton from "@/app/(afterLogin)/_component/BackButton";
 import Message from "../../_component/Message";
 import { ChatRoomPageProps } from "../page";
+import Image from "next/image";
 
 export default function ChatRoom({ params }: ChatRoomPageProps) {
   const { user } = useFetchUser();
@@ -81,10 +82,12 @@ export default function ChatRoom({ params }: ChatRoomPageProps) {
           className="px-16 py-4 flex flex-col items-center transition duration-200 border-b border-gray-200 hover:bg-gray-100"
         >
           <div className="relative">
-            <img
+            <Image
               src={selectedUserQuery.data?.avatar_url!}
               alt="프로필 이미지"
               className="w-12 h-12 rounded-full border"
+              width={48}
+              height={48}
             />
             {isOnlineNow && (
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
@@ -112,10 +115,12 @@ export default function ChatRoom({ params }: ChatRoomPageProps) {
           )}
         </div>
         <div className="flex fixed bottom-1 w-full p-2 border border-gray-300 rounded-full items-center bg-white sm:max-w-xl md-lg:max-w-4xl lg-xl:max-w-4xl lg:max-w-xl xl:max-w-4xl">
-          <img
+          <Image
             src={user?.avatar_url}
             alt="프로필 이미지"
             className="w-8 h-8 rounded-full mr-2 border"
+            width={32}
+            height={32}
           />
           <input
             value={message}

@@ -169,10 +169,12 @@ export default function CreateCommentModal({
         </button>
         <div className="pl-4">
           <div className="flex">
-            <img
+            <Image
               src={post?.profiles.avatar_url!}
               alt="프로필 이미지"
               className="w-10 h-10 rounded-full mr-2 border"
+              width={40}
+              height={40}
             />
             <p className="font-bold mr-2">{post?.profiles.user_name}</p>
             <span className="text-gray-500">
@@ -215,10 +217,12 @@ export default function CreateCommentModal({
             className="flex-col p-2 w-full items-center bg-white rounded-b-xl"
           >
             <div className="flex items-center mb-1">
-              <img
+              <Image
                 src={user.avatar_url}
                 alt="프로필 이미지"
                 className="w-10 h-10 rounded-full mr-2 border"
+                width={40}
+                height={40}
               />
               <span className="font-bold mr-2">{user.user_name}</span>
             </div>
@@ -233,10 +237,12 @@ export default function CreateCommentModal({
                 (v, index) =>
                   v && (
                     <div key={index} className="relative">
-                      <img
+                      <Image
                         className="pl-4 border rounded-lg"
                         src={v}
                         alt="미리보기"
+                        width={150}
+                        height={150}
                         style={{
                           minWidth: 150,
                           maxWidth: 200,

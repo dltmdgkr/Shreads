@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postBoard } from "../../(home)/_lib/postBoard";
 import ConfirmModal from "../../_component/ConfirmModal";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
+import Image from "next/image";
 
 export default function CreatePostModal() {
   const supabase = createBrowserSupabaseClient();
@@ -147,10 +148,12 @@ export default function CreatePostModal() {
         </button>
         <form className="w-full bg-white rounded-full" onSubmit={onSubmit}>
           <div className="flex pl-4 mb-2">
-            <img
+            <Image
               src={user?.avatar_url}
               alt="프로필 이미지"
               className="w-10 h-10 rounded-full mr-3 border"
+              width={40}
+              height={40}
             />
             <p className="font-bold">{user?.user_name}</p>
           </div>
@@ -166,10 +169,12 @@ export default function CreatePostModal() {
                 {preview?.map((v, index) =>
                   v ? (
                     <div key={index} className="relative">
-                      <img
+                      <Image
                         className="border rounded-lg"
                         src={v}
                         alt="미리보기"
+                        width={150}
+                        height={150}
                         style={{
                           minWidth: 150,
                           maxWidth: 200,

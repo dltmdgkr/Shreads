@@ -6,6 +6,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useRouter } from "next/navigation";
 import { getAllMessages } from "../_lib/getAllMessages";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -32,10 +33,12 @@ export default function Room({ user, onlineAt }: any) {
       onClick={() => onClick(user.id)}
     >
       <div className="relative mr-4">
-        <img
+        <Image
           src={user.avatar_url}
           alt="프로필 이미지"
           className="w-12 h-12 rounded-full border"
+          width={48}
+          height={48}
         />
         {isOnlineNow && (
           <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>

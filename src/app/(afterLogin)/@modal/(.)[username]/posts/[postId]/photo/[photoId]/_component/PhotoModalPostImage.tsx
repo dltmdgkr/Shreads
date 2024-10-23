@@ -5,6 +5,7 @@ import PhotoModalPrevButton from "./PhotoModalPrevButton";
 import PhotoModalNextButton from "./PhotoModalNextButton";
 import { useQuery } from "@tanstack/react-query";
 import { getSinglePost } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/getSinglePost";
+import Image from "next/image";
 
 export default function PhotoModalPostImage({
   postId,
@@ -56,9 +57,11 @@ export default function PhotoModalPostImage({
   return (
     <>
       <PhotoModalPrevButton handlePrevImage={handlePrevImage} />
-      <img
+      <Image
         src={post?.postImages[currentImageIndex].image_url!}
         alt="게시글 이미지"
+        width={800}
+        height={800}
       />
       <PhotoModalNextButton handleNextImage={handleNextImage} />
     </>

@@ -7,6 +7,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import PhotoModalPrevButton from "@/app/(afterLogin)/@modal/(.)[username]/posts/[postId]/photo/[photoId]/_component/PhotoModalPrevButton";
 import PhotoModalNextButton from "@/app/(afterLogin)/@modal/(.)[username]/posts/[postId]/photo/[photoId]/_component/PhotoModalNextButton";
 import { getSingleComment } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/getSingleComment";
+import Image from "next/image";
 
 export default function PhotoModalCommentImage({
   commentId,
@@ -59,9 +60,11 @@ export default function PhotoModalCommentImage({
   return (
     <>
       <PhotoModalPrevButton handlePrevImage={handlePrevImage} />
-      <img
+      <Image
         src={comment?.commentImages[currentImageIndex].image_url!}
         alt="댓글 이미지"
+        width={800}
+        height={800}
       />
       <PhotoModalNextButton handleNextImage={handleNextImage} />
     </>

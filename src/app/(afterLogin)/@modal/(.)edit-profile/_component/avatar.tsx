@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Image from "next/image";
 
 export default function Avatar({
   uid,
@@ -67,13 +68,12 @@ export default function Avatar({
   return (
     <div className="flex flex-col items-center justify-center space-y-4">
       {avatarUrl ? (
-        <img
-          width={size}
-          height={size}
+        <Image
+          width={100}
+          height={100}
           src={avatarUrl}
           alt="Avatar"
           className="avatar image rounded-full border-2 border-gray-200 shadow-md"
-          style={{ height: size, width: size }}
         />
       ) : (
         <div

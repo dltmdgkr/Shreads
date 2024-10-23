@@ -4,6 +4,7 @@ import { followUser } from "../_lib/followUser";
 import { useFetchUser } from "../../_hook/useFetchUser";
 import { isFollowingUser } from "../_lib/isFollowingUser";
 import { getFollowerCount } from "../_lib/getFollowerCount";
+import Image from "next/image";
 
 interface FollowerData {
   follower_count: number;
@@ -80,10 +81,12 @@ export default function SearchList({ user }: any) {
       <div className="flex items-center justify-between p-3">
         <Link href={`/${user.id}`}>
           <div className="flex items-center">
-            <img
+            <Image
               src={user.avatar_url}
               alt="User Avatar"
               className="w-10 h-10 rounded-full mr-4 border"
+              width={40}
+              height={40}
             />
             <div>
               <h2 className="text-md font-semibold hover:underline">

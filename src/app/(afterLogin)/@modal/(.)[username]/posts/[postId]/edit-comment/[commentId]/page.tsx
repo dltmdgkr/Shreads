@@ -13,6 +13,7 @@ import useDisableBodyScroll from "@/app/(afterLogin)/_hook/useDisableBodyScroll"
 import { getSinglePost } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/getSinglePost";
 import { editComment } from "@/app/(afterLogin)/[userId]/posts/[postId]/_lib/editComment";
 import ConfirmModal from "@/app/(afterLogin)/_component/ConfirmModal";
+import Image from "next/image";
 
 export default function EditCommentModal({
   params,
@@ -196,10 +197,12 @@ export default function EditCommentModal({
         </button>
         <div className="pl-4">
           <div className="flex">
-            <img
+            <Image
               src={post?.profiles.avatar_url!}
               alt="프로필 이미지"
               className="w-10 h-10 rounded-full mr-2 border"
+              width={40}
+              height={40}
             />
             <p className="font-bold mr-2">{post?.profiles.user_name}</p>
             <span className="text-gray-500">
@@ -217,7 +220,7 @@ export default function EditCommentModal({
               className="flex gap-4 mt-4 overflow-scroll scrollbar-hide mr-4"
             >
               {post?.postImages?.map((image) => (
-                <img
+                <Image
                   key={image.id}
                   src={image.image_url!}
                   alt="게시글 이미지"
@@ -237,10 +240,12 @@ export default function EditCommentModal({
             className="flex-col p-2 w-full items-center bg-white rounded-b-xl"
           >
             <div className="flex items-center mb-1">
-              <img
+              <Image
                 src={user.avatar_url}
                 alt="프로필 이미지"
                 className="w-10 h-10 rounded-full mr-2 border"
+                width={40}
+                height={40}
               />
               <span className="font-bold mr-2">{user.user_name}</span>
             </div>
@@ -255,11 +260,13 @@ export default function EditCommentModal({
                 (v, index) =>
                   v && (
                     <div key={index} className="relative">
-                      <img
+                      <Image
                         className="pl-4 border rounded-lg"
                         src={v}
                         alt="미리보기"
                         style={{ minWidth: 150, minHeight: 150 }}
+                        width={150}
+                        height={150}
                       />
                       <div
                         onClick={() => onRemoveImage(index)}
